@@ -1,0 +1,240 @@
+#loading {
+	background-color: rgba(0, 0, 0, 0.3);
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    text-align: center;
+    display:none;
+    z-index:10;
+}
+
+#loading > span{
+	display: inline-block;
+    height: 100%;
+    vertical-align: middle;
+}
+
+.graphs {
+	display: block;
+}
+
+.graph {
+	width: 49%;
+	float: left;
+}
+
+.graph100 {
+	width: 100%;
+	float: left;
+}
+
+.oculto {
+	display: none;
+}
+
+.txtRed {
+	color: red;
+}
+
+.msgBox{
+  padding: 10px;
+  border: 1px solid rgba(0, 0, 0, .2);
+  border-radius: 8px;
+  font-family: Arial;
+  letter-spacing: normal;
+}
+
+img.margin5side, input.margin5side{
+	margin:2px 5px -10px 5px;
+}
+
+img.padding5side, input.padding5side{
+	padding:2px 5px;
+}
+
+.msgBox span{
+  font-weight: bold;
+}
+
+.txtNormal span{
+  font-weight: normal;
+}
+
+.txtBold{
+  font-weight: bold;
+}
+
+.bgRed{
+	background:#e80000 !important;
+}
+
+.txtWhite{
+	color:#FFFFFF !important;
+}
+
+.bgLightRed{
+	background:#ff8484 !important;
+}
+
+.bgGreen{
+	background:#7cd248 !important;
+}
+
+.bgOrange{
+	background:#ffb200 !important;
+}
+
+.bgLightGrey{
+	background:#dfe0de !important;
+}
+
+.bgWhite, td.bgWhite{
+	background:white !important;
+}
+
+.bgBlack{
+	background:black !important;
+}
+
+.txtWhite{
+	color: white !important;
+}
+
+.txtBlack{
+	color: black !important;
+}
+
+.txtGrey{
+	color: #878e83 !important;
+}
+
+table.gen { 
+  width: 100%; 
+  border-collapse: collapse;
+}
+/* Zebra striping */
+table.gen tr:nth-of-type(odd), table.leyenda tr:nth-of-type(odd) { 
+  background: #e2e2e2; 
+}
+table.gen tr:nth-of-type(even), table.leyenda tr:nth-of-type(even) { 
+  background: white; 
+}
+
+table.gen tr:hover{background:#ccdce6;}
+
+table.gen tr.green:hover{background:#77e223 !important;}
+
+table.gen tr.orange:hover{background:#ff9a1d !important;}
+
+table.gen tr.red:hover{background:#ff7277 !important;}
+
+table.gen tr.green:nth-of-type(odd), table.leyenda tr.green:nth-of-type(odd) { 
+  background: #c6f79e !important;; 
+}
+table.gen tr.green:nth-of-type(even), table.leyenda tr.green:nth-of-type(even) { 
+  background: #b3ff77 !important;; 
+}
+
+table.gen tr.orange:nth-of-type(odd), table.leyenda tr.green:nth-of-type(odd) { 
+  background: #ffc745; 
+}
+table.gen tr.orange:nth-of-type(even), table.leyenda tr.green:nth-of-type(even) { 
+  background: #ffb200; 
+}
+
+table.gen tr.red:nth-of-type(odd), table.leyenda tr.red:nth-of-type(odd) { 
+  background: #ffbdbf; 
+}
+table.gen tr.red:nth-of-type(even), table.leyenda tr.red:nth-of-type(even) { 
+  background: #f7d5d5; 
+}
+
+table.gen tr.grey:nth-of-type(odd), table.leyenda tr.grey:nth-of-type(odd) { 
+  background: #e0e0e0; 
+}
+table.gen tr.grey:nth-of-type(even), table.leyenda tr.grey:nth-of-type(even) { 
+  background: #eee; 
+}
+
+table.gen tr.blue:nth-of-type(odd), table.leyenda tr.blue:nth-of-type(odd) { 
+  background: #d6f2ff; 
+}
+table.gen tr.blue:nth-of-type(even), table.leyenda tr.blue:nth-of-type(even) { 
+  background: #bbe9ff; 
+}
+
+table.gen th { 
+  background: #163b73; 
+  color: white; 
+  font-weight: normal;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+table.gen th a{ 
+  color: white; 
+  font-weight: normal;
+  text-decoration: none;
+}
+
+table.gen td, table.gen th { 
+  padding: 5px; 
+  border: 1px solid #ccc;
+  vertical-align: middle;
+}
+
+table.gen th, table.gen td { 
+  text-align: left; 
+} 
+
+table.gen td.number,
+table.gen th.number { 
+  text-align: right; 
+}
+
+.centered, table.centered, th.centered{
+	text-align:center !important;
+	vertical-align:middle !important;
+}
+
+.tipoComida {
+	font-weight: bold;
+	color: #888888;
+	border-bottom: 1px solid #888888;
+	margin-bottom: 15px;
+}
+
+form input[type="text"].error,
+form input[type="email"].error,
+form input[type="password"].error,
+form select.error,
+form textarea.error {
+	border: 1px solid #FF0000 !important;
+}
+
+form input[type="text"].ok,
+form input[type="email"].ok,
+form input[type="password"].ok,
+form select.ok,
+form textarea.ok {
+	border: 1px solid #00FF00 !important;
+}
+
+@media 
+only screen and (max-width: 760px),
+(min-device-width: 768px) and (max-device-width: 1024px)  {
+
+	table.gen td, table.gen th { 
+	  padding: 0px; 
+	  border: 1px solid #ccc;
+	  vertical-align: middle;
+	}
+
+	input.inputTabla,
+	textarea.inputTabla,
+	select.inputTabla{
+		width: 95%;
+	} 
+	
+}

@@ -1,0 +1,95 @@
+
+.centered, th.centered {
+	text-align: center;
+	vertical-align: middle;
+}
+
+.centeredTotal {
+	text-align: center;
+	vertical-align: middle;
+	float: none;
+	width: 100%;
+}
+
+.titulo {
+  font-size: 20px;
+  font-family: Arial;
+  text-align: center;
+}
+
+.direccionFacturacion {
+  float: right;
+}
+
+.direccionProveedor {
+  font-size: 15px;
+}
+
+.subject {
+  font-size: 15px;
+}
+
+.clear {
+  clear: both;
+}
+
+.floatRight {
+	float: right;
+}
+
+table.pagos {
+	width: 100%;
+	font-size: 12px;
+	text-align: left;
+}
+
+table.totales {
+	width: 100%;
+	font-size: 15px;
+	text-align: left;
+}
+
+table.width100 {
+	width: 100%;
+}
+
+table.titulo {
+	width: 100%;
+	font-size: 55px;
+}
+
+table.invoiceId {
+	width: 100%;
+	border-bottom: 1px solid;
+	font-size: 15px;
+}
+
+table.header {
+	width: 100%;
+	font-size: 15px;
+	text-align: center;
+	/*border-bottom: 1px solid;*/
+}
+
+table.footer {
+	width: 100%;
+	font-size: 15px;
+	text-align: left;
+	border-top: 1px solid;
+}
+
+table.direccion {
+	width: 100%;
+	font-size: 10px;
+	text-align: left;
+	float: right;
+	margin: 0px;
+	padding: 0px;
+    border-spacing: 0px;
+    border-collapse: separate;
+}
+
+table.direccion > td {
+	margin: 0px;
+	padding: 0px;
+}
