@@ -15,6 +15,7 @@ class GrupoUser {
 	private $gusFeccre;
 	private $gusUsucre;
 	private $gusVerifyCode;
+	private $gusAvisoRetraso;
 	
 	private $useName;
 	private $useLastname;
@@ -108,6 +109,14 @@ class GrupoUser {
 		$this->pesoMedio = $pesoMedio;
 	}
 
+	public function getGusAvisoRetraso() {
+		return $this->gusAvisoRetraso;
+	}
+
+	public function setGusAvisoRetraso($gusAvisoRetraso) {
+		$this->gusAvisoRetraso = $gusAvisoRetraso;
+	}
+
 	public function setOrder($valor) { $this->order = trim($valor); }
 	public function getOrder() { return $this->order; }
 	
@@ -122,6 +131,7 @@ class GrupoUser {
 		$this->gusFeccre		= $data["GUS_FECCRE"];
 		$this->gusUsucre		= $data["GUS_USUCRE"];
 		$this->gusVerifyCode	= $data["GUS_VERIFY_CODE"];
+		$this->gusAvisoRetraso	= $data["GUS_AVISO_RETRASO"];
 		
 		$this->pesoMedio		= $data["peso_medio"];
 		
@@ -364,5 +374,33 @@ class GrupoUser {
 		return $list;
 	}
 	
+	function updateAvisoRetrasoUser($conMsi, $pageCode){
+		global $error;
+		
+		$sql = "UPDATE ".$this->tbl." SET
+					GUS_AVISO_RETRASO = '".mysqli_real_escape_string($conMsi, $this->gusAvisoRetraso)."'
+				WHERE GUS_IDUSER = ".mysqli_real_escape_string($conMsi, $this->gusIduser);
+
+		if(!$conMsi->query($sql)){ $error = true; rolLog("$pageCode> GUS-SQL-16", $sql." -> ".$conMsi->error, 3);}
+		
+		if (!$error){
+			return true;
+		}else return false;
+	}
+	
+	function updateAvisoRetrasoUserGrupo($conMsi, $pageCode){
+		global $error;
+		
+		$sql = "UPDATE ".$this->tbl." SET
+					GUS_AVISO_RETRASO = '".mysqli_real_escape_string($conMsi, $this->gusAvisoRetraso)."'
+				WHERE GUS_IDGRUPO = ".mysqli_real_escape_string($conMsi, $this->gusIdgrupo)."
+				  AND GUS_IDUSER = ".mysqli_real_escape_string($conMsi, $this->gusIduser);
+		
+		if(!$conMsi->query($sql)){ $error = true; rolLog("$pageCode> GUS-SQL-16", $sql." -> ".$conMsi->error, 3);}
+		
+		if (!$error){
+			return true;
+		}else return false;
+	}
 }
 ?>

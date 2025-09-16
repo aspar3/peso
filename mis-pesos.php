@@ -12,6 +12,7 @@
 	
 	include_once 'classes/Unidad.php';
 	include_once 'classes/Peso.php';
+	include_once 'classes/GrupoUser.php';
 
 	if (!isset($_SESSION["sesIduser"]) || $_SESSION["sesIduser"]=="" || $_SESSION["sesType"]!=1){
 		//rolLog("$pageCode-01", "No session started or not a signedup user -> (".$_SESSION["sesIduser"].")", 1);
@@ -36,8 +37,17 @@
 		$peso->setPesIduser($_SESSION["sesIduser"]);
 		$peso->setPesIdpeso($_POST["id"]);
 		if ($peso->delete($conMsi, $pageCode)){
-			$mensaje1=sprintf(litCambiosOk);
-			$classMsgBox = "msgBox bgGreen txtBlack";
+			$grupoUser = new GrupoUser();
+			$grupoUser->setGusIduser($_SESSION["sesIduser"]);
+			$grupoUser->setGusAvisoRetraso("N");
+			if ($grupoUser->updateAvisoRetrasoUser($conMsi, $pageCode)) {
+				$mensaje1=sprintf(litCambiosOk);
+				$classMsgBox = "msgBox bgGreen txtBlack";
+			}else{
+				$mensaje1=sprintf(litError1);
+				$mensaje2=sprintf(litError2, $mailAdmin);
+				$classMsgBox = "msgBox bgRed txtWhite";
+			}
 		}else{
 			$mensaje1=sprintf(litError1);
 			$mensaje2=sprintf(litError2, $mailAdmin);

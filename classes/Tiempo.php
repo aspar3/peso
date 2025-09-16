@@ -6,6 +6,7 @@ class Tiempo {
 	private $tieIdtiempo;
 	private $tieNombre;
 	private $tieOrden;
+	private $tiePalabraMysql;
 
 	function __construct(){}
 	
@@ -33,10 +34,19 @@ class Tiempo {
 		$this->tieOrden = $tieOrden;
 	}
 
+	public function getTiePalabraMysql() {
+		return $this->tiePalabraMysql;
+	}
+
+	public function setTiePalabraMysql($tiePalabraMysql) {
+		$this->tiePalabraMysql = $tiePalabraMysql;
+	}
+
 	function setTiempo($data = array()){
-		$this->tieIdtiempo	= $data["TIE_IDTIEMPO"];
-		$this->tieNombre	= $data["TIE_NOMBRE"];
-		$this->tieOrden		= $data["TIE_ORDEN"];
+		$this->tieIdtiempo		= $data["TIE_IDTIEMPO"];
+		$this->tieNombre		= $data["TIE_NOMBRE"];
+		$this->tieOrden			= $data["TIE_ORDEN"];
+		$this->tiePalabraMysql	= $data["TIE_PALABRA_MYSQL"];
 	}
 
 	public function getTiempos($conMsi, $pageCode){

@@ -12,6 +12,7 @@ include("in_idiom.php");
 
 include_once 'classes/Funciones.php';
 include_once 'classes/Peso.php';
+include_once 'classes/GrupoUser.php';
 
 if (!isset($_SESSION["sesIduser"]) || $_SESSION["sesIduser"]=="" || $_SESSION["sesType"]!=1){
 	//rolLog("$pageCode-01", "No session started or not a signedup user -> (".$_SESSION["sesIduser"].")", 1);
@@ -48,11 +49,19 @@ if ($accion == "save"){
 		$peso->setPesPeso($_POST["peso"] * 1000 / $_SESSION["sesUniMultipli"]);
 		
 		if ($peso->insert($conMsi, $pageCode)){
-			$mensaje1=sprintf(litCambiosOk);
-			$classMsgBox = "msgBox bgGreen txtBlack";
-			
-			header("Location: /mis-pesos");
-			die();
+			$grupoUser = new GrupoUser();
+			$grupoUser->setGusIduser($_SESSION["sesIduser"]);
+			$grupoUser->setGusAvisoRetraso("N");
+			if ($grupoUser->updateAvisoRetrasoUser($conMsi, $pageCode)) {
+				$mensaje1=sprintf(litCambiosOk);
+				$classMsgBox = "msgBox bgGreen txtBlack";
+				header("Location: /mis-pesos");
+				die();
+			} else {
+				$mensaje1=sprintf(litError1);
+				$mensaje2=sprintf(litError2, $mailAdmin);
+				$classMsgBox = "msgBox bgRed txtWhite";
+			}
 		}else{
 			$mensaje1=sprintf(litError1);
 			$mensaje2=sprintf(litError2, $mailAdmin);
@@ -64,11 +73,19 @@ if ($accion == "save"){
 		$peso->setPesPeso($_POST["peso"] * 1000 / $_SESSION["sesUniMultipli"]);
 		
 		if ($peso->update($conMsi, $pageCode)){
-			$mensaje1=sprintf(litCambiosOk);
-			$classMsgBox = "msgBox bgGreen txtBlack";
-			
-			header("Location: /mis-pesos");
-			die();
+			$grupoUser = new GrupoUser();
+			$grupoUser->setGusIduser($_SESSION["sesIduser"]);
+			$grupoUser->setGusAvisoRetraso("N");
+			if ($grupoUser->updateAvisoRetrasoUser($conMsi, $pageCode)) {
+				$mensaje1=sprintf(litCambiosOk);
+				$classMsgBox = "msgBox bgGreen txtBlack";
+				header("Location: /mis-pesos");
+				die();
+			} else {
+				$mensaje1=sprintf(litError1);
+				$mensaje2=sprintf(litError2, $mailAdmin);
+				$classMsgBox = "msgBox bgRed txtWhite";
+			}
 		}else{
 			$mensaje1=sprintf(litError1);
 			$mensaje2=sprintf(litError2, $mailAdmin);
