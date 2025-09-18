@@ -156,6 +156,8 @@ function enviarMailSMTPadjunto($from, $to, $cc, $replyTo, $subject, $body, $adjN
 	$mail = new PHPMailer(true); //defaults to using php "mail()"; the true param means it will throw exceptions on errors, which we need to catch
 	
 	$mail->IsSMTP();
+	$mail->CharSet = 'UTF-8';
+	$mail->Encoding = 'base64';
 	$mail->Host = $host;
 	$mail->Port = $port;
 	$mail->SMTPAuth = true;
@@ -228,6 +230,8 @@ function enviarMailInfo($from, $to, $replyTo, $subject, $body){
 	$mail = new PHPMailer(true); //defaults to using php "mail()"; the true param means it will throw exceptions on errors, which we need to catch
 	
 	$mail->IsSMTP();
+	$mail->CharSet = 'UTF-8';
+	$mail->Encoding = 'base64';
 	$mail->Host = $host;
 	$mail->Port = $port;
 	$mail->SMTPAuth = true;
@@ -260,23 +264,24 @@ function enviarMailInfo($from, $to, $replyTo, $subject, $body){
 }
 
 function enviarMailAlert($from, $to, $replyTo, $subject, $body){
-	
 	global $nombreGeneral;
-	
+		
 	$enviado = false;
 	
 	$pos = strpos($from,$nombreGeneral);
-	if($pos === false)
+	if($pos === false) {
 		$from = "$nombreGeneral <".$from.">";
+	}
 		
-		$headers = "From: $from\r\n";
-		$headers.= "X-Mailer: php";
-		if (mail($to, $subject, $body, $headers))
-			$enviado = true;
-			else
-				$enviado = false;
+	$headers = "From: $from\r\n";
+	$headers.= "X-Mailer: php";
+	if (mail($to, $subject, $body, $headers)) {
+		$enviado = true;
+	} else {
+		$enviado = false;
+	}
 				
-				return $enviado;
+	return $enviado;
 				
 }
 
@@ -323,6 +328,8 @@ function enviarMailSMTPhtml($from, $to, $cc, $replyTo, $subject, $body, $idpsiMa
 		$mail = new PHPMailer(true); //defaults to using php "mail()"; the true param means it will throw exceptions on errors, which we need to catch
 		
 		$mail->IsSMTP();
+		$mail->CharSet = 'UTF-8';
+		$mail->Encoding = 'base64';
 		$mail->Host = $host;
 		$mail->Port = $port;
 		$mail->SMTPAuth = true;

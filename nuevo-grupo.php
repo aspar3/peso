@@ -151,7 +151,7 @@ if ($accion == "save"){
 										}
 									?>
 									<header>
-										<h2><?=sprintf(litCrearNuevoGrupo)?></h2>
+										<h2><?=sprintf(litCrearNuevoGrupoTitle)?></h2>
 									</header>
 									  
 									<div>

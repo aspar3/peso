@@ -104,7 +104,7 @@
 			$grupo->getGrupo($conMsi, $pageCode);
 			
 			$bodyUser = sprintf(litEstimado, $userInvitador->getUseName())."\n\n".
-					sprintf(litRechazarInvitacion, $userInvitado->getUseName(), $grupo->getGruNombre())."\n\n".
+					sprintf(litRechazadoInvitacion, $userInvitado->getUseName(), $grupo->getGruNombre())."\n\n".
 					sprintf(litAtentamente)."\n".
 					$nombreGeneral.": ".$accesoHttp.$rootURL;
 			$subjectUser = $nombreGeneral.": ".sprintf(litInvitacionSubject, $_SESSION["sesName"]);

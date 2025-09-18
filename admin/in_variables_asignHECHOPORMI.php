@@ -27,7 +27,7 @@
   	$mailAdmin = "peso@hechopormi.com";
   	$mailAlertasAdmin = "alertas@psicologosensantodomingo.com"; 
   	$codigoAbrev = "PSG";
-  	$nombreGeneral = "Peso (Reto grupal)";
+  	$nombreGeneral = "PesoTEST (Reto grupal)";
   	$rootURL = "pesotest.hechopormi.com";
   	
   	

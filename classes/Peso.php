@@ -218,5 +218,23 @@ class Peso {
 		}else return false;
 	}
 
+	public function checkRetrasoPeso($conMsi, $pageCode, $palabraTiempo){
+		$sql = "SELECT CASE  WHEN MAX(PES_FECHA) IS NULL OR MAX(PES_FECHA) <= NOW() - INTERVAL 1 ".mysqli_real_escape_string($conMsi, $palabraTiempo)." THEN 'S'
+							 ELSE 'N'
+					   END AS retraso_peso
+				FROM ".$this->tbl."
+				WHERE PES_IDUSER = ".mysqli_real_escape_string($conMsi, $this->pesIduser);
+		
+		if(!$result = $conMsi->query($sql)){ $error = true; rolLog("$pageCode> PES-SQL-02", $sql." -> ".$conMsi->error, 3);}
+		if ($row = $result->fetch_assoc()) {
+			if ($row["retraso_peso"] == "S") {
+				return true;
+			} else {
+				return false;
+			}
+		} else {
+			return true;
+		}
+	}
 }
 ?>
