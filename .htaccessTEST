@@ -1,0 +1,36 @@
+Options +FollowSymlinks -multiViews -Indexes
+Header set X-Endurance-Cache-Level "2"
+<IfModule mod_rewrite.c>
+RewriteEngine On
+#RewriteCond %{HTTPS} !=on
+#RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301,NE]
+Header always set Content-Security-Policy "upgrade-insecure-requests;"
+RewriteBase /
+RewriteRule ^ver/([0-9]+)/([^/]+)$ https://challenges.group/ver/$1/$2 [L]
+RewriteRule ^res/en/([0-9]+)/([^/]+)$ https://challenges.group/res/en/$1/$2 [L]
+RewriteRule ^res/([0-9]+)/([^/]+)$ https://challenges.group/res/$1/$2 [L]
+RewriteRule ^gruok/([0-9]+)/([0-9]+)/([^/]+)$ https://challenges.group/gruok/$1/$2/$3 [L]
+RewriteRule ^gruko/([0-9]+)/([0-9]+)/([^/]+)$ https://challenges.group/gruko/$1/$2/$3 [L]
+RewriteRule ^sign-up/en$ https://challenges.group/sign-up/en [L]
+RewriteRule ^sign-up$ https://challenges.group/sign-up [L]
+RewriteRule ^login/en$ https://challenges.group/login/en [L]
+RewriteRule ^login$ https://challenges.group/login [L]
+RewriteRule ^about-us$ https://challenges.group/about-us [L]
+RewriteRule ^sign-out$ https://challenges.group/sign-out [L]
+RewriteRule ^login-reminder/en$ https://challenges.group/login-reminder/en [L]
+RewriteRule ^login-reminder$ https://challenges.group/login-reminder [L]
+RewriteRule ^not-found$ https://challenges.group/not-found [L]
+RewriteRule ^my-profile$ https://challenges.group/my-profile [L]
+RewriteRule ^sign-ajax$ https://challenges.group/sign-ajax [L]
+RewriteRule ^mis-grupos$ https://challenges.group/mis-grupos [L]
+RewriteRule ^mis-grupos-miembros$ https://challenges.group/mis-grupos-miembros [L]
+RewriteRule ^mis-grupos-estadisticas$ https://challenges.group/mis-grupos-estadisticas [L]
+RewriteRule ^nuevo-miembro$ https://challenges.group/nuevo-miembro [L]
+RewriteRule ^nuevo-grupo$ https://challenges.group/nuevo-grupo [L]
+RewriteRule ^mis-pesos$ https://challenges.group/mis-pesos [L]
+RewriteRule ^nuevo-peso$ https://challenges.group/nuevo-peso [L]
+RewriteRule ^index$ https://challenges.group/index [L]
+RewriteRule ^en$ https://challenges.group/en [L]
+RewriteRule ^(.*)$ https://challenges.group [L]
+</IfModule>
+

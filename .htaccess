@@ -46,5 +46,7 @@ RewriteRule ^mis-pesos$ /mis-pesos.php [L]
 RewriteRule ^nuevo-peso$ /nuevo-peso.php [L]
 RewriteRule ^index$ /index.php [L]
 RewriteRule ^en$ /index.php?idioma=en [L]
+RewriteRule ^cron-task/en$ /cron-task.php?idioma=en [L]
+RewriteRule ^cron-task$ /cron-task.php?idioma=es [L]
 </IfModule>
 

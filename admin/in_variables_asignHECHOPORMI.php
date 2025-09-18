@@ -28,7 +28,7 @@
   	$mailAlertasAdmin = "alertas@psicologosensantodomingo.com"; 
   	$codigoAbrev = "PSG";
   	$nombreGeneral = "Peso (Reto grupal)";
-  	$rootURL = "peso.hechopormi.com";
+  	$rootURL = "pesotest.hechopormi.com";
   	
   	
 	$urlFull = "$accesoHttp$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
