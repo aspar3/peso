@@ -102,7 +102,7 @@ if ($algunGrupoParaAvisar) {
 		
 //echo "The time is ".date("Y/m/d")." ". date("h:i:sa");
 if ($algunMailEnviado && $enviarMails) {
-	enviarMailSMTP($mailAdmin, $mailAlertasAdmin, "", "", $nombreGeneral.": Cron ejecutado", $mailsJuntos, "");
+	enviarMailSMTP($mailAdmin, $mailAlertasAdmin, "", "", $nombreGeneral.": Cron ejecutado con avisos enviados", $mailsJuntos, "");
 }
 
 // $peso = new Peso();
