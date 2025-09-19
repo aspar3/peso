@@ -67,6 +67,7 @@ header("Status: 404 Not Found");
 							 Sus datos serán incluidos en la base de datos de <?=$nombreGeneral?>, cuyo código de inscripción en la AGPD es el 2083090492							 Según LEY ORGÁNICA 15/1999, del 13 de diciembre de protección de datos de carácter personal, usted tiene derecho a acceder a la información que le concierne, recopilada en nuestro fichero de clientes y cancelarla o ratificarla de ser errónea, a través de esta misma web o por email.<br>
 							<br>
 					</div>
+					<br>
 				</section>
 		</div>
 
