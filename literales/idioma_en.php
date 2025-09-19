@@ -101,6 +101,7 @@ define("litVolver", 'Back');
 define("litMisPesos", 'My weights');
 define("litConfirmElimPeso", 'Are you sure you want to delete this weight?');
 define("litFecha", 'Date');
+define("litHora", 'Time');
 define("litPeso", 'Weight');
 define("litComentario", 'Comment');
 define("litNuevoGrupo", 'New group');

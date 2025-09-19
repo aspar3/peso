@@ -1667,6 +1667,7 @@ input, select, textarea {
 	form input[type="email"],
 	form input[type="password"],
 	form input[type="date"],
+	form input[type="time"],
 	form input[type="number"],
 	form select,
 	form textarea {
@@ -1691,6 +1692,28 @@ input, select, textarea {
 		form textarea:focus {
 			background: #f0f0f0;
 		}
+
+	form input.mitad[type="text"],
+	form input.mitad[type="email"],
+	form input.mitad[type="password"],
+	form input.mitad[type="date"],
+	form input.mitad[type="time"],
+	form input.mitad[type="number"],
+	form select.mitad,
+	form textarea.mitad {
+		-moz-transition: background-color 0.25s ease-in-out;
+		-webkit-transition: background-color 0.25s ease-in-out;
+		-ms-transition: background-color 0.25s ease-in-out;
+		transition: background-color 0.25s ease-in-out;
+		-webkit-appearance: none;
+		float: left;
+		border: 1px solid #b5b5b5;
+		width: 50%;
+		box-shadow: inset 2px 2px 0px 0px rgba(0, 0, 0, 0.1);
+		border-radius: 4px;
+		line-height: 1.25em;
+		padding: 0.75em 1em 0.75em 1em;
+	}
 
 	form textarea {
 		min-height: 11em;

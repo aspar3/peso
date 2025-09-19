@@ -100,6 +100,7 @@ define("litVolver", 'volver');
 define("litMisPesos", 'Mis pesos');
 define("litConfirmElimPeso", '¿Está seguro de que desea eliminar este peso?');
 define("litFecha", 'Fecha');
+define("litHora", 'Hora');
 define("litPeso", 'Peso');
 define("litComentario", 'Comentario');
 define("litNuevoGrupo", 'Nuevo grupo');

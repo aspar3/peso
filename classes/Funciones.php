@@ -205,6 +205,14 @@ class Funciones {
 		$date = new DateTime($valor);
 		return $date->format('Y-m-d');
 	}
+
+	public static function horaFormateadaInput($valor) {
+		if ($valor == "") {
+			return "";
+		}
+		$date = new DateTime($valor);
+		return $date->format('H:i');
+	}
 	
 	public static function dateToIcs($dateTime) {
 		return str_replace(" ", "T", str_replace(":", "", str_replace("-", "", $dateTime)));

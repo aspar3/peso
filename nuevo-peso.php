@@ -44,7 +44,7 @@ if ($accion == "save"){
 	$peso->setPesIduser($_SESSION["sesIduser"]);
 	
 	if (!$editar) {
-		$peso->setPesFecha($_POST["fecha"]);
+		$peso->setPesFecha($_POST["fecha"]." ".$_POST["hora"]);
 		$peso->setPesComent($_POST["coment"]);
 		$peso->setPesPeso($_POST["peso"] * 1000 / $_SESSION["sesUniMultipli"]);
 		
@@ -159,7 +159,8 @@ if ($accion == "save"){
 									<div>
 										<label class="desc" for="fecha"><?=sprintf(litFecha)?> <span class="txtRed">*</span></label>
 										<div>
-											<input id="fecha" name="fecha" type="date" value="<?=($editar?Funciones::fechaFormateadaInput($peso->getPesFecha()):date('Y-m-d'))?>" <?=($editar?" disabled ":"")?>>
+											<input id="fecha" class="mitad" name="fecha" type="date" value="<?=($editar?Funciones::fechaFormateadaInput($peso->getPesFecha()):"")?>" <?=($editar?" disabled ":"")?>>
+											<input id="hora" class="mitad" name="hora" type="time" value="<?=($editar?Funciones::horaFormateadaInput($peso->getPesFecha()):"")?>" <?=($editar?" disabled ":"")?>>
 										</div>
 									</div>
 									<div>
@@ -188,9 +189,9 @@ if ($accion == "save"){
 								
 									</section>
 								</div>
-							</div>
 						</div>
 					</div>
+					<br>
 				</section>
 		</div>
 
@@ -203,7 +204,22 @@ if ($accion == "save"){
 			<script src="/assets/js/main.js"></script>
 		
 		<?php include("in-footer.php");?>
-		
+		<?php if (!$editar) { ?>
+			<script type="text/javascript">
+				const now = new Date();
+				const yyyy = now.getFullYear();
+				const mm = String(now.getMonth() + 1).padStart(2, '0'); // Months start at 0
+				const dd = String(now.getDate()).padStart(2, '0');
+				const hh = String(now.getHours()).padStart(2, '0');
+				const mi = String(now.getMinutes()).padStart(2, '0');
+				
+				const formattedDate = `${yyyy}-${mm}-${dd}`; // "YYYY-MM-DD"
+				document.getElementById('fecha').value = formattedDate;
+				const currentTime = `${hh}:${mi}`; // Format: "HH:MM"
+				document.getElementById('hora').value = currentTime;
+			</script>
+		<?php } ?>
+
 	</body>
 </html>	
 

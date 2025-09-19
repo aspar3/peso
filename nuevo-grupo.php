@@ -217,6 +217,7 @@ if ($accion == "save"){
 							</div>
 						</div>
 					</div>
+					<br>
 				</section>
 		</div>
 

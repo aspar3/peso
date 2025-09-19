@@ -35,6 +35,7 @@ header("Status: 404 Not Found");
 						<?php include("in-menu.php");?>
 
 					</div>
+					<br>
 				</section>
 		</div>
 
