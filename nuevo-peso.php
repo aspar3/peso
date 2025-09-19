@@ -55,6 +55,9 @@ if ($accion == "save"){
 			if ($grupoUser->updateAvisoRetrasoUser($conMsi, $pageCode)) {
 				$mensaje1=sprintf(litCambiosOk);
 				$classMsgBox = "msgBox bgGreen txtBlack";
+				if ($enviarMails) { 
+					enviarMailAlert($mailAdmin, $mailAlertasAdmin, "", $nombreGeneral." : ".$_SESSION["sesName"]." ha metido un nuevo peso", "Nuevo peso");
+				}
 				header("Location: /mis-pesos");
 				die();
 			} else {
