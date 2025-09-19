@@ -21,7 +21,10 @@
 		
 		$userInvitado = new User();
 		$userInvitado->setUseIduser($_GET["idUser"]);
-		$userInvitado->setUserWithIdNoStatus($conMsi, $pageCode);
+		if (!$userInvitado->setUserWithIdNoStatus($conMsi, $pageCode)) {
+			header("Location: /not-found");
+			die;
+		}
 		$idioma = new Idioma();
 		$idioma->setIdmIdidioma($userInvitado->getUseIdidioma());
 		$idioma->getIdioma($conMsi, $pageCode);

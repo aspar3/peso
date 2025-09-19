@@ -29,7 +29,7 @@ include_once 'literales/idioma_'.$idiomaTxt.'.php';
 
 $conMsi= crearConexionMysqli();
 
-if ($_GET["msj"] = "ok") {
+if ($_GET["msj"] == "ok") {
 	$mensaje1=sprintf(litCambiosOk);
 	$mensaje2=sprintf(litPerfilOk);
 	$classMsgBox = "msgBox bgGreen txtBlack";
