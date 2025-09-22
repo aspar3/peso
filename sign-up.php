@@ -14,9 +14,12 @@
 	include_once 'classes/Unidad.php';
 	include_once 'classes/GrupoUser.php';
 
+	$idiomaURL = "";
 	$idiomaTxt = $_GET["idioma"];
 	if ($idiomaTxt == "") {
 		$idiomaTxt = "es";
+	} else {
+		$idiomaURL = "/".$idiomaTxt;
 	}
 	include_once 'literales/idioma_'.$idiomaTxt.'.php';
 	
@@ -82,7 +85,7 @@
 								sprintf(litEmailVerif02)."\n".
 								$accesoHttp.$rootURL."/ver/".$user->getUseIduser()."/".$user->getUseVerifyCode()."\n\n".
 								sprintf(litAtentamente)."\n".
-								$nombreGeneral.": ".$accesoHttp.$rootURL;
+								$nombreGeneral.": ".$accesoHttp.$rootURL.$idiomaURL;
 					$subjectUser = $nombreGeneral.": ".sprintf(litEmailVerifSubject);
 												
 					if ($enviarMails) enviarMailSMTP($mailAdmin, $user->getUseMail(), "", "", $subjectUser, $bodyUser, $user->getUseIduser());

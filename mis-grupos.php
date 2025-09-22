@@ -334,7 +334,9 @@
 				        datasets: [
 				        <?php 
 					        foreach ($users as $objUser){
-					        	$color = rand(0, 255);
+					        	$color1 = rand(0, 255);
+					        	$color2 = rand(0, 255);
+					        	$color3 = rand(0, 255);
 					        	$g1Data = "";
 				        		foreach ($objUser[3] as $objPeso){
 			        				$pesoInicial = str_replace(",", ".", $objUser[2]);
@@ -347,8 +349,8 @@
 					            label: '<?=$objUser[1]?>',
 					            data: [<?=$g1Data?>],
 					            <?=$graph2Config?>,
-					            borderColor: 'rgba(<?=$color?>, 0, 0, 1)',
-					            backgroundColor: 'rgba(<?=$color?>, 225, 225, 1)'
+					            borderColor: 'rgba(<?=$color1?>, <?=$color2?>, <?=$color3?>, 1)',
+					            backgroundColor: 'rgba(<?=$color1?>, <?=$color2?>, <?=$color3?>, 1)'
 					            }
 				        <?php 
 				        		if ($objUser !== end($users)) {

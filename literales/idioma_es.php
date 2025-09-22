@@ -1,6 +1,6 @@
 <?php
 define("litMenuInicio", 'Inicio');
-define("litMenuIniciarSesion", 'Iniciar sesion');
+define("litMenuIniciarSesion", 'Iniciar sesión');
 define("litMenuRegistrarse", 'Registrarse');
 define("litMenuMiPerfil", 'Mi perfil');
 define("litMenuMisGrupos", 'Mis grupos');
@@ -9,7 +9,7 @@ define("litMenuNuevoPeso", 'Nuevo peso');
 define("litMenuSalir", 'Salir');
 define("litKeywords", 'Reto peso grupos');
 define("litDescri", 'Reto de peso entre amigos creando grupos');
-
+define("litIniciarSesion", 'Iniciar sesión');
 define("litRegistrarse", 'Registrarse');
 define("litCambiosOk", 'Cambios guardados correctamente.');
 define("litError1", 'Ha ocurrido un error');

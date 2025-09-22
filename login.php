@@ -15,9 +15,12 @@
 	include_once 'classes/Unidad.php';
 	include_once 'classes/Idioma.php';
 	
+	$idiomaURL = "";
 	$idiomaTxt = $_GET["idioma"];
 	if ($idiomaTxt == "") {
 		$idiomaTxt = "es";
+	} else {
+		$idiomaURL = "/".$idiomaTxt;
 	}
 	include_once 'literales/idioma_'.$idiomaTxt.'.php';
 	
@@ -201,13 +204,13 @@
 									<div>
 									    <label class="desc" id="title3"></label>
 									    <div>
-											<a href="/login-reminder"><?=sprintf(litOlvidoPass)?></a>
+											<a href="/login-reminder<?=$idiomaURL?>"><?=sprintf(litOlvidoPass)?></a>
 										</div>
 									</div>
 									<div>
 									    <label class="desc" id="title3"></label>
 									    <div>
-											<a href="/sign-up"><?=sprintf(litRegistrarseNuevo)?></a>
+											<a href="/sign-up<?=$idiomaURL?>"><?=sprintf(litRegistrarseNuevo)?></a>
 										</div>
 									</div>
 								</form>

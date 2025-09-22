@@ -9,7 +9,7 @@ define("litMenuNuevoPeso", 'New weight');
 define("litMenuSalir", 'Log out');
 define("litKeywords", 'Group weight challenge');
 define("litDescri", 'Weight challenge among friends by creating groups');
-
+define("litIniciarSesion", 'Log in');
 define("litRegistrarse", 'Register');
 define("litCambiosOk", 'Changes saved successfully.');
 define("litError1", 'An error has occurred');
