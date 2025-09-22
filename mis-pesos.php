@@ -194,6 +194,9 @@
 			<?php 	
 				$graph2Config = "cubicInterpolationMode: 'monotone', tension: 0.4, borderWidth: 2, spanGaps: true";
 				$graph1Config = $graph2Config.", fill: true";
+				$color1 = rand(0, 255);
+				$color2 = rand(0, 255);
+				$color3 = rand(0, 255);
 			?>
 			<script>
 			    var ctx1 = document.getElementById('myChart1').getContext('2d');
@@ -205,8 +208,8 @@
 				            label: '<?=sprintf(litEvoluPeso)?>',
 				            data: [<?=$g1Data1?>],
 				            <?=$graph1Config?>,
-				            borderColor: 'rgba(255, 0, 0, 1)',
-				            backgroundColor: 'rgba(255, 225, 225, 1)'
+				            borderColor: 'rgba(<?=$color1?>, <?=$color2?>, <?=$color3?>, 1)',
+				            backgroundColor: 'rgba(<?=$color1?>, <?=$color2?>, <?=$color3?>, 1)'
 				        }]
 				    },
 				    options: {

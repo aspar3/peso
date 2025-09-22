@@ -1,15 +1,19 @@
 <?php
 define("litMenuInicio", 'Inicio');
-define("litMenuIniciarSesion", 'Iniciar sesion');
+define("litMenuIniciarSesion", 'Iniciar sesión');
 define("litMenuRegistrarse", 'Registrarse');
 define("litMenuMiPerfil", 'Mi perfil');
-define("litMenuMisGrupos", 'Mis grupos');
+define("litMenuMisGrupos", 'Mis grupos de peso');
 define("litMenuMisPesos", 'Mis pesos');
 define("litMenuNuevoPeso", 'Nuevo peso');
+define("litMenuNuevoDato", 'Nuevo dato');
+define("litMenuOtrosGrupos", 'Otros grupos');
 define("litMenuSalir", 'Salir');
+define("litMenuRetosPeso", 'Retos de peso');
+define("litMenuOtrosRetos", 'Otros retos');
 define("litKeywords", 'Reto peso grupos');
 define("litDescri", 'Reto de peso entre amigos creando grupos');
-
+define("litIniciarSesion", 'Iniciar sesión');
 define("litRegistrarse", 'Registrarse');
 define("litCambiosOk", 'Cambios guardados correctamente.');
 define("litError1", 'Ha ocurrido un error');
@@ -77,10 +81,13 @@ define("litEntrar", 'Entrar');
 define("litBorrarGrupoNoAdmin01", 'No puede borrar el grupo porque no es administrador del grupo.');
 define("litBorrarGrupoNoAdmin02", 'Por favor, contacte con un administrador del grupo si desea borrarlo.');
 define("litMisGrupos", 'Mis grupos');
+define("litMisOtrosGrupos", 'Mis otros grupos');
+define("litMisOtrosGrupos01", 'Aquí podrás gestionar otros grupos de retos no relacionados con el peso.');
 define("litSeguroElimGrupo", '¿Está seguro de que desea eliminar este grupo?');
 define("litInvitacionesPendientes", 'Invitaciones pendientes');
 define("litIconoVerdeRojo", 'Pulsa el icono verde o rojo para aceptar o rechazar entrar en el grupo.');
 define("litFechaInicio", 'Fecha inicio');
+define("litFechaInicioFin", 'Fecha inicio - Fin');
 define("litFechaFin", 'Fecha fin');
 define("litMiembros", 'Miembros');
 define("litAceptarInvitacion", 'Aceptar invitación');
@@ -137,8 +144,15 @@ define("litSemanal", 'Semanal');
 define("litMensual", 'Mensual');
 define("litAdministrador", 'Administrador');
 define("litUsuario", 'Usuario');
-
 define("litMailRecordatorioSubject", 'Recordatorio retraso en tu pesada para el reto');
 define("litMailRecordatorio01", 'Le recordamos que le ha faltado guardar su peso en nuestra web, dado que está en los siguientes grupos que están activos:');
 define("litMailRecordatorio02", 'Por favor, haga clik en el siguiente enlace, inicie sesión y guarde su peso cuanto antes:');
+define("litEvolucionPorcentual", 'Evolución porcentual');
+define("litEvolucionPesoReal", 'Evolución peso real');
+define("litEvolucionCambiosPeso", 'Evolución cambios de peso');
+define("litPreguntaIntro", 'Pregunta al introducir los datos');
+define("litTipoRespuesta", 'Tipo de datos a introducir');
+define("litNuevoDato", 'Nuevo dato');
+define("litIntroNuevoDato", 'Introducir nuevo dato');
+define("litPrimeroGrupo", 'Primero seleccione un grupo');
 ?>

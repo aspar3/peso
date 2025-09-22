@@ -13,6 +13,10 @@ class Grupo {
 	private $gruFecfin;
 	private $gruIdtiempo;
 	private $gruReto;
+	private $gruTipo;
+	private $gruPregunta;
+	private $gruIdrespuesta;
+	private $gruGanador;
 	private $gruFeccre;
 	private $gruStatus;
 	
@@ -77,6 +81,38 @@ class Grupo {
 		$this->gruReto = $gruReto;
 	}
 
+	public function getGruTipo() {
+		return $this->gruTipo;
+	}
+
+	public function setGruTipo($gruTipo) {
+		$this->gruTipo = $gruTipo;
+	}
+
+	public function getGruPregunta() {
+		return $this->gruPregunta;
+	}
+
+	public function setGruPregunta($gruPregunta) {
+		$this->gruPregunta = $gruPregunta;
+	}
+
+	public function getGruIdrespuesta() {
+		return $this->gruIdrespuesta;
+	}
+
+	public function setGruIdrespuesta($gruIdrespuesta) {
+		$this->gruIdrespuesta = $gruIdrespuesta;
+	}
+
+	public function getGruGanador() {
+		return $this->gruGanador;
+	}
+
+	public function setGruGanador($gruGanador) {
+		$this->gruGanador = $gruGanador;
+	}
+
 	public function setGruFeccre($gruFeccre) {
 		$this->gruFeccre = $gruFeccre;
 	}
@@ -136,7 +172,11 @@ class Grupo {
 		$this->gruFecini		= $data["GRU_FECINI"];
 		$this->gruFecfin		= $data["GRU_FECFIN"];
 		$this->gruIdtiempo		= $data["GRU_IDTIEMPO"];
-		$this->gruReto		= $data["GRU_RETO"];
+		$this->gruReto			= $data["GRU_RETO"];
+		$this->gruTipo			= $data["GRU_TIPO"];
+		$this->gruPregunta		= $data["GRU_PREGUNTA"];
+		$this->gruIdrespuesta	= $data["GRU_IDRESPUESTA"];
+		$this->gruGanador		= $data["GRU_GANADOR"];
 		$this->gruFeccre		= $data["GRU_USUCRE"];
 		$this->gruStatus		= $data["GRU_STATUS"];
 		
@@ -175,6 +215,7 @@ class Grupo {
 																	   AND GUS_IDROL = 1) ES_ADMIN
 				FROM ".$this->tbl."
 				WHERE GRU_STATUS = 1
+				  AND GRU_TIPO = ".mysqli_real_escape_string($conMsi, $this->gruTipo)."
 				  AND EXISTS (SELECT 1 FROM GRUPO_USER 
 							  WHERE GUS_IDGRUPO = GRU_IDGRUPO 
 								AND GUS_IDUSER = ".mysqli_real_escape_string($conMsi, $this->gruIduser)."
@@ -188,6 +229,7 @@ class Grupo {
 				else if ($this->getOrder()=="2") $orden = " GRU_FECINI ";
 				else if ($this->getOrder()=="3") $orden = " GRU_FECFIN ";
 				else if ($this->getOrder()=="4") $orden = " NUMERO_MIEMBROS ";
+				else if ($this->getOrder()=="5") $orden = " GRU_RETO ";
 				
 				if ($this->getAsc()=="1") $orden.= " ASC ";
 				if ($this->getAsc()=="2") $orden.= " DESC ";
@@ -213,6 +255,7 @@ class Grupo {
 																	   AND GUS_IDROL = 1) ES_ADMIN
 				FROM ".$this->tbl."
 				WHERE GRU_STATUS = 1
+				  AND GRU_TIPO = ".mysqli_real_escape_string($conMsi, $this->gruTipo)."
 				  AND EXISTS (SELECT 1 FROM GRUPO_USER
 							  WHERE GUS_IDGRUPO = GRU_IDGRUPO
 								AND GUS_IDUSER = ".mysqli_real_escape_string($conMsi, $this->gruIduser)."
@@ -238,6 +281,9 @@ class Grupo {
 					".($this->gruFecfin != ""?"GRU_FECFIN = '".mysqli_real_escape_string($conMsi, $this->gruFecfin)."',":"")."
 					GRU_IDTIEMPO = '".mysqli_real_escape_string($conMsi, $this->gruIdtiempo)."',
 					GRU_RETO = '".mysqli_real_escape_string($conMsi, $this->gruReto)."',
+					GRU_TIPO = '".mysqli_real_escape_string($conMsi, $this->gruTipo)."',
+					GRU_PREGUNTA = '".mysqli_real_escape_string($conMsi, $this->gruPregunta)."',
+					GRU_IDRESPUESTA = '".mysqli_real_escape_string($conMsi, $this->gruIdrespuesta)."',
 					GRU_FECCRE = NOW(),
 					GRU_USUCRE = '".mysqli_real_escape_string($conMsi, $this->gruIduser)."',
 					GRU_STATUS = 1";
@@ -260,6 +306,8 @@ class Grupo {
 					".($this->gruFecfin != ""?"GRU_FECFIN = '".mysqli_real_escape_string($conMsi, $this->gruFecfin)."',":"")."
 					GRU_IDTIEMPO = '".mysqli_real_escape_string($conMsi, $this->gruIdtiempo)."',
 					GRU_RETO = '".mysqli_real_escape_string($conMsi, $this->gruReto)."',
+					GRU_PREGUNTA = '".mysqli_real_escape_string($conMsi, $this->gruPregunta)."',
+					GRU_IDRESPUESTA = '".mysqli_real_escape_string($conMsi, $this->gruIdrespuesta)."',
 					GRU_STATUS = ".mysqli_real_escape_string($conMsi, $this->gruStatus)."
 				WHERE GRU_STATUS = 1
 				  AND GRU_IDGRUPO = ".mysqli_real_escape_string($conMsi, $this->gruIdgrupo)."

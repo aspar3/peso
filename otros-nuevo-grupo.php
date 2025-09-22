@@ -13,6 +13,7 @@ include("in_idiom.php");
 include_once 'classes/Funciones.php';
 include_once 'classes/Grupo.php';
 include_once 'classes/GrupoUser.php';
+include_once 'classes/Respuesta.php';
 include_once 'classes/Tiempo.php';
 
 if (!isset($_SESSION["sesIduser"]) || $_SESSION["sesIduser"]=="" || $_SESSION["sesType"]!=1){
@@ -28,6 +29,9 @@ if ($idiomaTxt == "") {
 include_once 'literales/idioma_'.$idiomaTxt.'.php';
 
 $conMsi= crearConexionMysqli();
+
+// 1: Peso. 2: Otros
+$gruTipo = "2";
 
 $grupo = new Grupo();
 
@@ -48,10 +52,12 @@ if ($accion == "save"){
 	$grupo->setGruNombre($_POST["nombre"]);
 	$grupo->setGruFecini($_POST["fecini"]);
 	$grupo->setGruFecfin($_POST["fecfin"]);
-	$grupo->setGruMostrarPeso($_POST["mostrarPeso"]);
+	$grupo->setGruMostrarPeso("S");
+	$grupo->setGruPregunta($_POST["pregunta"]);
+	$grupo->setGruIdrespuesta($_POST["idrespuesta"]);
 	$grupo->setGruIdtiempo($_POST["idtiempo"]);
 	$grupo->setGruReto($_POST["reto"]);
-	$grupo->setGruTipo("1");
+	$grupo->setGruTipo($gruTipo);
 	
 	if (!$editar) {		
 		if ($grupo->insertGrupo($conMsi, $pageCode)){
@@ -64,7 +70,7 @@ if ($accion == "save"){
 				$mensaje1=sprintf(litCambiosOk);
 				$classMsgBox = "msgBox bgGreen txtBlack";
 				
-				header("Location: /mis-grupos");
+				header("Location: /otros-mis-grupos");
 				die();
 			} else {
 				$mensaje1=sprintf(litError1);
@@ -82,7 +88,7 @@ if ($accion == "save"){
 			$mensaje1=sprintf(litCambiosOk);
 			$classMsgBox = "msgBox bgGreen txtBlack";
 			
-			header("Location: /mis-grupos");
+			header("Location: /otros-mis-grupos");
 			die();
 		}else{
 			$mensaje1=sprintf(litError1);
@@ -110,9 +116,9 @@ if ($accion == "save"){
 				} else if (formulario.fecini.value==""){
 					alert("<?=sprintf(litCampoOblig, sprintf(litFechaInicio))?>");
 					formulario.fecini.focus();
-				} else if (formulario.mostrarPeso.value==""){
-					alert("<?=sprintf(litCampoOblig, sprintf(litPeso))?>");
-					formulario.mostrarPeso.focus();
+				} else if (formulario.idrespuesta.value==""){
+					alert("<?=sprintf(litCampoOblig, sprintf(litTipoRespuesta))?>");
+					formulario.idrespuesta.focus();
 				} else if (formulario.idtiempo.value==""){
 					alert("<?=sprintf(litCampoOblig, sprintf(litPeriodoPesajes))?>");
 					formulario.idtiempo.focus();
@@ -175,11 +181,21 @@ if ($accion == "save"){
 										</div>
 									</div>
 									<div>
-										<label class="desc" for="mostrarPeso"><?=sprintf(litMostrarPeso)?> <span class="txtRed">*</span></label>
+										<label class="desc" for="pregunta"><?=sprintf(litPreguntaIntro)?></label>
 										<div>
-											<select id="mostrarPeso" name="mostrarPeso">
-												<option <?=($grupo->getGruMostrarPeso() == "S"?" selected ":"")?> value="S"><?=sprintf(litSi)?></option>
-												<option <?=($grupo->getGruMostrarPeso() == "N"?" selected ":"")?> value="N"><?=sprintf(litNoPorcen)?></option>
+											<input id="pregunta" name="pregunta" type="text" maxlength="255" value="<?=$grupo->getGruPregunta()?>">
+										</div>
+									</div>
+									<div>
+										<label class="desc" for="idrespuesta"><?=sprintf(litTipoRespuesta)?> <span class="txtRed">*</span></label>
+										<div>
+											<select id="idrespuesta" name="idrespuesta">
+												<?php
+												$respuesta = new Respuesta();
+												foreach ($respuesta->getRespuestas($conMsi, $pageCode) as $objRespuesta) {
+													echo "<option ".($objRespuesta->getResIdrespuesta() == $grupo->getGruIdrespuesta()?"selected":"")." value = '".$objRespuesta->getResIdrespuesta()."'>".$objRespuesta->getResNombre()."</option>";
+												}
+												?>
 											</select>
 										</div>
 									</div>

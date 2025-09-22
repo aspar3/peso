@@ -14,9 +14,12 @@
 	include_once 'classes/Unidad.php';
 	include_once 'classes/GrupoUser.php';
 
+	$idiomaURL = "";
 	$idiomaTxt = $_GET["idioma"];
 	if ($idiomaTxt == "") {
 		$idiomaTxt = "es";
+	} else {
+		$idiomaURL = "/".$idiomaTxt;
 	}
 	include_once 'literales/idioma_'.$idiomaTxt.'.php';
 	
@@ -82,7 +85,7 @@
 								sprintf(litEmailVerif02)."\n".
 								$accesoHttp.$rootURL."/ver/".$user->getUseIduser()."/".$user->getUseVerifyCode()."\n\n".
 								sprintf(litAtentamente)."\n".
-								$nombreGeneral.": ".$accesoHttp.$rootURL;
+								$nombreGeneral.": ".$accesoHttp.$rootURL.$idiomaURL;
 					$subjectUser = $nombreGeneral.": ".sprintf(litEmailVerifSubject);
 												
 					if ($enviarMails) enviarMailSMTP($mailAdmin, $user->getUseMail(), "", "", $subjectUser, $bodyUser, $user->getUseIduser());
@@ -121,7 +124,6 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
 		<link rel="stylesheet" href="/assets/css/main.css?<?=rand(0, 999)?>" />
 		<link rel="stylesheet" href="/css/extra.css?<?=rand(0, 999)?>" />
-		<script src="/js/sign.js"></script>
 		<script type="text/javascript">
 			function saveData(formulario){
 				if (formulario.mail.value==""){

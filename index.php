@@ -14,10 +14,14 @@ include_once 'classes/Peso.php';
 
 $conMsi= crearConexionMysqli();
 
+$idiomaURL = "";
 $idiomaTxt = $_GET["idioma"];
 if ($idiomaTxt == "") {
 	$idiomaTxt = "es";
+} else {
+	$idiomaURL = "/".$idiomaTxt;
 }
+
 include_once 'literales/idioma_'.$idiomaTxt.'.php';
 
 ?>
@@ -63,7 +67,11 @@ include_once 'literales/idioma_'.$idiomaTxt.'.php';
 									<p><?=sprintf(litIntimidad01)?></p>
 
 								</article>
-
+								<div>
+									<div>
+								  		<br><input class="button" id="saveForm" name="saveForm" type="submit" onclick="window.location.href='/login<?=$idiomaURL?>'" value="<?=sprintf(litIniciarSesion)?>">
+								    </div>
+								</div>
 						</div>
 					</div>
 					<br>

@@ -13,9 +13,12 @@
 	include_once 'classes/User.php';
 	include_once 'classes/Idioma.php';
 	
+	$idiomaURL = "";
 	$idiomaTxt = $_GET["idioma"];
 	if ($idiomaTxt == "") {
 		$idiomaTxt = "es";
+	} else {
+		$idiomaURL = "/".$idiomaTxt;
 	}
 	include_once 'literales/idioma_'.$idiomaTxt.'.php';
 	
@@ -35,9 +38,9 @@
 				if ($user->updateReminderCode($conMsi, $pageCode)){
 					$bodyUser = sprintf(litEstimado, $userInvitador->getUseName())."\n\n".
 							sprintf(litCambioPassMail01)."\n".
-							$accesoHttp.$rootURL.$urlIdm."/res/".$user->getUseIduser()."/".$codValida."\n\n".
+							$accesoHttp.$rootURL.$urlIdm.$idiomaURL."/res/".$user->getUseIduser()."/".$codValida."\n\n".
 							sprintf(litAtentamente)."\n".
-							$nombreGeneral.": ".$accesoHttp.$rootURL;
+							$nombreGeneral.": ".$accesoHttp.$rootURL.$idiomaURL;
 					$subjectUser = $nombreGeneral.": ".sprintf(litCambioPassMailSubject);
 					
 					if ($enviarMails) enviarMailSMTP($mailAdmin, $user->getUseMail(), "", "", $subjectUser, $bodyUser, $idUser);
