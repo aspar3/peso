@@ -82,6 +82,7 @@ define("litSeguroElimGrupo", 'Are you sure you want to delete this group?');
 define("litInvitacionesPendientes", 'Pending invitations');
 define("litIconoVerdeRojo", 'Click the green or red icon to accept or decline joining the group.');
 define("litFechaInicio", 'Start date');
+define("litFechaInicioFin", 'Start - End date');
 define("litFechaFin", 'End date');
 define("litMiembros", 'Members');
 define("litAceptarInvitacion", 'Accept invitation');

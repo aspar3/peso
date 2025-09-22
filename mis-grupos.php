@@ -215,10 +215,9 @@
 												<thead>
 													<tr>
 														<th <?=Funciones::getArrow("1", $order, $asc)?> onclick="ordenFiltro(1, <?=($asc=="1"?"2":"1")?>)"><?=sprintf(litNombre)?></th>
-														<th <?=Funciones::getArrow("2", $order, $asc)?> onclick="ordenFiltro(2, <?=($asc=="1"?"2":"1")?>)"><?=sprintf(litFechaInicio)?></th>
-														<th <?=Funciones::getArrow("3", $order, $asc)?> onclick="ordenFiltro(3, <?=($asc=="1"?"2":"1")?>)"><?=sprintf(litFechaFin)?></th>
+														<th <?=Funciones::getArrow("2", $order, $asc)?> onclick="ordenFiltro(2, <?=($asc=="1"?"2":"1")?>)"><?=sprintf(litFechaInicioFin)?></th>
 														<th <?=Funciones::getArrow("4", $order, $asc)?> onclick="ordenFiltro(4, <?=($asc=="1"?"2":"1")?>)"><?=sprintf(litMiembros)?></th>
-														<th <?=Funciones::getArrow("4", $order, $asc)?> onclick="ordenFiltro(4, <?=($asc=="1"?"2":"1")?>)"><?=sprintf(litReto)?></th>
+														<th <?=Funciones::getArrow("5", $order, $asc)?> onclick="ordenFiltro(5, <?=($asc=="1"?"2":"1")?>)"><?=sprintf(litReto)?></th>
 														<th></th>
 													</tr>
 												</thead>
@@ -233,8 +232,14 @@
 													?>
 														    <tr>
 														      <td><?=$objGrupo->getGruNombre()?></td>
-														      <td><?=Funciones::fechaFormateadaIdioma($objGrupo->getGruFecini(), $_SESSION["sesIdidioma"])?></td>
-														      <td><?=Funciones::fechaFormateadaIdioma($objGrupo->getGruFecfin(), $_SESSION["sesIdidioma"])?></td>
+														      <td>
+														      		<?=Funciones::fechaFormateadaIdioma($objGrupo->getGruFecini(), $_SESSION["sesIdidioma"])?>
+														      		<?php
+														      			if ($objGrupo->getGruFecfin() != "") {
+														      				echo "<br>".Funciones::fechaFormateadaIdioma($objGrupo->getGruFecfin(), $_SESSION["sesIdidioma"]);
+														      			}
+														      		?>
+														      </td>
 														      <td class="number"><?=$objGrupo->getNumeroMiembros()?></td>
 														      <td title="<?=$objGrupo->getGruReto()?>" onclick="alert('<?=$objGrupo->getGruReto()?>')"><?=(strlen($objGrupo->getGruReto()) > 10?substr($objGrupo->getGruReto(), 0, 10)."...":$objGrupo->getGruReto())?></td>
 														      <td class="centered">
@@ -261,6 +266,7 @@
 							</div>
 							<div class="graphs">
 							    <div class="graph100">
+							    <span class="tituloGraph"><?=sprintf(litEvolucionPorcentual)?></span>
 									<canvas id="myChart1" width="870" height="435" style="display: block; width: 870px; height: 435px;"></canvas>
 								</div>
 							</div>

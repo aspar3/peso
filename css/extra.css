@@ -15,6 +15,15 @@
     vertical-align: middle;
 }
 
+.scroll {
+	overflow-x:auto;
+    margin-right: -10px;
+}
+
+.scrollable{
+	overflow-x: auto;
+}
+
 .graphs {
 	display: block;
 }

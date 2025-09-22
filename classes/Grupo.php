@@ -188,6 +188,7 @@ class Grupo {
 				else if ($this->getOrder()=="2") $orden = " GRU_FECINI ";
 				else if ($this->getOrder()=="3") $orden = " GRU_FECFIN ";
 				else if ($this->getOrder()=="4") $orden = " NUMERO_MIEMBROS ";
+				else if ($this->getOrder()=="5") $orden = " GRU_RETO ";
 				
 				if ($this->getAsc()=="1") $orden.= " ASC ";
 				if ($this->getAsc()=="2") $orden.= " DESC ";
