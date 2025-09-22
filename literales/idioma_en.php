@@ -141,4 +141,7 @@ define("litUsuario", 'User');
 define("litMailRecordatorioSubject", 'Reminder: You’re late logging your weight for the challenge');
 define("litMailRecordatorio01", 'We remind you that you haven’t logged your weight on our website, and you’re part of the following active groups:');
 define("litMailRecordatorio02", 'Please click the link below, log in, and record your weight as soon as possible.');
+define("litEvolucionPorcentual", 'Percentage evolution');
+define("litEvolucionPesoReal", 'Actual weight evolution');
+define("litEvolucionCambiosPeso", 'Weight change evolution');
 ?>

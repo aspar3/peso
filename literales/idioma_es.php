@@ -137,8 +137,13 @@ define("litSemanal", 'Semanal');
 define("litMensual", 'Mensual');
 define("litAdministrador", 'Administrador');
 define("litUsuario", 'Usuario');
-
 define("litMailRecordatorioSubject", 'Recordatorio retraso en tu pesada para el reto');
 define("litMailRecordatorio01", 'Le recordamos que le ha faltado guardar su peso en nuestra web, dado que está en los siguientes grupos que están activos:');
 define("litMailRecordatorio02", 'Por favor, haga clik en el siguiente enlace, inicie sesión y guarde su peso cuanto antes:');
+define("litEvolucionPorcentual", 'Evolución porcentual');
+define("litEvolucionPesoReal", 'Evolución peso real');
+define("litEvolucionCambiosPeso", 'Evolución cambios de peso');
+
+
+
 ?>

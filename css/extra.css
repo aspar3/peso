@@ -19,6 +19,11 @@
 	display: block;
 }
 
+.graphs .tituloGraph{
+	font-weight: bold;
+    font-size: 24px;
+}
+
 .graph {
 	width: 49%;
 	float: left;

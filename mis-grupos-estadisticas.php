@@ -143,11 +143,21 @@
 							</div>
 							<div class="graphs">
 							    <div class="graph100">
+							    	<span class="tituloGraph"><?=sprintf(litEvolucionPorcentual)?></span>
 									<canvas id="myChart1" width="870" height="435" style="display: block; width: 870px; height: 435px;"></canvas>
 								</div>
-							    <div class="graph100">
-									<canvas id="myChart2" width="870" height="435" style="display: block; width: 870px; height: 435px;"></canvas>
-								</div>
+								<?php if ($grupo->getGruMostrarPeso() == "S") {?>
+											<div class="graph100">
+												<br>
+												<span class="tituloGraph"><?=sprintf(litEvolucionPesoReal)?></span>
+												<canvas id="myChart2" width="870" height="435" style="display: block; width: 870px; height: 435px;"></canvas>
+											</div>
+										    <div class="graph100">
+										    	<br>
+										    	<span class="tituloGraph"><?=sprintf(litEvolucionCambiosPeso)?></span>
+												<canvas id="myChart3" width="870" height="435" style="display: block; width: 870px; height: 435px;"></canvas>
+											</div>
+								<?php }?>
 								<div>
 							  		<br><input class="button" id="volver" name="volver" type="button" onclick="history.back();" value="<?=sprintf(litVolver)?>">
 							    </div>
@@ -231,6 +241,51 @@
 								        	$g1Data = "";
 							        		foreach ($objUser[3] as $objPeso){
 						        				$g1Data.= str_replace(",", ".", $objPeso).", ";
+							        		}
+							        		$g1Data = trim($g1Data, ", ");
+							        ?>
+							        		{
+								            label: '<?=$objUser[1]?>',
+								            data: [<?=$g1Data?>],
+								            <?=$graph2Config?>,
+								            borderColor: 'rgba(<?=$color1?>, <?=$color2?>, <?=$color3?>, 1)',
+								            backgroundColor: 'rgba(<?=$color1?>, <?=$color2?>, <?=$color3?>, 1)'
+								            }
+							        <?php 
+							        		if ($objUser !== end($users)) {
+									        	echo ", ";
+									        }
+								        }
+								    ?>
+							        ]
+							    },
+							    options: {
+								    scales: {
+								      x: {
+								        stacked: true
+								      },
+								      y: {
+								        stacked: false
+								      }
+								    }
+							    }
+							});
+						    var ctx3 = document.getElementById('myChart3').getContext('2d');
+							var myChart = new Chart(ctx3, {
+							    type: 'line',
+							    data: {
+							        labels: [<?=$labels?>],
+							        datasets: [
+							        <?php 
+								        foreach ($users as $objUser){
+								        	$color1 = rand(0, 255);
+								        	$color2 = rand(0, 255);
+								        	$color3 = rand(0, 255);
+								        	$g1Data = "";
+							        		foreach ($objUser[3] as $objPeso){
+							        			$pesoInicial = str_replace(",", ".", $objUser[2]);
+							        			$pesoComparar = str_replace(",", ".", $objPeso);
+							        			$g1Data.= ($pesoInicial - $pesoComparar).", ";
 							        		}
 							        		$g1Data = trim($g1Data, ", ");
 							        ?>
