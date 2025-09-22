@@ -160,7 +160,7 @@ class GrupoUserDato {
 		$sql = "UPDATE ".$this->tbl."
 				SET 
 					GUD_DATO = ".mysqli_real_escape_string($conMsi, $this->gudDato).",
-					GUD_COMENT = '".mysqli_real_escape_string($conMsi, $this->gudComent)."',
+					GUD_COMENT = '".mysqli_real_escape_string($conMsi, $this->gudComent)."'
 				WHERE GUD_IDGUD = ".mysqli_real_escape_string($conMsi, $this->gudIdgud)."
 				  AND GUD_IDGRUPO = ".mysqli_real_escape_string($conMsi, $this->gudIdgrupo)."
 				  AND GUD_IDUSER = ".mysqli_real_escape_string($conMsi, $this->gudIduser);

@@ -74,7 +74,7 @@ if ($accion == "save"){
 				if ($enviarMails) { 
 					enviarMailAlert($mailAdmin, $mailAlertasAdmin, "", $nombreGeneral." : ".$_SESSION["sesName"]." ha metido un nuevo peso", "Nuevo peso");
 				}
-				header("Location: /otros-mis-grupos.php");
+				header("Location: /otros-mis-datos.php?idGrupo=".$idGrupo);
 				die();
 			} else {
 				$mensaje1=sprintf(litError1);
@@ -87,10 +87,9 @@ if ($accion == "save"){
 			$classMsgBox = "msgBox bgRed txtWhite";
 		}
 	} else {
-		$grupoUserDato->setGudIdpeso($idGud);
 		$grupoUserDato->setGudComent($_POST["coment"]);
 		$grupoUserDato->setGudDato($_POST["dato"]);
-		
+
 		if ($grupoUserDato->update($conMsi, $pageCode)){
 			$grupoUser = new GrupoUser();
 			$grupoUser->setGusIduser($_SESSION["sesIduser"]);
@@ -98,7 +97,7 @@ if ($accion == "save"){
 			if ($grupoUser->updateAvisoRetrasoUser($conMsi, $pageCode)) {
 				$mensaje1=sprintf(litCambiosOk);
 				$classMsgBox = "msgBox bgGreen txtBlack";
-				header("Location: /otros-mis-grupos.php");
+				header("Location: /otros-mis-datos.php?idGrupo=".$idGrupo);
 				die();
 			} else {
 				$mensaje1=sprintf(litError1);

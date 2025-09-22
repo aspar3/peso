@@ -47,6 +47,7 @@ if ($idiomaTxt != "" && $idiomaTxt != "es") {
 											<a class="icon solid fa-compress-arrows-alt" href="#"><?=sprintf(litMenuOtrosRetos)?></a>
 											<ul>
 												<li><a class="icon solid fa-compress-arrows-alt" href="/otros-mis-grupos.php"><span><?=sprintf(litMenuOtrosGrupos)?></span></a></li>
+												<li><a class="icon solid fa-balance-scale" href="/otros-mis-datos.php"><span><?=sprintf(litMenuMisDatos)?></span></a></li>
 												<li><a class="icon solid fa-plus-circle" href="/otros-nuevo-dato.php"><span><?=sprintf(litMenuNuevoDato)?></span></a></li>
 											</ul>
 										</li>
