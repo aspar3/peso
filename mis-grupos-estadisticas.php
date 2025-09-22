@@ -285,7 +285,7 @@
 							        		foreach ($objUser[3] as $objPeso){
 							        			$pesoInicial = str_replace(",", ".", $objUser[2]);
 							        			$pesoComparar = str_replace(",", ".", $objPeso);
-							        			$g1Data.= ($pesoInicial - $pesoComparar).", ";
+							        			$g1Data.= ($pesoComparar - $pesoInicial).", ";
 							        		}
 							        		$g1Data = trim($g1Data, ", ");
 							        ?>
