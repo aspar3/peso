@@ -20,10 +20,10 @@
 		header("Location: /login?new=yes");
 		die();
 	}
-	
-	// 1: Peso. 2: Otros
-	$gruTipo = "1";
 
+	// 1: Peso. 2: Otros
+	$gruTipo = "2";
+	
 	$idiomaTxt = $_SESSION["sesIdmLocale"];
 	if ($idiomaTxt == "") {
 		$idiomaTxt = "es";
@@ -99,8 +99,8 @@
 <!DOCTYPE HTML>
 <html>
 	<head>
-		<title><?=$nombreGeneral." - ".sprintf(litMisGrupos)?></title>
-		<meta name="title" content="<?=$nombreGeneral." - ".sprintf(litMisGrupos)?>">
+		<title><?=$nombreGeneral." - ".sprintf(litMisOtrosGrupos)?></title>
+		<meta name="title" content="<?=$nombreGeneral." - ".sprintf(litMisOtrosGrupos)?>">
 		<meta name="verify-v1" content="iktchguQVSJTd8nwo6NGXdZ0nuE1URIv9bJN/OODK8E=" />
 		<?php include("in-metas.php");?>
 		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
@@ -200,7 +200,9 @@
 												</div>
 										<?php }?>
 										<header>
-											<h2><?=sprintf(litMisGrupos)?> <input class="button" id="saveForm" name="saveForm" type="button" onclick="window.location.href='/nuevo-grupo'" value="<?=sprintf(litCrearNuevoGrupo)?>"></h2>
+											<h2><?=sprintf(litMisOtrosGrupos)?> <input class="button" id="saveForm" name="saveForm" type="button" onclick="window.location.href='/otros-nuevo-grupo.php'" value="<?=sprintf(litCrearNuevoGrupo)?>"></h2>
+											<div><?=sprintf(litMisOtrosGrupos01)?></div>
+											<br>
 											<div><?=sprintf(litReordenarColumnas)?></div>
 										</header>
 										<form name="formulario" method="get">
@@ -249,7 +251,7 @@
 														      <td title="<?=$objGrupo->getGruReto()?>" onclick="alert('<?=$objGrupo->getGruReto()?>')"><?=(strlen($objGrupo->getGruReto()) > 10?substr($objGrupo->getGruReto(), 0, 10)."...":$objGrupo->getGruReto())?></td>
 														      <td class="centered">
 														      		<?php if ($objGrupo->getEsAdmin() == "1") {?>
-																			<input type="image" class="tdIcon" src="/images/edit.gif" id="imageButton" title="<?=sprintf(litModificar)?>" alt="<?=sprintf(litModificar)?>" onClick="window.location.href='/nuevo-grupo?idGrupo=<?=$objGrupo->getGruIdgrupo()?>';return false;"/><br>
+																			<input type="image" class="tdIcon" src="/images/edit.gif" id="imageButton" title="<?=sprintf(litModificar)?>" alt="<?=sprintf(litModificar)?>" onClick="window.location.href='/otros-nuevo-grupo.php?idGrupo=<?=$objGrupo->getGruIdgrupo()?>';return false;"/><br>
 																	<?php } else { ?>
 																			<img src="/images/blank.gif"><br>
 																	<?php } ?>
@@ -269,12 +271,6 @@
 									</section>
 								</div>
 							</div>
-							<div class="graphs">
-							    <div class="graph100">
-							    <span class="tituloGraph"><?=sprintf(litEvolucionPorcentual)?></span>
-									<canvas id="myChart1" width="870" height="435" style="display: block; width: 870px; height: 435px;"></canvas>
-								</div>
-							</div>
 						</div>
 					</div>
 					<br>
@@ -289,101 +285,6 @@
 			<script src="/assets/js/util.js"></script>
 			<script src="/assets/js/main.js"></script>
 
-			<?php
-				$user = new User();
-				$user->setUseIduser($_SESSION["sesIduser"]);
-				
-				// crear array, que tendra lo siguiente en las posiciones:
-				// 0) id usuario
-				// 1) nombre usuario
-				// 2) peso inicial
-				// 3) array con los pesos
-				$users = [];
-				$fila = 0;
-				foreach ($user->getUsersSharingGroupsWithMe($conMsi, $pageCode) as $objUser) {
-					$users[$fila][0] = $objUser->getUseIduser();
-					$users[$fila][1] = $objUser->getUseName();
-					$users[$fila][3] = array();
-					$fila++;
-				}
-				
-				$labels = "";
-				$start = $user->getFirstGroupDate($conMsi, $pageCode);
-				$end   = $grupo->getGruFecfin();
-				$hoy = date('Y-m-d');
-				if ($start == "") { $start = $hoy;}
-				if ($end > $hoy) { $end = $hoy;}
-				
-				$weeks = Funciones::getIsoWeeksWithStartDates($start, $end);
-				foreach ($weeks as $week) {
-					//echo $week['year'] . '-W' . sprintf('%02d', $week['week']) . " starts on " . $week['start_of_week'];
-					$labels.= "'".Funciones::fechaFormateadaIdioma($week['start_of_week'], $_SESSION["sesIdidioma"])."', ";
-					
-					$grupoUserSemana = new GrupoUser();
-					$grupoUserSemana->setGusIduser($_SESSION["sesIduser"]);
-					foreach ($grupoUserSemana->getTodosLosGruposUsersPeso($conMsi, $pageCode, $week['year'], $week['week']) as $objUserSemana) {
-						for ($fila = 0; $fila < count($users); $fila++) {
-							if ($objUserSemana->getGusIduser() == $users[$fila][0]){
-								if (count($users[$fila][3]) == 0) {
-									$users[$fila][2] = Funciones::pesoConvertido($objUserSemana->getPesoMedio(), $_SESSION["sesIdunidad"], $_SESSION["sesUniMultipli"]);
-								}
-								array_push($users[$fila][3], Funciones::pesoConvertido($objUserSemana->getPesoMedio(), $_SESSION["sesIdunidad"], $_SESSION["sesUniMultipli"]));
-							}
-						}
-					}
-				}
-				
-				$graph2Config = "cubicInterpolationMode: 'monotone', tension: 0.4, borderWidth: 2, spanGaps: true";
-				$graph1Config = $graph2Config.", fill: true";
-			?>
-			<script>
-			    var ctx1 = document.getElementById('myChart1').getContext('2d');
-				var myChart = new Chart(ctx1, {
-				    type: 'line',
-				    data: {
-				        labels: [<?=$labels?>],
-				        datasets: [
-				        <?php 
-					        foreach ($users as $objUser){
-					        	$color1 = rand(0, 255);
-					        	$color2 = rand(0, 255);
-					        	$color3 = rand(0, 255);
-					        	$g1Data = "";
-				        		foreach ($objUser[3] as $objPeso){
-			        				$pesoInicial = str_replace(",", ".", $objUser[2]);
-			        				$pesoComparar = str_replace(",", ".", $objPeso);
-			        				$g1Data.= ($pesoComparar * 100 / $pesoInicial).", ";
-				        		}
-				        		$g1Data = trim($g1Data, ", ");
-				        ?>
-				        		{
-					            label: '<?=$objUser[1]?>',
-					            data: [<?=$g1Data?>],
-					            <?=$graph2Config?>,
-					            borderColor: 'rgba(<?=$color1?>, <?=$color2?>, <?=$color3?>, 1)',
-					            backgroundColor: 'rgba(<?=$color1?>, <?=$color2?>, <?=$color3?>, 1)'
-					            }
-				        <?php 
-				        		if ($objUser !== end($users)) {
-						        	echo ", ";
-						        }
-					        }
-					    ?>
-				        ]
-				    },
-				    options: {
-					    scales: {
-					      x: {
-					        stacked: true
-					      },
-					      y: {
-					        stacked: false
-					      }
-					    }
-				    }
-				});
-			</script>
-			
 		<?php include("in-footer.php");?>
 		
 	</body>

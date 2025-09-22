@@ -11,8 +11,9 @@ require_once("in_func_mail.php");
 include("in_idiom.php");
 
 include_once 'classes/Funciones.php';
-include_once 'classes/Peso.php';
+include_once 'classes/Grupo.php';
 include_once 'classes/GrupoUser.php';
+include_once 'classes/GrupoUserDato.php';
 
 if (!isset($_SESSION["sesIduser"]) || $_SESSION["sesIduser"]=="" || $_SESSION["sesType"]!=1){
 	//rolLog("$pageCode-01", "No session started or not a signedup user -> (".$_SESSION["sesIduser"].")", 1);
@@ -26,29 +27,44 @@ if ($idiomaTxt == "") {
 }
 include_once 'literales/idioma_'.$idiomaTxt.'.php';
 
+// 1: Peso. 2: Otros
+$gruTipo = "2";
+
 $conMsi= crearConexionMysqli();
 
-$peso = new Peso();
+$idGrupo = $_GET["idGrupo"];
+$grupo = new Grupo();
+if ($idGrupo != "") {
+	$grupo->setGruIdgrupo($idGrupo);
+	$grupo->setGruIduser($_SESSION["sesIduser"]);
+	if (!$grupo->getGrupo($conMsi, $pageCode)) {
+		die;
+	}
+}
+
+$grupoUserDato = new GrupoUserDato();
 
 $editar = false; 
-$idPeso = $_GET["idPeso"];
-if ($idPeso != "") {
+$idGud = $_GET["idGud"];
+if ($idGud != "") {
 	$editar = true;
-	$peso->setPesIduser($_SESSION["sesIduser"]);
-	$peso->setPesIdpeso($idPeso);
-	$peso->getPeso($conMsi, $pageCode);
+	$grupoUserDato->setGudIduser($_SESSION["sesIduser"]);
+	$grupoUserDato->setGudIdgrupo($grupo->getGruIdgrupo());
+	$grupoUserDato->setGudIdgud($idGud);
+	$grupoUserDato->getGrupoUserDato($conMsi, $pageCode);
 }
 
 $accion = $_POST["accion"];
 if ($accion == "save"){
-	$peso->setPesIduser($_SESSION["sesIduser"]);
+	$grupoUserDato->setGudIdgrupo($grupo->getGruIdgrupo());
+	$grupoUserDato->setGudIduser($_SESSION["sesIduser"]);
 	
 	if (!$editar) {
-		$peso->setPesFecha($_POST["fecha"]." ".$_POST["hora"]);
-		$peso->setPesComent($_POST["coment"]);
-		$peso->setPesPeso($_POST["peso"] * 1000 / $_SESSION["sesUniMultipli"]);
+		$grupoUserDato->setGudFecha($_POST["fecha"]." ".$_POST["hora"]);
+		$grupoUserDato->setGudComent($_POST["coment"]);
+		$grupoUserDato->setGudDato($_POST["dato"]);
 		
-		if ($peso->insert($conMsi, $pageCode)){
+		if ($grupoUserDato->insert($conMsi, $pageCode)){
 			$grupoUser = new GrupoUser();
 			$grupoUser->setGusIduser($_SESSION["sesIduser"]);
 			$grupoUser->setGusAvisoRetraso("N");
@@ -58,7 +74,7 @@ if ($accion == "save"){
 				if ($enviarMails) { 
 					enviarMailAlert($mailAdmin, $mailAlertasAdmin, "", $nombreGeneral." : ".$_SESSION["sesName"]." ha metido un nuevo peso", "Nuevo peso");
 				}
-				header("Location: /mis-pesos");
+				header("Location: /otros-mis-grupos.php");
 				die();
 			} else {
 				$mensaje1=sprintf(litError1);
@@ -71,18 +87,18 @@ if ($accion == "save"){
 			$classMsgBox = "msgBox bgRed txtWhite";
 		}
 	} else {
-		$peso->setPesIdpeso($idPeso);
-		$peso->setPesComent($_POST["coment"]);
-		$peso->setPesPeso($_POST["peso"] * 1000 / $_SESSION["sesUniMultipli"]);
+		$grupoUserDato->setGudIdpeso($idGud);
+		$grupoUserDato->setGudComent($_POST["coment"]);
+		$grupoUserDato->setGudDato($_POST["dato"]);
 		
-		if ($peso->update($conMsi, $pageCode)){
+		if ($grupoUserDato->update($conMsi, $pageCode)){
 			$grupoUser = new GrupoUser();
 			$grupoUser->setGusIduser($_SESSION["sesIduser"]);
 			$grupoUser->setGusAvisoRetraso("N");
 			if ($grupoUser->updateAvisoRetrasoUser($conMsi, $pageCode)) {
 				$mensaje1=sprintf(litCambiosOk);
 				$classMsgBox = "msgBox bgGreen txtBlack";
-				header("Location: /mis-pesos");
+				header("Location: /otros-mis-grupos.php");
 				die();
 			} else {
 				$mensaje1=sprintf(litError1);
@@ -101,8 +117,8 @@ if ($accion == "save"){
 <!DOCTYPE HTML>
 <html>
 	<head>
-		<title><?=$nombreGeneral." - ".sprintf(litNuevoPeso)?></title>
-		<meta name="title" content="<?=$nombreGeneral." - ".sprintf(litNuevoPeso)?>">
+		<title><?=$nombreGeneral." - ".sprintf(litNuevoDato)?></title>
+		<meta name="title" content="<?=$nombreGeneral." - ".sprintf(litNuevoDato)?>">
 		<?php include("in-metas.php");?>
 		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
 		<link rel="stylesheet" href="/assets/css/main.css?<?=rand(0, 999)?>" />
@@ -112,9 +128,9 @@ if ($accion == "save"){
 				if (formulario.fecha.value==""){
 					alert("<?=sprintf(litCampoOblig, sprintf(litFecha))?>");
 					formulario.fecha.focus();
-				} else if (formulario.peso.value==""){
-					alert("<?=sprintf(litCampoOblig, sprintf(litPeso))?>");
-					formulario.peso.focus();
+				} else if (formulario.dato.value==""){
+					alert("<?=$grupo->getGruPregunta()?>");
+					formulario.dato.focus();
 				} else formulario.submit();
 			}
 		</script>
@@ -152,36 +168,64 @@ if ($accion == "save"){
 										}
 									?>
 									<header>
-										<h2><?=sprintf(litIntroNuevoPeso)?></h2>
+										<h2><?=sprintf(litIntroNuevoDato)?></h2>
 									</header>
-									  
+
 									<div>
-										<label class="desc" for="fecha"><?=sprintf(litFecha)?> <span class="txtRed">*</span></label>
+										<label class="desc" for="idgrupo"><?=sprintf(litPrimeroGrupo)?> <span class="txtRed">*</span></label>
 										<div>
-											<input id="fecha" class="mitad" name="fecha" type="date" value="<?=($editar?Funciones::fechaFormateadaInput($peso->getPesFecha()):"")?>" <?=($editar?" disabled ":"")?>>
-											<input id="hora" class="mitad" name="hora" type="time" value="<?=($editar?Funciones::horaFormateadaInput($peso->getPesFecha()):"")?>" <?=($editar?" disabled ":"")?>>
+											<select id="idgrupo" name="idgrupo" onchange="window.location.href='/otros-nuevo-dato.php?idGrupo=' + this.value">
+												<option value=""></option>
+												<?php
+													$grupoSelect = new Grupo();
+													$grupoSelect->setGruTipo($gruTipo);
+													$grupoSelect->setGruIduser($_SESSION["sesIduser"]);
+													foreach ($grupoSelect->getGruposAceptados($conMsi, $pageCode) as $objGrupo) {
+														echo "<option ".($objGrupo->getGruIdgrupo() == $idGrupo?"selected":"")." value = '".$objGrupo->getGruIdgrupo()."'>".$objGrupo->getGruNombre()."</option>";
+													}
+												?>
+											</select>
 										</div>
 									</div>
-									<div>
-										<label class="desc" for="peso"><?=sprintf(litPeso)?> (<?=$_SESSION["sesUniAbreviatura"]?>)<span class="txtRed">*</span></label>
-										<div>
-											<input id="peso" name="peso" type="number" maxlength="8" value="<?=Funciones::pesoConvertidoParaInput($peso->getPesPeso(), $_SESSION["sesIdunidad"], $_SESSION["sesUniMultipli"])?>">
-										</div>
-									</div>
-									<div>
-										<label class="desc" for="coment"><?=sprintf(litComentario)?></label>
-										<div>
-											<input id="coment" name="coment" type="text" maxlength="100" value="<?=$peso->getPesComent()?>">
-										</div>
-									</div>
-									<div>
-										<div>
-									  		<br><input class="button" id="saveForm" name="saveForm" type="submit" onclick="saveData(this.form);return false;" value="<?=sprintf(litEnviarDatos)?>">
-									  		<?php if ($editar) {?>
-									  			&nbsp;<input class="button" id="volver" name="volver" type="button" onclick="history.back();" value="<?=sprintf(litVolver)?>">
-									  		<?php }?>
-									    </div>
-									</div>
+									<?php if ($idGrupo != "") {?>
+											<div>
+												<label class="desc" for="fecha"><?=sprintf(litFecha)?> <span class="txtRed">*</span></label>
+												<div>
+													<input id="fecha" class="mitad" name="fecha" type="date" value="<?=($editar?Funciones::fechaFormateadaInput($grupoUserDato->getGudFecha()):"")?>" <?=($editar?" disabled ":"")?>>
+													<input id="hora" class="mitad" name="hora" type="time" value="<?=($editar?Funciones::horaFormateadaInput($grupoUserDato->getGudFecha()):"")?>" <?=($editar?" disabled ":"")?>>
+												</div>
+											</div>
+											<div>
+												<label class="desc" for="dato"><?=$grupo->getGruPregunta()?> <span class="txtRed">*</span></label>
+												<div>
+													<?php if ($grupo->getGruIdrespuesta() == 1) { ?>
+															<input id="dato" name="dato" type="number" maxlength="8" value="<?=$grupoUserDato->getGudDato()?>">
+													<?php } else if ($grupo->getGruIdrespuesta() == 2) { ?>
+															<select id="dato" name="dato">
+																<option value="1"><?=sprintf(litSi)?></option>
+															</select>
+													<?php } else if ($grupo->getGruIdrespuesta() == 3) { ?>
+															<select id="dato" name="dato">
+																<option value="1"><?=sprintf(litNo)?></option>
+															</select>
+													<?php } ?>
+												</div>
+											</div>
+											<div>
+												<label class="desc" for="coment"><?=sprintf(litComentario)?></label>
+												<div>
+													<input id="coment" name="coment" type="text" maxlength="100" value="<?=$grupoUserDato->getGudComent()?>">
+												</div>
+											</div>
+											<div>
+												<div>
+											  		<br><input class="button" id="saveForm" name="saveForm" type="submit" onclick="saveData(this.form);return false;" value="<?=sprintf(litEnviarDatos)?>">
+											  		<?php if ($editar) {?>
+											  			&nbsp;<input class="button" id="volver" name="volver" type="button" onclick="history.back();" value="<?=sprintf(litVolver)?>">
+											  		<?php }?>
+											    </div>
+											</div>
+									<?php }?>
 									  
 								</form>
 								
@@ -203,7 +247,7 @@ if ($accion == "save"){
 			<script src="/assets/js/main.js"></script>
 		
 		<?php include("in-footer.php");?>
-		<?php if (!$editar) { ?>
+		<?php if ($idGrupo != "") {?>
 			<script type="text/javascript">
 				const now = new Date();
 				const yyyy = now.getFullYear();
