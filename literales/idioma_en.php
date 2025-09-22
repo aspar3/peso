@@ -7,6 +7,7 @@ define("litMenuMisGrupos", 'My weight groups');
 define("litMenuMisPesos", 'My weights');
 define("litMenuNuevoPeso", 'New weight');
 define("litMenuNuevoDato", 'New data');
+define("litMenuMisDatos", 'My data');
 define("litMenuOtrosGrupos", 'Other groups');
 define("litMenuSalir", 'Log out');
 define("litMenuRetosPeso", 'Weight challenges');
@@ -156,4 +157,6 @@ define("litTipoRespuesta", 'Type of data to enter');
 define("litNuevoDato", 'New data');
 define("litIntroNuevoDato", 'Enter new data');
 define("litPrimeroGrupo", 'First select a group');
+define("litDato", 'Data');
+define("litEvoluDatos", 'My data evolution');
 ?>
