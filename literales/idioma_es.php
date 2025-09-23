@@ -162,4 +162,7 @@ define("litPrimeroGrupo", 'Primero seleccione un grupo');
 define("litDato", 'Dato');
 define("litEvoluDatos", 'Evolución de mis datos');
 define("litGrupo", 'Grupo');
+define("litQuienGana", '¿Quién gana?');
+define("litQuienGanaMas", 'El que sume más');
+define("litQuienGanaMenos", 'El que sume menos');
 ?>

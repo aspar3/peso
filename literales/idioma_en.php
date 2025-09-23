@@ -163,4 +163,7 @@ define("litPrimeroGrupo", 'First select a group');
 define("litDato", 'Data');
 define("litEvoluDatos", 'My data evolution');
 define("litGrupo", 'Group');
+define("litQuienGana", 'Who wins?');
+define("litQuienGanaMas", 'The one who scores the most');
+define("litQuienGanaMenos", 'The one who scores the least');
 ?>

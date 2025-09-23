@@ -284,6 +284,7 @@ class Grupo {
 					GRU_TIPO = '".mysqli_real_escape_string($conMsi, $this->gruTipo)."',
 					GRU_PREGUNTA = '".mysqli_real_escape_string($conMsi, $this->gruPregunta)."',
 					GRU_IDRESPUESTA = '".mysqli_real_escape_string($conMsi, $this->gruIdrespuesta)."',
+					GRU_GANADOR = ".Funciones::numberVacio2cero(mysqli_real_escape_string($conMsi, $this->gruGanador)).",
 					GRU_FECCRE = NOW(),
 					GRU_USUCRE = '".mysqli_real_escape_string($conMsi, $this->gruIduser)."',
 					GRU_STATUS = 1";
@@ -308,6 +309,7 @@ class Grupo {
 					GRU_RETO = '".mysqli_real_escape_string($conMsi, $this->gruReto)."',
 					GRU_PREGUNTA = '".mysqli_real_escape_string($conMsi, $this->gruPregunta)."',
 					GRU_IDRESPUESTA = '".mysqli_real_escape_string($conMsi, $this->gruIdrespuesta)."',
+					GRU_GANADOR = ".Funciones::numberVacio2cero(mysqli_real_escape_string($conMsi, $this->gruGanador)).",
 					GRU_STATUS = ".mysqli_real_escape_string($conMsi, $this->gruStatus)."
 				WHERE GRU_STATUS = 1
 				  AND GRU_IDGRUPO = ".mysqli_real_escape_string($conMsi, $this->gruIdgrupo)."

@@ -102,6 +102,14 @@ class Funciones {
 		}
 	}
 	
+	public static function numberVacio2cero($valor) {
+		if ($valor == "" || $valor == null) {
+			return "0";
+		} else {
+			return $valor;
+		}
+	}
+	
 	public static function dateVacio2null($valor) {
 		if ($valor == "" || $valor == null) {
 			return "null";
