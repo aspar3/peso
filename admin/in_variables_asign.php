@@ -26,8 +26,10 @@
   	$mailPass = "!ffV^mf#mJks!md?";
   	$mailAdmin = "info@challenges.group";
   	$mailAlertasAdmin = "alertas@psicologosensantodomingo.com"; 
-  	$codigoAbrev = "PSG";
-  	$nombreGeneral = "Peso (Reto grupal)";
+  	$codigoAbrev = "RGR";
+  	// Aunque se define aqui, se sobrescribe en los ficheros de literales para que este traducido
+  	// se pone tambien aqui por si hay alguna pagina que por error no incluya los ficheros de literales 
+  	$nombreGeneral = "Retos grupales";
   	$rootURL = "challenges.group";
   	
   	

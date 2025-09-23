@@ -1,4 +1,5 @@
 <?php
+$nombreGeneral = "Retos grupales";
 define("litMenuInicio", 'Inicio');
 define("litMenuIniciarSesion", 'Iniciar sesión');
 define("litMenuRegistrarse", 'Registrarse');
@@ -53,9 +54,11 @@ define("litPerfilOk", 'Su perfil se ha actualizado correctamente.');
 define("litMailExiste", 'El Email ya existe.');
 define("litCambiarPerfil", 'Cambiar mi perfil');
 define("litNoCambiarPass", 'Si no desea cambiar su contraseña, déjela vacía. Después de hacer los cambios deseados, presione en "Guardar"');
-define("litFormaVida", 'Una forma de vida. Una forma de comer.');
+define("litFormaVida", 'Una forma de vida. Una forma de hacer retos.');
 define("litBienvenido", '¡Bienvenido a <strong>%1$s</strong>!');
-define("litBienvenido01", 'En esta web podrás crear grupos con los que llevar un control sobre quien va adelgazando más.');
+define("litBienvenido01", 'En esta web podrá crear grupos con los que llevar un control sobre los retos que haga con sus amigos.');
+define("litBienvenido02", 'Podrá hacer retos de todo tipo, siempre que se puedan medir numéricamente (por ejemplo los pasos dados en un día), o con un "sí" o un "no" (por ejemplo, indicar si un día ha hecho ejercicio o no).');
+define("litBienvenido03", 'En esta web podrás crear grupos con los que llevar un control sobre quien va adelgazando más. También podrá hacer retos relacionados con el peso (a ver quién adelgaza más, ya sea absolutamente o porcentualmente).');
 define("litIntimidad", 'Intimidad');
 define("litIntimidad01", 'Si lo deseas, puedes configurar un grupo para que no se muestren los pesos, y solo se muestre el porcentaje de subida o bajada de peso de cada componente del grupo.');
 define("litAceptInvitacion", '%1$s ha aceptado la invitación al grupo %2$s.');
@@ -158,4 +161,8 @@ define("litIntroNuevoDato", 'Introducir nuevo dato');
 define("litPrimeroGrupo", 'Primero seleccione un grupo');
 define("litDato", 'Dato');
 define("litEvoluDatos", 'Evolución de mis datos');
+define("litGrupo", 'Grupo');
+define("litQuienGana", '¿Quién gana?');
+define("litQuienGanaMas", 'El que sume más');
+define("litQuienGanaMenos", 'El que sume menos');
 ?>

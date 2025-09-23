@@ -55,6 +55,11 @@ if ($accion == "save"){
 	$grupo->setGruMostrarPeso("S");
 	$grupo->setGruPregunta($_POST["pregunta"]);
 	$grupo->setGruIdrespuesta($_POST["idrespuesta"]);
+	if ($grupo->getGruIdrespuesta() == 1) {
+		$grupo->setGruGanador($_POST["ganador"]);
+	} else {
+		$grupo->setGruGanador("0");
+	}
 	$grupo->setGruIdtiempo($_POST["idtiempo"]);
 	$grupo->setGruReto($_POST["reto"]);
 	$grupo->setGruTipo($gruTipo);
@@ -70,7 +75,7 @@ if ($accion == "save"){
 				$mensaje1=sprintf(litCambiosOk);
 				$classMsgBox = "msgBox bgGreen txtBlack";
 				
-				header("Location: /otros-mis-grupos");
+				header("Location: /otros-mis-grupos.php");
 				die();
 			} else {
 				$mensaje1=sprintf(litError1);
@@ -88,7 +93,7 @@ if ($accion == "save"){
 			$mensaje1=sprintf(litCambiosOk);
 			$classMsgBox = "msgBox bgGreen txtBlack";
 			
-			header("Location: /otros-mis-grupos");
+			header("Location: /otros-mis-grupos.php");
 			die();
 		}else{
 			$mensaje1=sprintf(litError1);
@@ -123,6 +128,14 @@ if ($accion == "save"){
 					alert("<?=sprintf(litCampoOblig, sprintf(litPeriodoPesajes))?>");
 					formulario.idtiempo.focus();
 				} else formulario.submit();
+			}
+			
+			function visibilidadDivGanador(){
+				if (document.getElementById("idrespuesta").value=='1') {
+					document.getElementById("divGanador").style.display = "block";
+				} else {
+					document.getElementById("divGanador").style.display = "none";
+				}
 			}
 		</script>
 	</head>
@@ -189,7 +202,7 @@ if ($accion == "save"){
 									<div>
 										<label class="desc" for="idrespuesta"><?=sprintf(litTipoRespuesta)?> <span class="txtRed">*</span></label>
 										<div>
-											<select id="idrespuesta" name="idrespuesta">
+											<select id="idrespuesta" name="idrespuesta" onchange="visibilidadDivGanador()">
 												<?php
 												$respuesta = new Respuesta();
 												foreach ($respuesta->getRespuestas($conMsi, $pageCode) as $objRespuesta) {
@@ -199,6 +212,16 @@ if ($accion == "save"){
 											</select>
 										</div>
 									</div>
+									<div id="divGanador">
+										<label class="desc" for="ganador"><?=sprintf(litQuienGana)?> <span class="txtRed">*</span></label>
+										<div>
+											<select id="ganador" name="ganador">
+												<option value="0" <?=($grupo->getGruGanador()=="0"?"selected":"")?>><?=sprintf(litQuienGanaMas)?></option>
+												<option value="1" <?=($grupo->getGruGanador()=="1"?"selected":"")?>><?=sprintf(litQuienGanaMenos)?></option>
+											</select>
+										</div>
+									</div>
+
 									<div>
 										<label class="desc" for="idtiempo"><?=sprintf(litPeriodoPesajes)?> <span class="txtRed">*</span></label>
 										<div>
@@ -246,6 +269,7 @@ if ($accion == "save"){
 			<script src="/assets/js/breakpoints.min.js"></script>
 			<script src="/assets/js/util.js"></script>
 			<script src="/assets/js/main.js"></script>
+			<script type="text/javascript">visibilidadDivGanador()</script>
 		
 		<?php include("in-footer.php");?>
 		

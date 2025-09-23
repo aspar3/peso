@@ -171,7 +171,7 @@ if ($accion == "save"){
 									</header>
 
 									<div>
-										<label class="desc" for="idgrupo"><?=sprintf(litPrimeroGrupo)?> <span class="txtRed">*</span></label>
+										<label class="desc" for="idgrupo"><?=($idGrupo==""?sprintf(litPrimeroGrupo):sprintf(litGrupo))?> <span class="txtRed">*</span></label>
 										<div>
 											<select id="idgrupo" name="idgrupo" onchange="window.location.href='/otros-nuevo-dato.php?idGrupo=' + this.value">
 												<option value=""></option>

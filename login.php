@@ -13,6 +13,7 @@
 
 	include_once 'classes/User.php';
 	include_once 'classes/Unidad.php';
+	include_once 'classes/Grupo.php';
 	include_once 'classes/Idioma.php';
 	
 	$idiomaURL = "";
@@ -25,11 +26,12 @@
 	include_once 'literales/idioma_'.$idiomaTxt.'.php';
 	
 	if (isset($_SESSION["sesIduser"]) && $_SESSION["sesIduser"] != ""){
-		if ($_GET["invitacion"] == "ok") {
-			header("Location: mis-grupos");
-		} else {
-			header("Location: nuevo-peso");
-		}
+		header("Location: ".funUrlRedir());
+// 		if ($_GET["invitacion"] == "ok") {
+// 			header("Location: mis-grupos");
+// 		} else {
+// 			header("Location: nuevo-peso");
+// 		}
 		die();
 	}
 		
@@ -66,9 +68,7 @@
 				$idioma->setIdmIdidioma($user->getUseIdidioma());
 				$idioma->getIdioma($conMsi, $pageCode);
 				$_SESSION["sesIdmLocale"] = $idioma->getIdmLocale();
-				
-				mysqli_close($conMsi);
-				
+								
 				if ($_POST["remember"]=="1"){
 					$number_of_days = 365 ;
 					$date_of_expiry = time() + 60 * 60 * 24 * $number_of_days ;
@@ -83,7 +83,7 @@
 					setcookie("cookie", "", time() - 3600, "/");
 				}
 				
-				header("Location: /nuevo-peso");
+				header("Location: ".funUrlRedir());
 				die();
 			}
 		}
@@ -236,4 +236,22 @@
 
 <?php
 	die();
+	
+	function funUrlRedir() {
+		$conMsi= crearConexionMysqli();
+		$grupo = new Grupo();
+		$grupo->setGruIduser($_SESSION["sesIduser"]);
+		//				$listGruposPeso = $grupo->getGruposByTipo($conMsi, $pageCode, "1");
+		$listGruposOtros = $grupo->getGruposByTipo($conMsi, $pageCode, "2");
+		
+		mysqli_close($conMsi);
+		
+		if (count($listGruposOtros) == 1) {
+			return "/otros-nuevo-dato.php?idGrupo=".$listGruposOtros[0]->getGruIdgrupo();
+		} else if (count($listGruposOtros) > 1) {
+			return "/otros-nuevo-dato.php";
+		} else {
+			return "/nuevo-peso";
+		}
+	}
 ?>

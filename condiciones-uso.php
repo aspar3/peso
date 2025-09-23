@@ -28,7 +28,7 @@ header("Status: 404 Not Found");
 
 						<!-- Logo -->
 							<h1 id="logo"><a href="index.php"><img src="/images/logo.png" alt="<?=$nombreGeneral?>"></a></h1>
-							<p>Una forma de vida. Una forma de comer.</p>
+							<p>Una forma de vida. Una forma de retarse.</p>
 							
 						<?php include("in-menu.php");?>
 

@@ -1,4 +1,5 @@
 <?php
+$nombreGeneral = "Group challenges";
 define("litMenuInicio", 'Home');
 define("litMenuIniciarSesion", 'Log in');
 define("litMenuRegistrarse", 'Register');
@@ -53,9 +54,11 @@ define("litPerfilOk", 'Your profile has been successfully updated.');
 define("litMailExiste", 'Email already exists.');
 define("litCambiarPerfil", 'Edit my profile');
 define("litNoCambiarPass", 'If you don’t want to change your password, leave it blank. After making the desired changes, click "Save"');
-define("litFormaVida", 'A way of life. A way of eating.');
+define("litFormaVida", 'A way of life. A way of group challenges.');
 define("litBienvenido", 'Welcome to <strong>%1$s</strong>!');
-define("litBienvenido01", 'On this website you can create groups to track who is losing the most weight.');
+define("litBienvenido01", 'On this website, you can create groups to track the challenges you do with your friends.');
+define("litBienvenido02", 'You can create all kinds of challenges, as long as they can be measured numerically (e.g., steps taken in a day) or with a "yes" or "no" (e.g., indicating whether you exercised on a given day).');
+define("litBienvenido03", 'On this website, you can create groups to track who is losing the most weight. You can also create weight-related challenges (to see who loses more weight, either in absolute terms or by percentage).');
 define("litIntimidad", 'Privacy');
 define("litIntimidad01", 'If you wish, you can configure a group so that weights are hidden and only the percentage of weight gain or loss is shown for each member.');
 define("litAceptInvitacion", '%1$s has accepted the invitation to group %2$s.');
@@ -159,4 +162,8 @@ define("litIntroNuevoDato", 'Enter new data');
 define("litPrimeroGrupo", 'First select a group');
 define("litDato", 'Data');
 define("litEvoluDatos", 'My data evolution');
+define("litGrupo", 'Group');
+define("litQuienGana", 'Who wins?');
+define("litQuienGanaMas", 'The one who scores the most');
+define("litQuienGanaMenos", 'The one who scores the least');
 ?>
