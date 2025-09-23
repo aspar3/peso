@@ -335,11 +335,47 @@ class Grupo {
 							  WHERE GUS_IDGRUPO = GRU_IDGRUPO)
 					  )";
 		echo $sql;
-		if(!$conMsi->query($sql)){ $error = true; rolLog("$pageCode> GRU-SQL-13", $sql." -> ".$conMsi->error, 3);}
+		if(!$conMsi->query($sql)){ $error = true; rolLog("$pageCode> GRU-SQL-19", $sql." -> ".$conMsi->error, 3);}
 		
 		if (!$error){
 			return true;
 		}else return false;
 	}
+	
+	function desactivarGrupoPorFechafin($conMsi, $pageCode){
+		global $error;
+		
+		$sql = "UPDATE ".$this->tbl."
+				SET GRU_STATUS = 0
+				WHERE GRU_FECFIN < NOW()";
+		
+		if(!$conMsi->query($sql)){ $error = true; rolLog("$pageCode> GRU-SQL-20", $sql." -> ".$conMsi->error, 3);}
+		else {return true;}
+		
+		return false;
+	}
+	
+	function getGruposByTipo($conMsi, $pageCode, $gruTipo){
+		global $error;
+		$list = array();
+		
+		$sql = "SELECT *
+				FROM ".$this->tbl."
+					LEFT JOIN ".$this->grupoUserTbl." ON GUS_IDGRUPO = GRU_IDGRUPO
+				WHERE GUS_VERIFY_CODE IS NOT NULL
+				  AND GUS_IDUSER = ".mysqli_real_escape_string($conMsi, $this->gruIduser)."
+				  AND GRU_STATUS = 1
+				  AND GRU_TIPO = ".mysqli_real_escape_string($conMsi, $gruTipo);
+
+		if(!$result = $conMsi->query($sql)){ $error = true; rolLog("$pageCode> GRU-SQL-01", $sql." -> ".$conMsi->error, 3);}
+		
+		while ($row = $result->fetch_assoc()){
+			$obj = new Grupo();
+			$obj->setGrupo($row);
+			array_push($list, $obj);
+		}
+		return $list;
+	}
+	
 }
 ?>

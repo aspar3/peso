@@ -396,11 +396,11 @@ class GrupoUser {
 				WHERE GUS_IDGRUPO = ".mysqli_real_escape_string($conMsi, $this->gusIdgrupo)."
 				  AND GUS_IDUSER = ".mysqli_real_escape_string($conMsi, $this->gusIduser);
 		
-		if(!$conMsi->query($sql)){ $error = true; rolLog("$pageCode> GUS-SQL-16", $sql." -> ".$conMsi->error, 3);}
+		if(!$conMsi->query($sql)){ $error = true; rolLog("$pageCode> GUS-SQL-17", $sql." -> ".$conMsi->error, 3);}
 		
 		if (!$error){
 			return true;
 		}else return false;
-	}
+	}	
 }
 ?>

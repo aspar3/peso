@@ -10,6 +10,7 @@ include_once 'classes/User.php';
 include_once 'classes/Idioma.php';
 include_once 'classes/Peso.php';
 include_once 'classes/GrupoUser.php';
+include_once 'classes/Grupo.php';
 
 $pageCode = "CTK";
 
@@ -112,6 +113,8 @@ if ($algunMailEnviado && $enviarMails) {
 // $peso->setPesComent(date("Y/m/d")." ". date("h:i:sa")."\n".$mailsJuntos);
 // $peso->insert($conMsi, $pageCode);
 
+$grupo = new Grupo();
+$grupo->desactivarGrupoPorFechafin($conMsi, $pageCode);
 
 mysqli_close($conMsi);
 die(); 

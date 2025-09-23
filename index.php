@@ -62,7 +62,9 @@ include_once 'literales/idioma_'.$idiomaTxt.'.php';
 									<header>
 										<h2><?=sprintf(litBienvenido, $nombreGeneral)?></strong>!</h2>
 									</header>
-									<p><?=sprintf(litBienvenido01)?></p>									
+									<p><?=sprintf(litBienvenido01)?></p>
+									<p><?=sprintf(litBienvenido02)?></p>
+									<p><?=sprintf(litBienvenido03)?></p>									
 									<h3><?=sprintf(litIntimidad)?></h3>
 									<p><?=sprintf(litIntimidad01)?></p>
 
@@ -72,6 +74,11 @@ include_once 'literales/idioma_'.$idiomaTxt.'.php';
 								  		<br><input class="button" id="saveForm" name="saveForm" type="submit" onclick="window.location.href='/login<?=$idiomaURL?>'" value="<?=sprintf(litIniciarSesion)?>">
 								    </div>
 								</div>
+								<?php if ($idiomaURL == "") {?>
+										<br><a href="/en">English version</a>
+								<?php } else {?>
+										<br><a href="/">Version en español</a>
+								<?php } ?>
 						</div>
 					</div>
 					<br>
