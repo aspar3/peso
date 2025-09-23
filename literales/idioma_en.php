@@ -1,4 +1,5 @@
 <?php
+$nombreGeneral = "Group challenges";
 define("litMenuInicio", 'Home');
 define("litMenuIniciarSesion", 'Log in');
 define("litMenuRegistrarse", 'Register');

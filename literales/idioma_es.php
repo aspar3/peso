@@ -1,4 +1,5 @@
 <?php
+$nombreGeneral = "Retos grupales";
 define("litMenuInicio", 'Inicio');
 define("litMenuIniciarSesion", 'Iniciar sesión');
 define("litMenuRegistrarse", 'Registrarse');

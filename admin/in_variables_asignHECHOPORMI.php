@@ -27,6 +27,8 @@
   	$mailAdmin = "peso@hechopormi.com";
   	$mailAlertasAdmin = "alertas@psicologosensantodomingo.com"; 
   	$codigoAbrev = "PSG";
+  	// Aunque se define aqui, se sobrescribe en los ficheros de literales para que este traducido
+  	// se pone tambien aqui por si hay alguna pagina que por error no incluya los ficheros de literales 
   	$nombreGeneral = "PesoTEST (Reto grupal)";
   	$rootURL = "pesotest.hechopormi.com";
   	
