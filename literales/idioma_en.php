@@ -9,7 +9,7 @@ define("litMenuMisPesos", 'My weights');
 define("litMenuNuevoPeso", 'New weight');
 define("litMenuNuevoDato", 'New data');
 define("litMenuMisDatos", 'My data');
-define("litMenuOtrosGrupos", 'Other groups');
+define("litMenuOtrosGrupos", 'My groups');
 define("litMenuSalir", 'Log out');
 define("litMenuRetosPeso", 'Weight challenges');
 define("litMenuOtrosRetos", 'Other challenges');

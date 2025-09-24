@@ -2083,7 +2083,7 @@ input, select, textarea {
 			}
 
 		.dropotron span, .dropotron a {
-			display: block;
+/* 			display: block; */
 			padding: 0.3em 1em 0.3em 1em;
 			border: 0;
 			border-top: solid 1px #f0f0f0;
