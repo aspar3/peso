@@ -1,6 +1,6 @@
 <?php
-error_reporting(E_ALL);
-ini_set("display_errors", 1);
+// error_reporting(E_ALL);
+// ini_set("display_errors", 1);
 // las 12:45 en el cron de dentalguia son las 18:45 en Getxo
 echo "The time is ".date("Y/m/d")." ". date("h:i:sa")."<br>";
 

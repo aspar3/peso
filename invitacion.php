@@ -38,6 +38,10 @@
 		$grupoUser->setGusIdgrupo($_GET["idGrupo"]);
 		$grupoUser->setGusIduser($_GET["idUser"]);
 		$grupoUser->setGusVerifyCode($_GET["verifyCode"]);
+		$enviarMailAdmin = false;
+		if ($grupoUser->pendienteInvitacion($conMsi, $pageCode)) {
+			$enviarMailAdmin = true;
+		}
 		if (!$grupoUser->aceptarInvitacion($conMsi, $pageCode)) {
 			$mensaje1=sprintf(litError1);
 			$mensaje2=sprintf(litError2, $mailAdmin);
@@ -60,7 +64,7 @@
 					$nombreGeneral.": ".$accesoHttp.$rootURL;
 			$subjectUser = $nombreGeneral.": ".sprintf(litInvitacionSubject, $userInvitado->getUseName());
 			
-			if ($enviarMails) enviarMailSMTP($mailAdmin, $userInvitador->getUseMail(), "", "", $subjectUser, $bodyUser, $userInvitador->getUseIduser());
+			if ($enviarMails && $enviarMailAdmin) enviarMailSMTP($mailAdmin, $userInvitador->getUseMail(), "", "", $subjectUser, $bodyUser, $userInvitador->getUseIduser());
 					
 			$user = new User();
 			$user->setUseIduser($_GET["idUser"]);

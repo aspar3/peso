@@ -238,6 +238,23 @@ class GrupoUser {
 		}else return false;
 	}
 	
+	function pendienteInvitacion($conMsi, $pageCode){
+		global $error;
+		
+		$sql = "SELECT GUS_VERIFY_CODE
+				FROM ".$this->tbl."
+				WHERE GUS_IDGRUPO = ".mysqli_real_escape_string($conMsi, $this->gusIdgrupo)."
+				  AND GUS_IDUSER = ".mysqli_real_escape_string($conMsi, $this->gusIduser)."
+				  AND GUS_VERIFY_CODE IS NOT NULL
+				  AND GUS_VERIFY_CODE != ''";
+		
+		if(!$result = $conMsi->query($sql)){ $error = true; rolLog("$pageCode> GUS-SQL-13", $sql." -> ".$conMsi->error, 3);}
+		
+		if (mysqli_num_rows($result)==1){
+			return true;
+		}else return false;
+	}
+	
 	function deleteGrupoUser($conMsi, $pageCode){
 		global $error;
 		
