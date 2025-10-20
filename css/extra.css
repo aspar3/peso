@@ -15,6 +15,10 @@
     vertical-align: middle;
 }
 
+a.noUnderlined {
+	text-decoration: none;
+}
+
 .scroll {
 	overflow-x:auto;
     margin-right: -10px;

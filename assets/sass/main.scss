@@ -476,6 +476,10 @@
 			line-height: 1.25em;
 			padding: 0.75em 1em 0.75em 1em;
 
+		  background-color: white;
+		  appearance: none; /* reduce estilo nativo */
+		  -moz-appearance: none;
+
 			&:focus {
 				background: #f0f0f0;
 			}
@@ -995,7 +999,8 @@
 			select,
 			textarea {
 				background: #f7f7f7;
-
+		  appearance: none; /* reduce estilo nativo */
+		  -moz-appearance: none;
 				&:focus {
 					background: #fff;
 				}

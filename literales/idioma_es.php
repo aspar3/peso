@@ -173,4 +173,5 @@ define("litQuienGanaMenos", 'El que sume menos');
 define("litQuienGanaMediaMas", 'El que tenga mejor media');
 define("litQuienGanaMediaMenos", 'El que tenga peor media');
 define("litPeriodoDatos", 'Periodo de introducción de datos');
+define("litAyudaPregunta", 'Por ejemplo, en un reto de quien da más pasos, la pregunta para meter los datos sería:\n\n¿Cuántos pasos has dado?');
 ?>

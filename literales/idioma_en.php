@@ -174,4 +174,5 @@ define("litQuienGanaMenos", 'The one who scores the least');
 define("litQuienGanaMediaMas", 'The one who scores the best average');
 define("litQuienGanaMediaMenos", 'The one who scores the worst average');
 define("litPeriodoDatos", 'Period between data entry');
+define("litAyudaPregunta", 'For example, in a challenge to see who takes the most steps, the question to enter data would be:\n\nHow many steps have you taken?');
 ?>

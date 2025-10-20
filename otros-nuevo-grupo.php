@@ -18,7 +18,7 @@ include_once 'classes/Tiempo.php';
 
 if (!isset($_SESSION["sesIduser"]) || $_SESSION["sesIduser"]=="" || $_SESSION["sesType"]!=1){
 	//rolLog("$pageCode-01", "No session started or not a signedup user -> (".$_SESSION["sesIduser"].")", 1);
-	header("Location: /login?new=yes");
+	header("Location: /login?new=yes&goUrl=".ltrim($_SERVER['REQUEST_URI'], '/'));
 	die();
 }
 
@@ -194,7 +194,7 @@ if ($accion == "save"){
 										</div>
 									</div>
 									<div>
-										<label class="desc" for="pregunta"><?=sprintf(litPreguntaIntro)?></label>
+										<label class="desc" for="pregunta"><?=sprintf(litPreguntaIntro)?> <a class="noUnderlined" href="javascript:alert('<?php echo sprintf(litAyudaPregunta)?>')"><img src="/images/infoLeft.gif"></a></label>
 										<div>
 											<input id="pregunta" name="pregunta" type="text" maxlength="255" value="<?=$grupo->getGruPregunta()?>">
 										</div>
