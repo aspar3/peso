@@ -209,7 +209,7 @@ if ($accion == "save"){
 												<?php
 												$respuesta = new Respuesta();
 												foreach ($respuesta->getRespuestas($conMsi, $pageCode) as $objRespuesta) {
-													echo "<option ".($objRespuesta->getResIdrespuesta() == $grupo->getGruIdrespuesta()?"selected":"")." value = '".$objRespuesta->getResIdrespuesta()."'>".$objRespuesta->getResNombre()."</option>";
+													echo "<option ".($objRespuesta->getResIdrespuesta() == $grupo->getGruIdrespuesta()?"selected":"")." value = '".$objRespuesta->getResIdrespuesta()."'>".constant($objRespuesta->getResNombre())."</option>";
 												}
 												?>
 											</select>

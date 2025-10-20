@@ -78,8 +78,8 @@ if ($accion == "save" || $accion == "saveAmigo"){
 		$mensaje1=sprintf(litCambiosOk);
 		$classMsgBox = "msgBox bgGreen txtBlack";
 		
-		$bodyUser = sprintf(litEstimado, $userExiste->getUseName())."\n\n".
-				sprintf(litMailBienvenido01)."\n".
+		$bodyUser = sprintf(litEstimado, $userExiste->getUseName())."\n".
+				sprintf(litMailBienvenido01)."\n\n".
 				sprintf(litMailBienvenido02, $_SESSION["sesName"].($_SESSION["sesLastname"]!=""?" ".$_SESSION["sesLastname"]:""), $grupo->getGruNombre())."\n\n".
 				sprintf(litMailBienvenido03)."\n".
 				$accesoHttp.$rootURL."/gruok/".$grupoUserAlta->getGusIduser()."/".$grupoUserAlta->getGusIdgrupo()."/".$grupoUserAlta->getGusVerifyCode()."\n\n".
@@ -89,7 +89,8 @@ if ($accion == "save" || $accion == "saveAmigo"){
 				$nombreGeneral.": ".$accesoHttp.$rootURL;
 		$subjectUser = $nombreGeneral.": ".sprintf(litMailBienvenidoSubject, $_SESSION["sesName"]);
 				
-		if ($enviarMails) enviarMailSMTP($mailAdmin, $userExiste->getUseMail(), "", "", $subjectUser, $bodyUser, $userExiste->getUseIduser());
+		//if ($enviarMails)
+			enviarMailSMTP($mailAdmin, $userExiste->getUseMail(), "", "", $subjectUser, $bodyUser, $userExiste->getUseIduser());
 				
 		header("Location: /mis-grupos-miembros?idGrupo=".$idGrupo);
 		die();
@@ -139,9 +140,7 @@ if ($accion == "save" || $accion == "saveAmigo"){
 
 			<!-- Header -->
 				<section id="header">
-					<div class="container">
-						<!-- Logo -->
-						<h1 id="logo"><a href="index.php"><img src="/images/logo.png" alt="<?=$nombreGeneral?>"></a></h1>
+					<div class="container sinLogo">
 
 						<?php include("in-menu.php");?>
 
