@@ -80,7 +80,7 @@ if ($accion == "save" || $accion == "saveAmigo"){
 		
 		$bodyUser = sprintf(litEstimado, $userExiste->getUseName())."\n\n".
 				sprintf(litMailBienvenido01)."\n".
-				sprintf(litMailBienvenido02, $_SESSION["sesName"].($_SESSION["sesLastname"]!=" ".$_SESSION["sesLastname"]?"":""), $grupo->getGruNombre())."\n\n".
+				sprintf(litMailBienvenido02, $_SESSION["sesName"].($_SESSION["sesLastname"]!=""?" ".$_SESSION["sesLastname"]:""), $grupo->getGruNombre())."\n\n".
 				sprintf(litMailBienvenido03)."\n".
 				$accesoHttp.$rootURL."/gruok/".$grupoUserAlta->getGusIduser()."/".$grupoUserAlta->getGusIdgrupo()."/".$grupoUserAlta->getGusVerifyCode()."\n\n".
 				sprintf(litMailBienvenido04)."\n".
@@ -180,6 +180,7 @@ if ($accion == "save" || $accion == "saveAmigo"){
 												<?php
 												$grupoUser = new GrupoUser();
 												$grupoUser->setGusIduser($_SESSION["sesIduser"]);
+												$grupoUser->setGusIdgrupo($grupo->getGruIdgrupo());
 												foreach ($grupoUser->getAmigos($conMsi, $pageCode) as $objAmigo) {
 													echo "<option value = '".$objAmigo->getGusIduser()."'>".$objAmigo->getUseName()." ".$objAmigo->getUseLastname()."</option>";
 												}

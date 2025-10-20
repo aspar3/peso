@@ -424,13 +424,17 @@ class GrupoUser {
 		global $error;
 		$list = array();
 		
-		$sql = "SELECT DISTINCT GUS_IDUSER, USE_NAME, USE_LASTNAME
-				FROM ".$this->tbl."
-					LEFT JOIN ".$this->tblUser." ON GUS_IDUSER = USE_IDUSER
-				WHERE GUS_IDGRUPO IN (SELECT gu2.GUS_IDGRUPO
+		$sql = "SELECT DISTINCT g1.GUS_IDUSER, USE_NAME, USE_LASTNAME
+				FROM ".$this->tbl." g1
+					LEFT JOIN ".$this->tblUser." ON g1.GUS_IDUSER = USE_IDUSER
+				WHERE g1.GUS_IDGRUPO IN (SELECT gu2.GUS_IDGRUPO
 									   FROM ".$this->tbl." gu2
 									   WHERE gu2.GUS_IDUSER = ".mysqli_real_escape_string($conMsi, $this->gusIduser).")
-				  AND GUS_IDUSER != ".mysqli_real_escape_string($conMsi, $this->gusIduser)."
+				  AND NOT EXISTS (SELECT gu3.GUS_IDUSER
+									   FROM ".$this->tbl." gu3 
+									   WHERE gu3.GUS_IDGRUPO = ".mysqli_real_escape_string($conMsi, $this->gusIdgrupo)."
+									     AND gu3.GUS_IDUSER = g1.GUS_IDUSER)
+				  AND g1.GUS_IDUSER != ".mysqli_real_escape_string($conMsi, $this->gusIduser)."
 				ORDER BY USE_NAME, USE_LASTNAME";
 		
 		if(!$result = $conMsi->query($sql)){ $error = true; rolLog("$pageCode> GUS-SQL-18", $sql." -> ".$conMsi->error, 3);}
