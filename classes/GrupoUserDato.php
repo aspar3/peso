@@ -205,5 +205,24 @@ class GrupoUserDato {
 			return true;
 		}
 	}
+	
+	function getGrupoUsersDatos($conMsi, $pageCode, $year, $week){
+		global $error;
+		$list = array();
+		
+		$sql = "SELECT GUD_IDUSER,
+				GUD_DATO AS peso_medio
+				FROM ".$this->tbl."
+				WHERE GUD_IDGRUPO = ".mysqli_real_escape_string($conMsi, $this->gudIdgrupo)."
+				ORDER BY GUD_IDUSER";
+		echo $sql;
+		if(!$result = $conMsi->query($sql)){ $error = true; rolLog("$pageCode> GUD-SQL-14", $sql." -> ".$conMsi->error, 3);}
+		while ($row = $result->fetch_assoc()){
+			$obj = new GrupoUser();
+			$obj->setGrupoUser($row);
+			array_push($list, $obj);
+		}
+		return $list;
+	}
 }
 ?>

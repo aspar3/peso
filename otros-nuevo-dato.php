@@ -42,6 +42,15 @@ if ($idGrupo != "") {
 	}
 }
 
+$grupoSelect = new Grupo();
+$grupoSelect->setGruTipo($gruTipo);
+$grupoSelect->setGruIduser($_SESSION["sesIduser"]);
+$listGruposAceptados = $grupoSelect->getGruposAceptados($conMsi, $pageCode);
+// Si solo esta en un grupo, que directamente salga seleccionado
+if ($idGrupo == "" && count($listGruposAceptados) == 1) {
+	$idGrupo = $listGruposAceptados[0]->getGruIdgrupo();
+}
+
 $grupoUserDato = new GrupoUserDato();
 
 $editar = false; 
@@ -179,7 +188,7 @@ if ($accion == "save"){
 													$grupoSelect = new Grupo();
 													$grupoSelect->setGruTipo($gruTipo);
 													$grupoSelect->setGruIduser($_SESSION["sesIduser"]);
-													foreach ($grupoSelect->getGruposAceptados($conMsi, $pageCode) as $objGrupo) {
+													foreach ($listGruposAceptados as $objGrupo) {
 														echo "<option ".($objGrupo->getGruIdgrupo() == $idGrupo?"selected":"")." value = '".$objGrupo->getGruIdgrupo()."'>".$objGrupo->getGruNombre()."</option>";
 													}
 												?>

@@ -1,6 +1,6 @@
 <?php
-// error_reporting(E_ALL);
-// ini_set("display_errors", 1);
+error_reporting(E_ALL);
+ini_set("display_errors", 1);
 	session_start();
 	$pageCode = "MLI";
 	
@@ -13,6 +13,7 @@
 	include_once 'classes/Unidad.php';
 	include_once 'classes/Grupo.php';
 	include_once 'classes/GrupoUser.php';
+	include_once 'classes/GrupoUserDato.php';
 	
 	if (!isset($_SESSION["sesIduser"]) || $_SESSION["sesIduser"]=="" || $_SESSION["sesType"]!=1){
 		//rolLog("$pageCode-01", "No session started or not a signedup user -> (".$_SESSION["sesIduser"].")", 1);
@@ -111,15 +112,15 @@
 											  			//echo $week['year'] . '-W' . sprintf('%02d', $week['week']) . " starts on " . $week['start_of_week'];
 											  			$labels.= "'".Funciones::fechaFormateadaIdioma($week['start_of_week'], $_SESSION["sesIdidioma"])."', ";
 											  			
-											  			$grupoUserSemana = new GrupoUser();
-											  			$grupoUserSemana->setGusIdgrupo($grupo->getGruIdgrupo());
-											  			foreach ($grupoUserSemana->getGrupoUsersPeso($conMsi, $pageCode, $week['year'], $week['week']) as $objUserSemana) {
+											  			$grupoUserSemana = new GrupoUserDato();
+											  			$grupoUserSemana->setGudIdgrupo($grupo->getGruIdgrupo());
+											  			foreach ($grupoUserSemana->getGrupoUsersDatos($conMsi, $pageCode, $week['year'], $week['week']) as $objUserSemana) {
 											  				for ($fila = 0; $fila < count($users); $fila++) {
 											  					if ($objUserSemana->getGusIduser() == $users[$fila][0]){
 											  						if (count($users[$fila][3]) == 0) {
-											  							$users[$fila][2] = Funciones::pesoConvertido($objUserSemana->getPesoMedio(), $_SESSION["sesIdunidad"], $_SESSION["sesUniMultipli"]);
+											  							$users[$fila][2] = $objUserSemana->getPesoMedio();
 											  						}
-										  							array_push($users[$fila][3], Funciones::pesoConvertido($objUserSemana->getPesoMedio(), $_SESSION["sesIdunidad"], $_SESSION["sesUniMultipli"]));
+										  							array_push($users[$fila][3], $objUserSemana->getPesoMedio());
 												  				}
 											  				}
 											  			}
@@ -143,21 +144,14 @@
 							</div>
 							<div class="graphs">
 							    <div class="graph100">
-							    	<span class="tituloGraph"><?=sprintf(litEvolucionPorcentual)?></span>
+							    	<span class="tituloGraph"><?=sprintf(litEstadGrupoAcum, $grupo->getGruNombre())?></span>
 									<canvas id="myChart1" width="870" height="435" style="display: block; width: 870px; height: 435px;"></canvas>
 								</div>
-								<?php if ($grupo->getGruMostrarPeso() == "S") {?>
-											<div class="graph100">
-												<br>
-												<span class="tituloGraph"><?=sprintf(litEvolucionPesoReal)?></span>
-												<canvas id="myChart2" width="870" height="435" style="display: block; width: 870px; height: 435px;"></canvas>
-											</div>
-										    <div class="graph100">
-										    	<br>
-										    	<span class="tituloGraph"><?=sprintf(litEvolucionCambiosPeso)?></span>
-												<canvas id="myChart3" width="870" height="435" style="display: block; width: 870px; height: 435px;"></canvas>
-											</div>
-								<?php }?>
+								<div class="graph100">
+									<br>
+									<span class="tituloGraph"><?=sprintf(litEstadGrupoReal, $grupo->getGruNombre())?></span>
+									<canvas id="myChart2" width="870" height="435" style="display: block; width: 870px; height: 435px;"></canvas>
+								</div>
 								<div>
 							  		<br><input class="button" id="volver" name="volver" type="button" onclick="history.back();" value="<?=sprintf(litVolver)?>">
 							    </div>

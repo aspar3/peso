@@ -198,9 +198,10 @@
 														</tbody>
 													</table>
 												</div>
+												<br><br>
 										<?php }?>
 										<header>
-											<h2><?=sprintf(litMisOtrosGrupos)?> <input class="button" id="saveForm" name="saveForm" type="button" onclick="window.location.href='/otros-nuevo-grupo.php'" value="<?=sprintf(litCrearNuevoGrupo)?>"></h2>
+											<h2><?=sprintf(litMisOtrosGrupos)?> <?php /*<input class="button" id="saveForm" name="saveForm" type="button" onclick="window.location.href='/otros-nuevo-grupo.php'" value="<?=sprintf(litCrearNuevoGrupo)?>">*/?></h2>
 											<div><?=sprintf(litMisOtrosGrupos01)?></div>
 											<br>
 											<div><?=sprintf(litReordenarColumnas)?></div>
@@ -255,7 +256,7 @@
 																	<?php } else { ?>
 																			<img src="/images/blank.gif"><br>
 																	<?php } ?>
-																	<input type="image" class="tdIcon" src="/images/stats.gif" id="imageButton" title="<?=sprintf(litEstadisticas)?>" alt="<?=sprintf(litEstadisticas)?>" onClick="window.location.href='/mis-grupos-estadisticas?idGrupo=<?=$objGrupo->getGruIdgrupo()?>';return false;"/><br>
+																	<input type="image" class="tdIcon" src="/images/stats.gif" id="imageButton" title="<?=sprintf(litEstadisticas)?>" alt="<?=sprintf(litEstadisticas)?>" onClick="window.location.href='/otros-mis-grupos-estadisticas.php?idGrupo=<?=$objGrupo->getGruIdgrupo()?>';return false;"/><br>
 																	<input type="image" class="tdIcon" src="/images/users.gif" id="imageButton" title="<?=sprintf(litMiembros)?>" alt="<?=sprintf(litMiembros)?>" onClick="window.location.href='/mis-grupos-miembros?idGrupo=<?=$objGrupo->getGruIdgrupo()?>';return false;"/><br>
 														      		<input type="image" class="tdIcon" src="/images/salir.gif" id="imageButton" title="<?=sprintf(litSalirGrupo)?>" alt="<?=sprintf(litSalirGrupo)?>" onClick="borrar('<?=$objGrupo->getGruIdgrupo()?>');return false;"/>
 														      </td>

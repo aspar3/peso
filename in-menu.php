@@ -34,10 +34,10 @@ if ($idiomaTxt != "" && $idiomaTxt != "es") {
 										<li><a class="icon solid fa-sign-in-alt" href="/login<?=$idiomaUrlOut?>"><span><?=sprintf(litMenuIniciarSesion)?></span></a></li>
 										<li><a class="icon solid fa-user-plus" href="/sign-up<?=$idiomaUrlOut?>"><span><?=sprintf(litMenuRegistrarse)?></span></a></li>
 									<?php } else {?>
-										<li><a class="icon solid fa-user" href="/my-profile"><span><?=sprintf(litMenuMiPerfil)?></span></a></li>
 										<li>
 											<a class="icon solid fa-balance-scale" href="#"><?=sprintf(litMenuRetosPeso)?></a>
 											<ul>
+												<li><a class="icon solid fa-running" href="/nuevo-grupo"><span><?=sprintf(litMenuNuevoRetoPeso)?></span></a></li>
 												<li><a class="icon solid fa-users" href="/mis-grupos"><span><?=sprintf(litMenuMisGrupos)?></span></a></li>
 												<li><a class="icon solid fa-balance-scale" href="/mis-pesos"><span><?=sprintf(litMenuMisPesos)?></span></a></li>
 												<li><a class="icon solid fa-weight-hanging" href="/nuevo-peso"><span><?=sprintf(litMenuNuevoPeso)?></span></a></li>
@@ -46,11 +46,13 @@ if ($idiomaTxt != "" && $idiomaTxt != "es") {
 										<li>
 											<a class="icon solid fa-compress-arrows-alt" href="#"><?=sprintf(litMenuOtrosRetos)?></a>
 											<ul>
+												<li><a class="icon solid fa-running" href="/otros-nuevo-grupo.php"><span><?=sprintf(litMenuNuevoRetoOtros)?></span></a></li>
 												<li><a class="icon solid fa-compress-arrows-alt" href="/otros-mis-grupos.php"><span><?=sprintf(litMenuOtrosGrupos)?></span></a></li>
 												<li><a class="icon solid fa-balance-scale" href="/otros-mis-datos.php"><span><?=sprintf(litMenuMisDatos)?></span></a></li>
 												<li><a class="icon solid fa-plus-circle" href="/otros-nuevo-dato.php"><span><?=sprintf(litMenuNuevoDato)?></span></a></li>
 											</ul>
 										</li>
+										<li><a class="icon solid fa-user" href="/my-profile"><span><?=sprintf(litMenuMiPerfil)?></span></a></li>
 										<li><a class="icon solid fa-sign-out-alt" href="/sign-out"><span><?=sprintf(litMenuSalir)?></span></a></li>
 									<?php }?>
 								</ul>

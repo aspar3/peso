@@ -141,7 +141,9 @@
 		$user->setUserWithId($conMsi, $pageCode);
 		$mail = $user->getUseMail();
 		mysqli_close($conMsi);
-	}	
+	} else {
+		$mail = $_POST["mail"];
+	}
 ?>
 <!DOCTYPE HTML>
 <html lang="es" translate="no">

@@ -207,7 +207,7 @@
 				        datasets: [{
 				            label: '<?=sprintf(litEvoluPeso)?>',
 				            data: [<?=$g1Data1?>],
-				            <?=$graph1Config?>,
+				            <?=$graph2Config?>,
 				            borderColor: 'rgba(<?=$color1?>, <?=$color2?>, <?=$color3?>, 1)',
 				            backgroundColor: 'rgba(<?=$color1?>, <?=$color2?>, <?=$color3?>, 1)'
 				        }]

@@ -418,6 +418,6 @@ class GrupoUser {
 		if (!$error){
 			return true;
 		}else return false;
-	}	
+	}
 }
 ?>

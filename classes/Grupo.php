@@ -336,7 +336,7 @@ class Grupo {
 					   OR NOT EXISTS (SELECT 1 FROM GRUPO_USER 
 							  WHERE GUS_IDGRUPO = GRU_IDGRUPO)
 					  )";
-		echo $sql;
+
 		if(!$conMsi->query($sql)){ $error = true; rolLog("$pageCode> GRU-SQL-19", $sql." -> ".$conMsi->error, 3);}
 		
 		if (!$error){

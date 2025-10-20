@@ -39,6 +39,16 @@
 	$conMsi= crearConexionMysqli();
 	
 	$idGrupo = $_GET["idGrupo"];
+	
+	$grupoSelect = new Grupo();
+	$grupoSelect->setGruTipo($gruTipo);
+	$grupoSelect->setGruIduser($_SESSION["sesIduser"]);
+	$listGruposAceptados = $grupoSelect->getGruposAceptados($conMsi, $pageCode);
+	// Si solo esta en un grupo, que directamente salga seleccionado
+	if ($idGrupo == "" && count($listGruposAceptados) == 1) {
+		$idGrupo = $listGruposAceptados[0]->getGruIdgrupo();
+	}
+	
 	$grupo = new Grupo();
 	if ($idGrupo != "") {
 		$grupo->setGruIdgrupo($idGrupo);
@@ -72,8 +82,7 @@
 			$mensaje2=sprintf(litError2, $mailAdmin);
 			$classMsgBox = "msgBox bgRed txtWhite";
 		}
-	}
-	
+	}	
 ?>
 <!DOCTYPE HTML>
 <html>
@@ -152,7 +161,7 @@
 															$grupoSelect = new Grupo();
 															$grupoSelect->setGruTipo($gruTipo);
 															$grupoSelect->setGruIduser($_SESSION["sesIduser"]);
-															foreach ($grupoSelect->getGruposAceptados($conMsi, $pageCode) as $objGrupo) {
+															foreach ($listGruposAceptados as $objGrupo) {
 																echo "<option ".($objGrupo->getGruIdgrupo() == $idGrupo?"selected":"")." value = '".$objGrupo->getGruIdgrupo()."'>".$objGrupo->getGruNombre()."</option>";
 															}
 														?>
@@ -163,7 +172,8 @@
 										</header>
 										</form>
 										<?php if ($idGrupo != "") { ?>
-												<br>								
+												<br>
+												<?php echo $grupo->getGruPregunta();?>						
 												<div class="scroll">
 													<table class="gen">
 														<thead>
@@ -184,10 +194,15 @@
 																foreach ($grupoUserDato->getGrupoUserDatos($conMsi, $pageCode) as $objDato){
 																	$labels.= "'".Funciones::fechaFormateadaIdioma($objDato->getGudFecha(), $_SESSION["sesIdidioma"])."', ";
 																	$g1Data1.= "'".str_replace(",", ".", $objDato->getGudDato())."', ";
+																	
+																	$datoMostrar = $objDato->getGudDato();
+																	if ($grupo->getGruIdRespuesta() == "1") {
+																		$datoMostrar = Funciones::formatNum2dec($datoMostrar);
+																	}
 															?>
 																    <tr>
 																      <td><?=Funciones::fechaFormateadaIdioma($objDato->getGudFecha(), $_SESSION["sesIdidioma"])?></td>
-																      <td class="number"><?=$objDato->getGudDato()?></td>
+																      <td class="number"><?=$datoMostrar?></td>
 																      <td title="<?=$objDato->getGudComent()?>" onclick="alert('<?=$objDato->getGudComent()?>')"><?=(strlen($objDato->getGudComent()) > 10?substr($objDato->getGudComent(), 0, 10)."...":$objDato->getGudComent())?></td>
 																      <td class="centered">
 																			<input type="image" class="tdIcon" src="/images/edit.gif" id="imageButton" title="<?=sprintf(litModificar)?>" alt="<?=sprintf(litModificar)?>" onClick="window.location.href='/otros-nuevo-dato.php?idGrupo=<?=$idGrupo?>&idGud=<?=$objDato->getGudIdgud()?>';return false;"/>
@@ -244,7 +259,7 @@
 				        datasets: [{
 				            label: '<?=sprintf(litEvoluDatos)?>',
 				            data: [<?=$g1Data1?>],
-				            <?=$graph1Config?>,
+				            <?=$graph2Config?>,
 				            borderColor: 'rgba(<?=$color1?>, <?=$color2?>, <?=$color3?>, 1)',
 				            backgroundColor: 'rgba(<?=$color1?>, <?=$color2?>, <?=$color3?>, 1)'
 				        }]

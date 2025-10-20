@@ -198,11 +198,14 @@
 														</tbody>
 													</table>
 												</div>
+												<br><br>
 										<?php }?>
+										
 										<header>
-											<h2><?=sprintf(litMisGrupos)?> <input class="button" id="saveForm" name="saveForm" type="button" onclick="window.location.href='/nuevo-grupo'" value="<?=sprintf(litCrearNuevoGrupo)?>"></h2>
+											<h2><?=sprintf(litMisGrupos)?> <?php /* <input class="button" id="saveForm" name="saveForm" type="button" onclick="window.location.href='/nuevo-grupo'" value="<?=sprintf(litCrearNuevoGrupo)?>">*/?></h2>
 											<div><?=sprintf(litReordenarColumnas)?></div>
 										</header>
+										
 										<form name="formulario" method="get">
 											<input type="hidden" name="accion" value="save"/>
 											<input type="hidden" name="id" value="save"/>
