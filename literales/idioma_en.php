@@ -171,4 +171,7 @@ define("litGrupo", 'Group');
 define("litQuienGana", 'Who wins?');
 define("litQuienGanaMas", 'The one who scores the most');
 define("litQuienGanaMenos", 'The one who scores the least');
+define("litQuienGanaMediaMas", 'The one who scores the best average');
+define("litQuienGanaMediaMenos", 'The one who scores the worst average');
+define("litPeriodoDatos", 'Period between data entry');
 ?>

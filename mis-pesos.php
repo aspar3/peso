@@ -237,7 +237,7 @@
 						            borderWidth: 1,
 						            label: {
 						              content: '<?=sprintf(litMedia, "")?>',
-						              enabled: true,
+						              enabled: false,
 						              position: 'start'
 						            }
 						          }

@@ -218,12 +218,14 @@ if ($accion == "save"){
 											<select id="ganador" name="ganador">
 												<option value="0" <?=($grupo->getGruGanador()=="0"?"selected":"")?>><?=sprintf(litQuienGanaMas)?></option>
 												<option value="1" <?=($grupo->getGruGanador()=="1"?"selected":"")?>><?=sprintf(litQuienGanaMenos)?></option>
+												<option value="2" <?=($grupo->getGruGanador()=="2"?"selected":"")?>><?=sprintf(litQuienGanaMediaMas)?></option>
+												<option value="3" <?=($grupo->getGruGanador()=="3"?"selected":"")?>><?=sprintf(litQuienGanaMediaMenos)?></option>
 											</select>
 										</div>
 									</div>
 
 									<div>
-										<label class="desc" for="idtiempo"><?=sprintf(litPeriodoPesajes)?> <span class="txtRed">*</span></label>
+										<label class="desc" for="idtiempo"><?=sprintf(litPeriodoDatos)?> <span class="txtRed">*</span></label>
 										<div>
 											<select id="idtiempo" name="idtiempo">
 												<?php

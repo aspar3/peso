@@ -170,4 +170,7 @@ define("litGrupo", 'Grupo');
 define("litQuienGana", '¿Quién gana?');
 define("litQuienGanaMas", 'El que sume más');
 define("litQuienGanaMenos", 'El que sume menos');
+define("litQuienGanaMediaMas", 'El que tenga mejor media');
+define("litQuienGanaMediaMenos", 'El que tenga peor media');
+define("litPeriodoDatos", 'Periodo de introducción de datos');
 ?>

@@ -84,7 +84,7 @@ if ($accion == "save"){
 				$mensaje1=sprintf(litCambiosOk);
 				$classMsgBox = "msgBox bgGreen txtBlack";
 				if ($enviarMails) { 
-					enviarMailAlert($mailAdmin, $mailAlertasAdmin, "", $nombreGeneral." : ".$_SESSION["sesName"]." ha metido un nuevo peso", "Nuevo peso");
+					enviarMailAlert($mailAdmin, $mailAlertasAdmin, "", $nombreGeneral." : ".$_SESSION["sesName"]." -> Nuevo dato para ".$grupo->getGruNombre(), "Se ha metido un nuevo dato para ".$grupo->getGruNombre());
 				}
 				header("Location: /otros-mis-datos.php?idGrupo=".$idGrupo);
 				die();

@@ -299,7 +299,7 @@
 								            borderWidth: 1,
 								            label: {
 								              content: '<?=sprintf(litMedia, $objUser[1])?>',
-								              enabled: true,
+								              enabled: false,
 								              position: 'start'
 								            }
 								          }

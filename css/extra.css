@@ -222,6 +222,9 @@ table.gen th.number {
 form input[type="text"].error,
 form input[type="email"].error,
 form input[type="password"].error,
+form input[type="date"].error,
+form input[type="time"].error,
+form input[type="number"].error,
 form select.error,
 form textarea.error {
 	border: 1px solid #FF0000 !important;
@@ -230,6 +233,9 @@ form textarea.error {
 form input[type="text"].ok,
 form input[type="email"].ok,
 form input[type="password"].ok,
+form input[type="date"].ok,
+form input[type="time"].ok,
+form input[type="number"].ok,
 form select.ok,
 form textarea.ok {
 	border: 1px solid #00FF00 !important;
