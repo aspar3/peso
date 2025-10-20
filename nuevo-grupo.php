@@ -105,7 +105,7 @@ if ($accion == "save"){
 		<script type="text/javascript">
 			function saveData(formulario){
 				if (formulario.nombre.value==""){
-					alert("<?=sprintf(litCampoOblig, sprintf(litNombre))?>");
+					alert("<?=sprintf(litCampoOblig, sprintf(litNombreGrupo))?>");
 					formulario.nombre.focus();
 				} else if (formulario.fecini.value==""){
 					alert("<?=sprintf(litCampoOblig, sprintf(litFechaInicio))?>");
@@ -157,7 +157,7 @@ if ($accion == "save"){
 									</header>
 									  
 									<div>
-										<label class="desc" for="nombre"><?=sprintf(litNombre)?> <span class="txtRed">*</span></label>
+										<label class="desc" for="nombre"><?=sprintf(litNombreGrupo)?> <span class="txtRed">*</span></label>
 										<div>
 											<input id="nombre" name="nombre" type="text" maxlength="100" value="<?=$grupo->getGruNombre()?>">
 										</div>

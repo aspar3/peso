@@ -34,7 +34,7 @@ define("litCampoOblig", 'The field %1$s is required');
 define("litPaswwordKo", 'Passwords do not match');
 define("litUsoKo", 'You must accept the terms of use');
 define("litMail", 'Email');
-define("litNombre", 'First name');
+define("litNombrePersona", 'First name');
 define("litApellidos", 'Last name');
 define("litIdioma", 'Language');
 define("litUnidad", 'Unit');
@@ -175,4 +175,8 @@ define("litQuienGanaMediaMas", 'The one who scores the best average');
 define("litQuienGanaMediaMenos", 'The one who scores the worst average');
 define("litPeriodoDatos", 'Period between data entry');
 define("litAyudaPregunta", 'For example, in a challenge to see who takes the most steps, the question to enter data would be:\n\nHow many steps have you taken?');
+define("litAyudaRespuesta", '- Numeric: In a challenge to see who takes the most steps, each time data is entered, the NUMBER OF STEPS taken would be entered.\n\n- "Yes" and "No" where the "Yes" counts: In a challenge to see who exercises the most days, what GIVES POINTS is ANSWERING YES to the question "Have you exercised today?"\n\n- "Yes" and "No" where the "No" counts: In a challenge to see who smokes the fewest days, what GIVES POINTS is ANSWERING NO to the question "Have you smoked today?"');
+define("litNombreGrupo", 'Name of the group');
+define("litNombreReto", 'Name of the challenge');
+define("litNombre", 'Name');
 ?>

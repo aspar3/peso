@@ -130,7 +130,7 @@
 					alert("<?=sprintf(litCampoOblig, sprintf(litMail))?>");
 					formulario.mail.focus();
 				} else if (formulario.name.value==""){
-					alert("<?=sprintf(litCampoOblig, sprintf(litNombre))?>");
+					alert("<?=sprintf(litCampoOblig, sprintf(litNombrePersona))?>");
 					formulario.name.focus();
 				} else if (formulario.ididioma.value==""){
 					alert("<?=sprintf(litCampoOblig, sprintf(litIdioma))?>");
@@ -194,7 +194,7 @@
 												</div>
 											</div>
 											<div>
-												<label class="desc" for="nombre"><?=sprintf(litNombre)?> <span class="txtRed">*</span></label>
+												<label class="desc" for="nombre"><?=sprintf(litNombrePersona)?> <span class="txtRed">*</span></label>
 												<div>
 													<input id="name" name="name" type="text" value="<?=$user->getUseName()?>" maxlength="50">
 												</div>

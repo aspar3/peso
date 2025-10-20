@@ -116,7 +116,7 @@ if ($accion == "save"){
 		<script type="text/javascript">
 			function saveData(formulario){
 				if (formulario.nombre.value==""){
-					alert("<?=sprintf(litCampoOblig, sprintf(litNombre))?>");
+					alert("<?=sprintf(litCampoOblig, sprintf(litNombreReto))?>");
 					formulario.nombre.focus();
 				} else if (formulario.fecini.value==""){
 					alert("<?=sprintf(litCampoOblig, sprintf(litFechaInicio))?>");
@@ -176,7 +176,7 @@ if ($accion == "save"){
 									</header>
 									  
 									<div>
-										<label class="desc" for="nombre"><?=sprintf(litNombre)?> <span class="txtRed">*</span></label>
+										<label class="desc" for="nombre"><?=sprintf(litNombreReto)?> <span class="txtRed">*</span></label>
 										<div>
 											<input id="nombre" name="nombre" type="text" maxlength="100" value="<?=$grupo->getGruNombre()?>">
 										</div>
@@ -199,8 +199,11 @@ if ($accion == "save"){
 											<input id="pregunta" name="pregunta" type="text" maxlength="255" value="<?=$grupo->getGruPregunta()?>">
 										</div>
 									</div>
+									<script>
+										alertRespuesta = '<?php echo sprintf(litAyudaRespuesta)?>';
+									</script>
 									<div>
-										<label class="desc" for="idrespuesta"><?=sprintf(litTipoRespuesta)?> <span class="txtRed">*</span></label>
+										<label class="desc" for="idrespuesta"><?=sprintf(litTipoRespuesta)?> <span class="txtRed">*</span> <a class="noUnderlined" href="javascript:alert(alertRespuesta)"><img src="/images/infoLeft.gif"></a></label>
 										<div>
 											<select id="idrespuesta" name="idrespuesta" onchange="visibilidadDivGanador()">
 												<?php

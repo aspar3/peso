@@ -102,7 +102,7 @@ if ($accion == "save"){
 		<script type="text/javascript">
 			function saveData(formulario){
 				if (formulario.name.value==""){
-					alert("<?=sprintf(litCampoOblig, sprintf(litNombre))?>");
+					alert("<?=sprintf(litCampoOblig, sprintf(litNombrePersona))?>");
 					formulario.name.focus();
 				} else if (formulario.mail.value==""){
 					alert("<?=sprintf(litCampoOblig, sprintf(litMail))?>");
@@ -151,7 +151,7 @@ if ($accion == "save"){
 									</header>
 									  
 									<div>
-										<label class="desc" for="name"><?=sprintf(litNombre)?> <span class="txtRed">*</span></label>
+										<label class="desc" for="name"><?=sprintf(litNombrePersona)?> <span class="txtRed">*</span></label>
 										<div>
 											<input id="name" name="name" type="text" value="" maxlength="50"> 
 										</div>
