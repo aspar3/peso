@@ -62,10 +62,11 @@
 	
 	$accion = $_POST["accion"];
 	if ($accion == "delete"){
-		$peso = new Peso();
-		$peso->setPesIduser($_SESSION["sesIduser"]);
-		$peso->setPesIdpeso($_POST["id"]);
-		if ($peso->delete($conMsi, $pageCode)){
+		$grupoUserDato = new GrupoUserDato();
+		$grupoUserDato->setGudIduser($_SESSION["sesIduser"]);
+		$grupoUserDato->setGudIdgrupo($grupo->getGruIdgrupo());
+		$grupoUserDato->setGudIdgud($_POST["id"]);
+		if ($grupoUserDato->delete($conMsi, $pageCode)){
 			$grupoUser = new GrupoUser();
 			$grupoUser->setGusIduser($_SESSION["sesIduser"]);
 			$grupoUser->setGusAvisoRetraso("N");

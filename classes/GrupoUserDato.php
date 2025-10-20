@@ -16,6 +16,8 @@ class GrupoUserDato {
 	private $gudFecha;
 	private $gudFeccre;
 	
+	private $pesoMedio;
+	
 	private $order;
 	private $asc;
 	
@@ -77,6 +79,16 @@ class GrupoUserDato {
 	public function setGudFeccre($gudFeccre) {
 		$this->gudFeccre = $gudFeccre;
 	}
+	
+	
+	public function getPesoMedio() {
+		return $this->pesoMedio;
+	}
+	
+	public function setPesoMedio($pesoMedio) {
+		$this->pesoMedio = $pesoMedio;
+	}
+	
 
 	public function setOrder($valor) { $this->order = trim($valor); }
 	public function getOrder() { return $this->order; }
@@ -94,6 +106,8 @@ class GrupoUserDato {
 		$this->gudFecha			= $data["GUD_FECHA"];
 		$this->gudComent		= $data["GUD_COMENT"];
 		$this->gudFeccre		= $data["GUD_FECCRE"];
+		
+		$this->pesoMedio		= $data["peso_medio"];
 	}
 
 	public function getGrupoUserDato($conMsi, $pageCode){
@@ -206,20 +220,23 @@ class GrupoUserDato {
 		}
 	}
 	
-	function getGrupoUsersDatos($conMsi, $pageCode, $year, $week){
+	function getGrupoUsersDatos($conMsi, $pageCode, $fecini){
 		global $error;
 		$list = array();
+		$fecini = mysqli_real_escape_string($conMsi, $fecini);
 		
 		$sql = "SELECT GUD_IDUSER,
-				GUD_DATO AS peso_medio
+				GUD_DATO AS peso_medio,
+				date(GUD_FECHA) AS GUD_FECHA
 				FROM ".$this->tbl."
 				WHERE GUD_IDGRUPO = ".mysqli_real_escape_string($conMsi, $this->gudIdgrupo)."
+				  AND GUD_FECHA >= '".$fecini."'
 				ORDER BY GUD_IDUSER";
-		echo $sql;
+
 		if(!$result = $conMsi->query($sql)){ $error = true; rolLog("$pageCode> GUD-SQL-14", $sql." -> ".$conMsi->error, 3);}
 		while ($row = $result->fetch_assoc()){
-			$obj = new GrupoUser();
-			$obj->setGrupoUser($row);
+			$obj = new GrupoUserDato();
+			$obj->setGrupoUserDato($row);
 			array_push($list, $obj);
 		}
 		return $list;

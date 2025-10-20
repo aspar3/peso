@@ -1,6 +1,6 @@
 <?php
-error_reporting(E_ALL);
-ini_set("display_errors", 1);
+// error_reporting(E_ALL);
+// ini_set("display_errors", 1);
 	session_start();
 	$pageCode = "MLI";
 	
@@ -55,6 +55,7 @@ ini_set("display_errors", 1);
 		<link rel="stylesheet" href="/assets/css/main.css?<?=rand(0, 999)?>" />
 		<link rel="stylesheet" href="/css/extra.css?<?=rand(0, 999)?>" />
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.3.0/chart.min.js"></script>
+		<script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-annotation@1.1.0"></script>
 	</head>
 	<body class="homepage is-preload">
 		<div id="loading"><span></span><img src="/images/loading.gif"></div>
@@ -92,7 +93,7 @@ ini_set("display_errors", 1);
 											  		// 0) id usuario
 											  		// 1) nombre usuario
 											  		// 2) peso inicial
-											  		// 3) array con los pesos
+											  		// 3) array tipo map con los datos, estilo $users[$fila][3]["una fecha"] te da el dato de esa fecha
 											  		$users = [];
 											  		$fila = 0;
 											  		foreach ($grupoUser->getGrupoUsers($conMsi, $pageCode) as $objGrupoUser){
@@ -106,26 +107,31 @@ ini_set("display_errors", 1);
 										  			$start = $grupo->getGruFecini();
 										  			$end   = $grupo->getGruFecfin();
 													$hoy = date('Y-m-d');
-													if ($end > $hoy) { $end = $hoy;}											  		
-											  		$weeks = Funciones::getIsoWeeksWithStartDates($start, $end);
-											  		foreach ($weeks as $week) {
-											  			//echo $week['year'] . '-W' . sprintf('%02d', $week['week']) . " starts on " . $week['start_of_week'];
-											  			$labels.= "'".Funciones::fechaFormateadaIdioma($week['start_of_week'], $_SESSION["sesIdidioma"])."', ";
-											  			
-											  			$grupoUserSemana = new GrupoUserDato();
-											  			$grupoUserSemana->setGudIdgrupo($grupo->getGruIdgrupo());
-											  			foreach ($grupoUserSemana->getGrupoUsersDatos($conMsi, $pageCode, $week['year'], $week['week']) as $objUserSemana) {
-											  				for ($fila = 0; $fila < count($users); $fila++) {
-											  					if ($objUserSemana->getGusIduser() == $users[$fila][0]){
-											  						if (count($users[$fila][3]) == 0) {
-											  							$users[$fila][2] = $objUserSemana->getPesoMedio();
-											  						}
-										  							array_push($users[$fila][3], $objUserSemana->getPesoMedio());
-												  				}
+													if ($end == "" || $end > $hoy) { $end = $hoy;}											  		
+													$days = Funciones::getDaysBetweenDates($start, $end);
+													foreach ($days as $day) {
+														$labels.= "'".Funciones::fechaFormateadaIdioma($day, $_SESSION["sesIdidioma"])."', ";
+											  		}
+											  		$labels = trim($labels, ", ");
+											  		
+											  		$grupoUserSemana = new GrupoUserDato();
+											  		$grupoUserSemana->setGudIdgrupo($grupo->getGruIdgrupo());
+											  		foreach ($grupoUserSemana->getGrupoUsersDatos($conMsi, $pageCode, $grupo->getGruFecini()) as $objUserSemana) {
+											  			for ($fila = 0; $fila < count($users); $fila++) {
+// 											  				echo "<br>".$objUserSemana->getGudIduser()."  ".$users[$fila][0];
+											  				if ($objUserSemana->getGudIduser() == $users[$fila][0]){
+											  					if (count($users[$fila][3]) == 0) {
+											  						$users[$fila][2] = $objUserSemana->getPesoMedio();
+											  					}
+// 											  					echo "<br>".$objUserSemana->getGudFecha()."  ".$objUserSemana->getPesoMedio();
+											  					//array_push($users[$fila][3][$objUserSemana->getGudFecha()], $objUserSemana->getPesoMedio());
+											  					$users[$fila][3][$objUserSemana->getGudFecha()] = $objUserSemana->getPesoMedio();
 											  				}
 											  			}
 											  		}
-											  		$labels = trim($labels, ", ");
+											  		
+// 											  		echo "<br><BR>";
+// 											  		Funciones::printArrayValues($users);
 										  		?>
 										    </div>
 										</div>
@@ -191,14 +197,18 @@ ini_set("display_errors", 1);
 				        labels: [<?=$labels?>],
 				        datasets: [
 				        <?php
-				        	$indiceUser = 0;
+	        				$indiceUser = 0;
 					        foreach ($users as $objUser){
 					        	$g1Data = "";
-				        		foreach ($objUser[3] as $objPeso){
-			        				$pesoInicial = str_replace(",", ".", $objUser[2]);
-			        				$pesoComparar = str_replace(",", ".", $objPeso);
-			        				$g1Data.= ($pesoComparar * 100 / $pesoInicial).", ";
-				        		}
+					        	$valorAcumulado = 0;
+					        	foreach ($days as $day) {
+					        		if ($objUser[3][$day] != "") {
+					        			$valorAcumulado += $objUser[3][$day];
+					        			$g1Data.= str_replace(",", ".", $valorAcumulado).", ";
+					        		} else {
+					        			$g1Data.= ", ";
+					        		}
+					        	}
 				        		$g1Data = trim($g1Data, ", ");
 				        ?>
 				        		{
@@ -228,100 +238,83 @@ ini_set("display_errors", 1);
 					    }
 				    }
 				});
-				<?php if ($grupo->getGruMostrarPeso() == "S") {?>
-						    var ctx2 = document.getElementById('myChart2').getContext('2d');
-							var myChart = new Chart(ctx2, {
-							    type: 'line',
-							    data: {
-							        labels: [<?=$labels?>],
-							        datasets: [
-							        <?php
-				        				$indiceUser = 0;
-								        foreach ($users as $objUser){
-								        	$color1 = rand(0, 255);
-								        	$color2 = rand(0, 255);
-								        	$color3 = rand(0, 255);
-								        	$g1Data = "";
-							        		foreach ($objUser[3] as $objPeso){
-						        				$g1Data.= str_replace(",", ".", $objPeso).", ";
-							        		}
-							        		$g1Data = trim($g1Data, ", ");
-							        ?>
-							        		{
-								            label: '<?=$objUser[1]?>',
-								            data: [<?=$g1Data?>],
-								            <?=$graph2Config?>,
+			    var ctx2 = document.getElementById('myChart2').getContext('2d');
+				var myChart = new Chart(ctx2, {
+				    type: 'line',
+				    data: {
+				        labels: [<?=$labels?>],
+				        datasets: [
+				        <?php 
+					        $indiceUser = 0;
+					        foreach ($users as $objUser){
+					        	$g1Data = "";
+					        	foreach ($days as $day) {
+					        		$g1Data.= str_replace(",", ".", $objUser[3][$day]).", ";
+					        	}
+				        		$g1Data = trim($g1Data, ", ");
+				        ?>
+				        		{
+					            label: '<?=$objUser[1]?>',
+					            data: [<?=$g1Data?>],
+					            <?=$graph2Config?>,
+					            borderColor: 'rgba(<?=$colores[$indiceUser][0]?>, <?=$colores[$indiceUser][1]?>, <?=$colores[$indiceUser][2]?>, 1)',
+					            backgroundColor: 'rgba(<?=$colores[$indiceUser][0]?>, <?=$colores[$indiceUser][1]?>, <?=$colores[$indiceUser][2]?>, 1)'
+					            }
+				        <?php 
+				        		if ($objUser !== end($users)) {
+						        	echo ", ";
+						        }
+						        $indiceUser++;
+					        }
+					    ?>
+				        ]
+				    },
+				    options: {
+					    scales: {
+					      x: {
+					        stacked: true
+					      },
+					      y: {
+					        stacked: false
+					      }
+					    },
+						plugins: {
+						      annotation: {
+						        annotations: {
+						        <?php 
+							        $indiceUser = 0;
+							        foreach ($users as $objUser){
+							        	$g1Data = "";
+							        	$valorTotal = 0;
+							        	foreach ($objUser[3] as $valor) {
+							        		$valorTotal += $valor;
+							        	}
+							        	$media = $valorTotal / count($objUser[3]);
+								?>
+								          media<?=$objUser[0]?>: {
+								            type: 'line',
+								            yMin: <?php echo str_replace(",", ".", $media)?>,
+								            yMax: <?php echo str_replace(",", ".", $media)?>,
 								            borderColor: 'rgba(<?=$colores[$indiceUser][0]?>, <?=$colores[$indiceUser][1]?>, <?=$colores[$indiceUser][2]?>, 1)',
-								            backgroundColor: 'rgba(<?=$colores[$indiceUser][0]?>, <?=$colores[$indiceUser][1]?>, <?=$colores[$indiceUser][2]?>, 1)'
+								            borderWidth: 1,
+								            label: {
+								              content: '<?=sprintf(litMedia, $objUser[1])?>',
+								              enabled: true,
+								              position: 'start'
 								            }
-							        <?php 
-							        		if ($objUser !== end($users)) {
-									        	echo ", ";
-									        }
-									        $indiceUser++;
-								        }
-								    ?>
-							        ]
-							    },
-							    options: {
-								    scales: {
-								      x: {
-								        stacked: true
-								      },
-								      y: {
-								        stacked: false
-								      }
-								    }
-							    }
-							});
-						    var ctx3 = document.getElementById('myChart3').getContext('2d');
-							var myChart = new Chart(ctx3, {
-							    type: 'line',
-							    data: {
-							        labels: [<?=$labels?>],
-							        datasets: [
-							        <?php 
-								        $indiceUser = 0;
-								        foreach ($users as $objUser){
-								        	$color1 = rand(0, 255);
-								        	$color2 = rand(0, 255);
-								        	$color3 = rand(0, 255);
-								        	$g1Data = "";
-							        		foreach ($objUser[3] as $objPeso){
-							        			$pesoInicial = str_replace(",", ".", $objUser[2]);
-							        			$pesoComparar = str_replace(",", ".", $objPeso);
-							        			$g1Data.= ($pesoComparar - $pesoInicial).", ";
-							        		}
-							        		$g1Data = trim($g1Data, ", ");
-							        ?>
-							        		{
-								            label: '<?=$objUser[1]?>',
-								            data: [<?=$g1Data?>],
-								            <?=$graph2Config?>,
-								            borderColor: 'rgba(<?=$colores[$indiceUser][0]?>, <?=$colores[$indiceUser][1]?>, <?=$colores[$indiceUser][2]?>, 1)',
-								            backgroundColor: 'rgba(<?=$colores[$indiceUser][0]?>, <?=$colores[$indiceUser][1]?>, <?=$colores[$indiceUser][2]?>, 1)'
-								            }
-							        <?php 
-							        		if ($objUser !== end($users)) {
-									        	echo ", ";
-									        }
-									        $indiceUser++;
-								        }
-								    ?>
-							        ]
-							    },
-							    options: {
-								    scales: {
-								      x: {
-								        stacked: true
-								      },
-								      y: {
-								        stacked: false
-								      }
-								    }
-							    }
-							});
-				<?php }?>
+								          }
+								<?php
+										if ($objUser !== end($users)) {
+											echo ", ";
+										}
+										$indiceUser++;
+							        }
+							    ?>
+						        }
+						      }
+						}
+				    }
+				});
 			</script>
 			
 		<?php include("in-footer.php");?>

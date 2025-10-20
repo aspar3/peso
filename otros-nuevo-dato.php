@@ -49,6 +49,9 @@ $listGruposAceptados = $grupoSelect->getGruposAceptados($conMsi, $pageCode);
 // Si solo esta en un grupo, que directamente salga seleccionado
 if ($idGrupo == "" && count($listGruposAceptados) == 1) {
 	$idGrupo = $listGruposAceptados[0]->getGruIdgrupo();
+	$grupo->setGruIdgrupo($idGrupo);
+	$grupo->setGruIduser($_SESSION["sesIduser"]);
+	$grupo->getGrupo($conMsi, $pageCode);
 }
 
 $grupoUserDato = new GrupoUserDato();

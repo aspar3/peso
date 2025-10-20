@@ -67,6 +67,7 @@
 		<link rel="stylesheet" href="/assets/css/main.css?<?=rand(0, 999)?>" />
 		<link rel="stylesheet" href="/css/extra.css?<?=rand(0, 999)?>" />
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.3.0/chart.min.js"></script>
+		<script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-annotation@1.1.0"></script>
 		
 		<script type="text/javascript">
 			function borrar(id) {
@@ -146,7 +147,10 @@
 														$peso->setPesIduser($_SESSION["sesIduser"]);
 														$peso->setOrder($order);
 														$peso->setAsc($asc);
-														foreach ($peso->getPesos($conMsi, $pageCode) as $objPeso){
+														$sumaTotal = 0;
+														$litPesos = $peso->getPesos($conMsi, $pageCode);
+														foreach ($litPesos as $objPeso){
+															$sumaTotal += $objPeso->getPesPeso()/1000;
 															$labels.= "'".Funciones::fechaFormateadaIdioma($objPeso->getPesFecha(), $_SESSION["sesIdidioma"])."', ";
 															$g1Data1.= "'".str_replace(",", ".", Funciones::pesoConvertido($objPeso->getPesPeso(), $_SESSION["sesIdunidad"], $_SESSION["sesUniMultipli"]))."', ";
 													?>
@@ -162,6 +166,7 @@
 													<?php
 															$i++;
 														}
+														$media = $sumaTotal / count($litPesos);
 														$labels = trim($labels, ", ");
 														$g1Data1 = trim($g1Data1, ", ");
 													?>
@@ -220,7 +225,25 @@
 					      y: {
 					        stacked: true
 					      }
-					    }
+					    },
+						plugins: {
+						      annotation: {
+						        annotations: {
+						          media1: {
+						            type: 'line',
+						            yMin: <?php echo str_replace(",", ".", $media)?>,
+						            yMax: <?php echo str_replace(",", ".", $media)?>,
+						            borderColor: 'rgba(<?=$color1?>, <?=$color2?>, <?=$color3?>, 1)',
+						            borderWidth: 1,
+						            label: {
+						              content: '<?=sprintf(litMedia, "")?>',
+						              enabled: true,
+						              position: 'start'
+						            }
+						          }
+						        }
+						      }
+						}
 				    }
 				});
 			</script>

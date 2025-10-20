@@ -290,5 +290,28 @@ class Funciones {
 		
 		return $result;
 	}
+	
+	public static function getDaysBetweenDates($startDate, $endDate) {
+		$dates = [];
+		$current = strtotime($startDate);
+		$end = strtotime($endDate);
+		
+		while ($current <= $end) {
+			$dates[] = date("Y-m-d", $current);
+			$current = strtotime("+1 day", $current);
+		}
+		
+		return $dates;
+	}
+	
+	public static function printArrayValues($array) {
+		foreach ($array as $value) {
+			if (is_array($value)) {
+				Funciones::printArrayValues($value); // Recursively handle nested arrays
+			} else {
+				echo $value . "\n";
+			}
+		}
+	}
 }
 ?>

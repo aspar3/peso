@@ -104,8 +104,8 @@
 										  			$labels = "";
 										  			$start = $grupo->getGruFecini();
 										  			$end   = $grupo->getGruFecfin();
-													$hoy = date('Y-m-d');
-													if ($end > $hoy) { $end = $hoy;}											  		
+										  			$hoy = date('Y-m-d');
+										  			if ($end == "" || $end > $hoy) { $end = $hoy;}		
 											  		$weeks = Funciones::getIsoWeeksWithStartDates($start, $end);
 											  		foreach ($weeks as $week) {
 											  			//echo $week['year'] . '-W' . sprintf('%02d', $week['week']) . " starts on " . $week['start_of_week'];
@@ -244,9 +244,6 @@
 							        <?php
 				        				$indiceUser = 0;
 								        foreach ($users as $objUser){
-								        	$color1 = rand(0, 255);
-								        	$color2 = rand(0, 255);
-								        	$color3 = rand(0, 255);
 								        	$g1Data = "";
 							        		foreach ($objUser[3] as $objPeso){
 						        				$g1Data.= str_replace(",", ".", $objPeso).", ";
@@ -289,9 +286,6 @@
 							        <?php 
 								        $indiceUser = 0;
 								        foreach ($users as $objUser){
-								        	$color1 = rand(0, 255);
-								        	$color2 = rand(0, 255);
-								        	$color3 = rand(0, 255);
 								        	$g1Data = "";
 							        		foreach ($objUser[3] as $objPeso){
 							        			$pesoInicial = str_replace(",", ".", $objUser[2]);
