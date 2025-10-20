@@ -569,11 +569,11 @@ class User {
 		}
 	}
 	
-	function getUsersMailPendientes($conMsi, $pageCode, $idioma){
+	function getDistinctUsersMailPendientes($conMsi, $pageCode, $idioma){
 		global $error;
 		$list = array();
 		
-		$sql = "SELECT *
+		$sql = "SELECT DISTINCT GUS_IDUSER, USE_NAME, USE_MAIL
 				FROM ".$this->userTbl."
 					LEFT JOIN ".$this->grupoUserTbl." ON GUS_IDUSER = USE_IDUSER
 					LEFT JOIN ".$this->grupoTbl." ON GRU_IDGRUPO = GUS_IDGRUPO
@@ -586,8 +586,34 @@ class User {
 				  AND (GRU_FECFIN is null OR GRU_FECFIN = '' OR GRU_FECFIN >= NOW())
 				  AND GUS_AVISO_RETRASO != 'S'
 				ORDER BY USE_IDUSER";
-		
+
 		if(!$result = $conMsi->query($sql)){ $error = true; rolLog("$pageCode> USE-SQL-24", $sql." -> ".$conMsi->error, 3);}
+		while ($row = $result->fetch_assoc()){
+			array_push($list, $row);
+		}
+		return $list;
+	}
+
+	function getUsersMailPendientes($conMsi, $pageCode, $iduser, $gruTipo){
+		global $error;
+		$list = array();
+		
+		$sql = "SELECT *
+				FROM ".$this->userTbl."
+					LEFT JOIN ".$this->grupoUserTbl." ON GUS_IDUSER = USE_IDUSER
+					LEFT JOIN ".$this->grupoTbl." ON GRU_IDGRUPO = GUS_IDGRUPO
+    				LEFT JOIN ".$this->tiempoTbl." ON GRU_IDTIEMPO = TIE_IDTIEMPO
+    				LEFT JOIN ".$this->idiomaTbl." ON USE_IDIDIOMA = IDM_IDIDIOMA
+				WHERE GUS_IDUSER = '".mysqli_real_escape_string($conMsi, $iduser)."'
+				  AND GRU_TIPO = ".mysqli_real_escape_string($conMsi, $gruTipo)."
+				  AND USE_IDSTATUS = 1
+				  AND GRU_STATUS = 1
+				  AND GRU_FECINI <= NOW()
+				  AND (GRU_FECFIN is null OR GRU_FECFIN = '' OR GRU_FECFIN >= NOW())
+				  AND GUS_AVISO_RETRASO != 'S'
+				ORDER BY USE_IDUSER";
+		
+		if(!$result = $conMsi->query($sql)){ $error = true; rolLog("$pageCode> USE-SQL-25", $sql." -> ".$conMsi->error, 3);}
 		while ($row = $result->fetch_assoc()){
 			array_push($list, $row);
 		}

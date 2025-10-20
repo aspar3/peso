@@ -206,7 +206,8 @@ class GrupoUserDato {
 							 ELSE 'N'
 					   END AS retraso_dato
 				FROM ".$this->tbl."
-				WHERE GUD_IDUSER = ".mysqli_real_escape_string($conMsi, $this->gudIduser);
+				WHERE GUD_IDUSER = ".mysqli_real_escape_string($conMsi, $this->gudIduser)."
+				  AND GUD_IDGRUPO = ".mysqli_real_escape_string($conMsi, $this->gudIdgrupo);
 		
 		if(!$result = $conMsi->query($sql)){ $error = true; rolLog("$pageCode> GUD-SQL-05", $sql." -> ".$conMsi->error, 3);}
 		if ($row = $result->fetch_assoc()) {

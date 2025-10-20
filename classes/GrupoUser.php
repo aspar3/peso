@@ -419,5 +419,45 @@ class GrupoUser {
 			return true;
 		}else return false;
 	}
+	
+	function getAmigos($conMsi, $pageCode){
+		global $error;
+		$list = array();
+		
+		$sql = "SELECT DISTINCT GUS_IDUSER, USE_NAME, USE_LASTNAME
+				FROM ".$this->tbl."
+					LEFT JOIN ".$this->tblUser." ON GUS_IDUSER = USE_IDUSER
+				WHERE GUS_IDGRUPO IN (SELECT gu2.GUS_IDGRUPO
+									   FROM ".$this->tbl." gu2
+									   WHERE gu2.GUS_IDUSER = ".mysqli_real_escape_string($conMsi, $this->gusIduser).")
+				  AND GUS_IDUSER != ".mysqli_real_escape_string($conMsi, $this->gusIduser)."
+				ORDER BY USE_NAME, USE_LASTNAME";
+		
+		if(!$result = $conMsi->query($sql)){ $error = true; rolLog("$pageCode> GUS-SQL-18", $sql." -> ".$conMsi->error, 3);}
+		while ($row = $result->fetch_assoc()){
+			$obj = new GrupoUser();
+			$obj->setGrupoUser($row);
+			array_push($list, $obj);
+		}
+		return $list;
+	}
+
+	function checkAmigo($conMsi, $pageCode, $iduserAmigo){
+		global $error;
+		$list = array();
+		
+		$sql = "SELECT DISTINCT GUS_IDUSER
+				FROM ".$this->tbl."
+				WHERE GUS_IDGRUPO IN (SELECT gu2.GUS_IDGRUPO
+									   FROM ".$this->tbl." gu2
+									   WHERE gu2.GUS_IDUSER = ".mysqli_real_escape_string($conMsi, $this->gusIduser).")
+				  AND GUS_IDUSER = ".mysqli_real_escape_string($conMsi, $iduserAmigo);
+		
+		if(!$result = $conMsi->query($sql)){ $error = true; rolLog("$pageCode> GUS-SQL-19", $sql." -> ".$conMsi->error, 3);}
+		if (mysqli_num_rows($result)==1){
+			return true;
+		}
+		return false;
+	}
 }
 ?>

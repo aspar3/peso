@@ -11,6 +11,7 @@ include_once 'classes/Idioma.php';
 include_once 'classes/Peso.php';
 include_once 'classes/GrupoUser.php';
 include_once 'classes/Grupo.php';
+include_once 'classes/GrupoUserDato.php';
 
 $pageCode = "CTK";
 
@@ -30,77 +31,78 @@ if ($idioma != "" && $idioma != "es") {
 include_once 'literales/idioma_'.$idiomaTxt.'.php';
 
 $mailsJuntos = "";
-$algunMailEnviado = false;
 $usuarioAnterior = null;
-$usuarioActual;
-$idUsuarioUltimo = "";
 $mailUsuarioUltimo = "";
 $subjectUser = $nombreGeneral.": ".sprintf(litMailRecordatorioSubject);
 $bodyUser = "";
-$algunGrupoParaAvisar = false;
-$user = new User();
-foreach ($user->getUsersMailPendientes($conMsi, $pageCode, $idiomaTxt) as $objUser) {
-	//echo $objUser["USE_NAME"]."<br>";
-	
-	$usuarioActual = $objUser['USE_IDUSER'];	
-	if ($usuarioActual !== $usuarioAnterior) {
-		if ($usuarioAnterior !== null && $algunGrupoParaAvisar) {
-			// $usuarioAnterior !== null para que no se haga la primera vez
-			// RECORDAR QUE ESTE TROZO SE PONE TAMBIEN AL FINAL DEL FOREACH
-			$bodyUser.="\n".sprintf(litMailRecordatorio02)."\n".
-					$accesoHttp.$rootURL."/login".$idiomaURL."\n\n".
-					sprintf(litAtentamente)."\n".
-					$nombreGeneral.": ".$accesoHttp.$rootURL.$idiomaURL;
-					
-			echo "mailUser: ".$mailUsuarioUltimo."<br>";
-			echo "bodyUser: ".$bodyUser."<br>";
-			if ($enviarMails) enviarMailSMTP($mailAdmin, $mailUsuarioUltimo, "", "", $subjectUser, $bodyUser, $usuarioAnterior);
-			$algunMailEnviado = true;
-			$mailsJuntos.=$bodyUser."\n\n\n";
-		}
-		
-		// echo "Cambio de usuario detectado: de {$usuarioAnterior} a {$usuarioActual}\n";
-		$mailUsuarioUltimo = $objUser["USE_MAIL"];
-		$bodyUser = sprintf(litEstimado, $objUser["USE_NAME"])."\n\n".
-				sprintf(litMailRecordatorio01)."\n";
-		$algunGrupoParaAvisar = false;
-	}
-	
-	$peso = new Peso();
-	$peso->setPesIduser($usuarioActual);
-	if ($peso->checkRetrasoPeso($conMsi, $pageCode, $objUser["TIE_PALABRA_MYSQL"])) {
-		$grupoUser = new GrupoUser();
-		$grupoUser->setGusIdgrupo($objUser["GUS_IDGRUPO"]);
-		$grupoUser->setGusIduser($usuarioActual);
-		$grupoUser->getGrupoUser($conMsi, $pageCode);
-		if ($grupoUser->getGusAvisoRetraso() != "S") {
-			// solo se manda si no se ha enviado antes
-			$algunGrupoParaAvisar = true;
-			$bodyUser.= " - ".$objUser["GRU_NOMBRE"]."\n";
-			$grupoUser->setGusAvisoRetraso("S");
-			$grupoUser->updateAvisoRetrasoUserGrupo($conMsi, $pageCode);
-		}
-	}
-			
-	$usuarioAnterior = $usuarioActual;
-}
+$algunMailEnviado = false;
 
-if ($algunGrupoParaAvisar) {
-	// para el ultimo usuario
-	$bodyUser.="\n".sprintf(litMailRecordatorio02)."\n".
-			$accesoHttp.$rootURL."/login".$idiomaURL."\n\n".
-			sprintf(litAtentamente)."\n".
-			$nombreGeneral.": ".$accesoHttp.$rootURL.$idiomaURL;
+$user = new User();
+foreach ($user->getDistinctUsersMailPendientes($conMsi, $pageCode, $idiomaTxt) as $objUser) {
+// 	echo $objUser["GUS_IDUSER"]."<br>";
+
+	$algunGrupoParaAvisar = false;
+	
+	$bodyUser = sprintf(litEstimado, $objUser["USE_NAME"])."\n\n".
+				sprintf(litMailRecordatorio01)."\n\n";
+				sprintf(litMailRecordatorio02)."\n\n";
 			
-	echo "mailUser: ".$mailUsuarioUltimo."<br>";
-	echo "bodyUser: ".$bodyUser."<br>";
+	// INICIO grupos PESO
+	foreach ($user->getUsersMailPendientes($conMsi, $pageCode, $objUser["GUS_IDUSER"], "1") as $objGruposPeso) {
+		$peso = new Peso();
+		$peso->setPesIduser($objUser["GUS_IDUSER"]);
+		if ($peso->checkRetrasoPeso($conMsi, $pageCode, $objGruposPeso["TIE_PALABRA_MYSQL"])) {
+			$grupoUser = new GrupoUser();
+			$grupoUser->setGusIdgrupo($objGruposPeso["GUS_IDGRUPO"]);
+			$grupoUser->setGusIduser($objUser["GUS_IDUSER"]);
+			$grupoUser->getGrupoUser($conMsi, $pageCode);
+			if ($grupoUser->getGusAvisoRetraso() != "S") {
+				// solo se manda si no se ha enviado antes
+				$algunGrupoParaAvisar = true;
+				$bodyUser.= " - ".$objGruposPeso["GRU_NOMBRE"]."\n";
+				$grupoUser->setGusAvisoRetraso("S");
+				$grupoUser->updateAvisoRetrasoUserGrupo($conMsi, $pageCode);
+			}
+		}
+	}
 	if ($algunGrupoParaAvisar) {
-		if ($enviarMails) enviarMailSMTP($mailAdmin, $mailUsuarioUltimo, "", "", $subjectUser, $bodyUser, $usuarioAnterior);
+		$bodyUser.= $accesoHttp.$rootURL."/nuevo-peso\n\n";
+	}
+	// FIN grupos PESO
+
+	// INICIO grupos OTROS
+	foreach ($user->getUsersMailPendientes($conMsi, $pageCode, $objUser["GUS_IDUSER"], "2") as $objGruposPeso) {
+		$grupoUserDato = new GrupoUserDato();
+		$grupoUserDato->setGudIduser($objUser["GUS_IDUSER"]);
+		$grupoUserDato->setGudIdgrupo($objGruposPeso["GUS_IDGRUPO"]);
+		if ($grupoUserDato->checkRetrasoGrupoUserDato($conMsi, $pageCode, $objGruposPeso["TIE_PALABRA_MYSQL"])) {
+			$grupoUser = new GrupoUser();
+			$grupoUser->setGusIdgrupo($objGruposPeso["GUS_IDGRUPO"]);
+			$grupoUser->setGusIduser($objUser["GUS_IDUSER"]);
+			$grupoUser->getGrupoUser($conMsi, $pageCode);
+			if ($grupoUser->getGusAvisoRetraso() != "S") {
+				// solo se manda si no se ha enviado antes
+				$algunGrupoParaAvisar = true;
+				$bodyUser.= " - ".$objGruposPeso["GRU_NOMBRE"]."\n".
+						$accesoHttp.$rootURL."/otros-nuevo-dato/".$objGruposPeso["GUS_IDGRUPO"]."\n\n";
+				$grupoUser->setGusAvisoRetraso("S");
+				$grupoUser->updateAvisoRetrasoUserGrupo($conMsi, $pageCode);
+			}
+		}
+	}
+	// FIN grupos OTROS
+	
+	$bodyUser.=sprintf(litAtentamente)."\n".
+			$nombreGeneral.": ".$accesoHttp.$rootURL.$idiomaURL;
+	
+	if ($algunGrupoParaAvisar) {
+		if ($enviarMails) enviarMailSMTP($mailAdmin, $objUser["USE_MAIL"], "", "", $subjectUser, $bodyUser, $objUser["GUS_IDUSER"]);
 		$algunMailEnviado = true;
 		$mailsJuntos.=$bodyUser."\n\n\n";
 	}
+	// echo $mailsJuntos;
 }
-		
+
 //echo "The time is ".date("Y/m/d")." ". date("h:i:sa");
 if ($algunMailEnviado && $enviarMails) {
 	enviarMailSMTP($mailAdmin, $mailAlertasAdmin, "", "", $nombreGeneral.": Cron ejecutado con avisos enviados", $mailsJuntos, "");
@@ -113,8 +115,10 @@ if ($algunMailEnviado && $enviarMails) {
 // $peso->setPesComent(date("Y/m/d")." ". date("h:i:sa")."\n".$mailsJuntos);
 // $peso->insert($conMsi, $pageCode);
 
-$grupo = new Grupo();
-$grupo->desactivarGrupoPorFechafin($conMsi, $pageCode);
+// ESTO HABRIA QUE HACERLO, PERO DE MOMENTO NO PORQUE AL PONERLOS COMO INACTIVOS NO SALDRIAN EN LA PANTALLA DE GRUPOS
+// EN REALIDAD, DEBEN SALIR EN LA PANTALLA PERO QUE YA NO SE PUEDA HACER NADA CON ELLOS EXCEPTO CONSULTAR
+// $grupo = new Grupo();
+// $grupo->desactivarGrupoPorFechafin($conMsi, $pageCode);
 
 mysqli_close($conMsi);
 die(); 

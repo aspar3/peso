@@ -47,22 +47,33 @@ if (!$grupo->getGrupo($conMsi, $pageCode)) {
 }
 
 $accion = $_POST["accion"];
-if ($accion == "save"){
+if ($accion == "save" || $accion == "saveAmigo"){
 	
 	$grupoUserAlta = new GrupoUser();
-	$grupoUserAlta->setGusIdgrupo($idGrupo);
-	
 	$userExiste = new User();
-	$userExiste->setUseName($_POST["name"]);
-	$userExiste->setUseMail($_POST["mail"]);
-	if (!$userExiste->checkUserMailAlreadyExistsSet($conMsi, $pageCode)) {
-		$userExiste->insertProfilePendiente($conMsi, $pageCode);
+	if ($accion == "saveAmigo"){
+		$grupoUserCheck = new GrupoUser();
+		$grupoUserCheck->setGusIduser($_SESSION["sesIduser"]);
+		if (!$grupoUserCheck->checkAmigo($conMsi, $pageCode, $_POST["iduser"])) {
+			mysqli_close($conMsi);
+			die;
+		}
+		$userExiste->setUseIduser($_POST["iduser"]);
+		$userExiste->setUserWithId($conMsi, $pageCode);
+		$grupoUserAlta->setGusIduser($_POST["iduser"]);
+	} else {
+		$userExiste->setUseName($_POST["name"]);
+		$userExiste->setUseMail($_POST["mail"]);
+		if (!$userExiste->checkUserMailAlreadyExistsSet($conMsi, $pageCode)) {
+			$userExiste->insertProfilePendiente($conMsi, $pageCode);
+		}
+		$grupoUserAlta->setGusIduser($userExiste->getUseIduser());
 	}
-	$grupoUserAlta->setGusIduser($userExiste->getUseIduser());
+	$grupoUserAlta->setGusIdgrupo($idGrupo);
 	$grupoUserAlta->setGusIdrol($_POST["idrol"]);
 	$grupoUserAlta->setGusUsucre($_SESSION["sesIduser"]);
 	$grupoUserAlta->setGusVerifyCode(Funciones::getNewCode());
-
+	
 	if ($grupoUserAlta->insertGrupoUser($conMsi, $pageCode)) {
 		$mensaje1=sprintf(litCambiosOk);
 		$classMsgBox = "msgBox bgGreen txtBlack";
@@ -100,6 +111,15 @@ if ($accion == "save"){
 		<link rel="stylesheet" href="/assets/css/main.css?<?=rand(0, 999)?>" />
 		<link rel="stylesheet" href="/css/extra.css?<?=rand(0, 999)?>" />
 		<script type="text/javascript">
+			function saveDataAmigo(formulario){
+				if (formulario.iduser.value==""){
+					alert("<?=sprintf(litCampoOblig, sprintf(litNombrePersona))?>");
+					formulario.iduser.focus();
+				} else if (formulario.idrol.value==""){
+					alert("<?=sprintf(litCampoOblig, sprintf(litRol))?>");
+					formulario.idrol.focus();
+				} else formulario.submit();
+			}
 			function saveData(formulario){
 				if (formulario.name.value==""){
 					alert("<?=sprintf(litCampoOblig, sprintf(litNombrePersona))?>");
@@ -137,8 +157,8 @@ if ($accion == "save"){
 								<div class="12u">
 									<section>
 
-								<form name="formulario" method="post">
-									<input type="hidden" name="accion" value="save"/>
+								<form name="formularioAmigo" method="post">
+									<input type="hidden" name="accion" value="saveAmigo"/>
 									<?php
 										if ($accion == "save"){
 											echo "<div class='$classMsgBox'><span>$mensaje1</span><br/>$mensaje2</div><br/>";
@@ -148,6 +168,52 @@ if ($accion == "save"){
 									?>
 									<header>
 										<h2><?=sprintf(litAnadirMiembroGrupo, $grupo->getGruNombre())?></h2>
+									</header>
+									<header>
+										<p><?=sprintf(litAnadirMiembroYaAmigo, $grupo->getGruNombre())?></p>
+									</header>
+									<div>
+										<label class="desc" for="iduser"><?=sprintf(litNombrePersona)?></label>
+										<div>
+											<select id="iduser" name="iduser">
+												<option value=""></option>
+												<?php
+												$grupoUser = new GrupoUser();
+												$grupoUser->setGusIduser($_SESSION["sesIduser"]);
+												foreach ($grupoUser->getAmigos($conMsi, $pageCode) as $objAmigo) {
+													echo "<option value = '".$objAmigo->getGusIduser()."'>".$objAmigo->getUseName()." ".$objAmigo->getUseLastname()."</option>";
+												}
+												?>
+											</select>
+										</div>
+									</div>
+									<div>
+										<label class="desc" for="idrol"><?=sprintf(litRol)?> <span class="txtRed">*</span></label>
+										<div>
+											<select id="idrol" name="idrol">
+												<?php
+												$rol = new Rol();
+												foreach ($rol->getRoles($conMsi, $pageCode) as $objRol) {
+													echo "<option value = '".$objRol->getRolIdrol()."'>".constant($objRol->getRolNombre())."</option>";
+												}
+												?>
+											</select>
+										</div>
+									</div>
+									<div>
+										<div>
+									  		<br><input class="button" id="saveForm" name="saveForm" type="submit" onclick="saveDataAmigo(this.form);return false;" value="<?=sprintf(litEnviarDatos)?>">
+									  		&nbsp;<input class="button" id="volver" name="volver" type="button" onclick="history.back();" value="<?=sprintf(litVolver)?>">
+									    </div>
+									</div>
+									<br>
+									<hr>
+									<br>
+								</form>
+								<form name="formulario" method="post">
+									<input type="hidden" name="accion" value="save"/>
+									<header>
+										<p><?=sprintf(litAnadirMiembroNuevo, $grupo->getGruNombre())?></p>
 									</header>
 									  
 									<div>
