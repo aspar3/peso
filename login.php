@@ -240,20 +240,24 @@
 	die();
 	
 	function funUrlRedir() {
-		$conMsi= crearConexionMysqli();
-		$grupo = new Grupo();
-		$grupo->setGruIduser($_SESSION["sesIduser"]);
-		//				$listGruposPeso = $grupo->getGruposByTipo($conMsi, $pageCode, "1");
-		$listGruposOtros = $grupo->getGruposByTipo($conMsi, $pageCode, "2");
-		
-		mysqli_close($conMsi);
-		
-		if (count($listGruposOtros) == 1) {
-			return "/otros-nuevo-dato.php?idGrupo=".$listGruposOtros[0]->getGruIdgrupo();
-		} else if (count($listGruposOtros) > 1) {
-			return "/otros-nuevo-dato.php";
+		if ($_GET["goUrl"] != "") {
+			return "/".$_GET["goUrl"];
 		} else {
-			return "/nuevo-peso";
+			$conMsi= crearConexionMysqli();
+			$grupo = new Grupo();
+			$grupo->setGruIduser($_SESSION["sesIduser"]);
+			//				$listGruposPeso = $grupo->getGruposByTipo($conMsi, $pageCode, "1");
+			$listGruposOtros = $grupo->getGruposByTipo($conMsi, $pageCode, "2");
+			
+			mysqli_close($conMsi);
+			
+			if (count($listGruposOtros) == 1) {
+				return "/otros-nuevo-dato.php?idGrupo=".$listGruposOtros[0]->getGruIdgrupo();
+			} else if (count($listGruposOtros) > 1) {
+				return "/otros-nuevo-dato.php";
+			} else {
+				return "/nuevo-peso";
+			}
 		}
 	}
 ?>

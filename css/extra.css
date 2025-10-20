@@ -17,6 +17,7 @@
 
 a.noUnderlined {
 	text-decoration: none;
+	border-bottom: 0px;
 }
 
 .scroll {

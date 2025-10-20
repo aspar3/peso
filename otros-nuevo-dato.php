@@ -17,7 +17,7 @@ include_once 'classes/GrupoUserDato.php';
 
 if (!isset($_SESSION["sesIduser"]) || $_SESSION["sesIduser"]=="" || $_SESSION["sesType"]!=1){
 	//rolLog("$pageCode-01", "No session started or not a signedup user -> (".$_SESSION["sesIduser"].")", 1);
-	header("Location: /login?new=yes");
+	header("Location: /login?new=yes&goUrl=".ltrim($_SERVER['REQUEST_URI'], '/'));
 	die();
 }
 
