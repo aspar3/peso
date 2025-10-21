@@ -141,18 +141,12 @@
 												</thead>
 												<tbody>
 													<?php
-														$labels = $g1Data1 = "";
-														$i = 0;
 														$peso = new Peso();
 														$peso->setPesIduser($_SESSION["sesIduser"]);
 														$peso->setOrder($order);
 														$peso->setAsc($asc);
-														$sumaTotal = 0;
-														$litPesos = $peso->getPesos($conMsi, $pageCode);
+														$litPesos = $peso->getPesos($conMsi, $pageCode, "");
 														foreach ($litPesos as $objPeso){
-															$sumaTotal += $objPeso->getPesPeso()/1000;
-															$labels.= "'".Funciones::fechaFormateadaIdioma($objPeso->getPesFecha(), $_SESSION["sesIdidioma"])."', ";
-															$g1Data1.= "'".str_replace(",", ".", Funciones::pesoConvertido($objPeso->getPesPeso(), $_SESSION["sesIdunidad"], $_SESSION["sesUniMultipli"]))."', ";
 													?>
 														    <tr>
 														      <td><?=Funciones::fechaFormateadaIdioma($objPeso->getPesFecha(), $_SESSION["sesIdidioma"])?></td>
@@ -164,8 +158,16 @@
 														      </td>
 														    </tr>
 													<?php
-															$i++;
 														}
+														
+														$sumaTotal = 0;
+														$labels = $g1Data1 = "";
+														foreach ($peso->getPesos($conMsi, $pageCode, "asc") as $objPeso){
+															$sumaTotal += $objPeso->getPesPeso()/1000;
+															$labels.= "'".Funciones::fechaFormateadaIdioma($objPeso->getPesFecha(), $_SESSION["sesIdidioma"])."', ";
+															$g1Data1.= "'".str_replace(",", ".", Funciones::pesoConvertido($objPeso->getPesPeso(), $_SESSION["sesIdunidad"], $_SESSION["sesUniMultipli"]))."', ";
+														}
+														
 														$media = $sumaTotal / count($litPesos);
 														$labels = trim($labels, ", ");
 														$g1Data1 = trim($g1Data1, ", ");

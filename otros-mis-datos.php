@@ -179,23 +179,20 @@
 													<table class="gen">
 														<thead>
 															<tr>
-																<th><?=sprintf(litFecha)?></th>
-																<th><?=sprintf(litDato)?></th>
-																<th><?=sprintf(litComentario)?></th>
+																<th <?=Funciones::getArrow("1", $order, $asc)?> onclick="ordenFiltro(1, <?=($asc=="1"?"2":"1")?>)"><?=sprintf(litFecha)?></th>
+																<th <?=Funciones::getArrow("2", $order, $asc)?> onclick="ordenFiltro(2, <?=($asc=="1"?"2":"1")?>)"><?=sprintf(litDato)?></th>
+																<th <?=Funciones::getArrow("3", $order, $asc)?> onclick="ordenFiltro(3, <?=($asc=="1"?"2":"1")?>)"><?=sprintf(litComentario)?></th>
 																<th></th>
 															</tr>
 														</thead>
 														<tbody>
 															<?php
-																$labels = $g1Data1 = "";
-																$i = 0;
 																$grupoUserDato = new GrupoUserDato();
 																$grupoUserDato ->setGudIduser($_SESSION["sesIduser"]);
 																$grupoUserDato ->setGudIdgrupo($idGrupo);
-																foreach ($grupoUserDato->getGrupoUserDatos($conMsi, $pageCode) as $objDato){
-																	$labels.= "'".Funciones::fechaFormateadaIdioma($objDato->getGudFecha(), $_SESSION["sesIdidioma"])."', ";
-																	$g1Data1.= "'".str_replace(",", ".", $objDato->getGudDato())."', ";
-																	
+																$grupoUserDato->setOrder($order);
+																$grupoUserDato->setAsc($asc);
+																foreach ($grupoUserDato->getGrupoUserDatos($conMsi, $pageCode, "") as $objDato){																	
 																	$datoMostrar = $objDato->getGudDato();
 																	if ($grupo->getGruIdRespuesta() == "1") {
 																		$datoMostrar = Funciones::formatNum2dec($datoMostrar);
@@ -211,8 +208,13 @@
 																      </td>
 																    </tr>
 															<?php
-																	$i++;
 																}
+																$labels = $g1Data1 = "";
+																foreach ($grupoUserDato->getGrupoUserDatos($conMsi, $pageCode, "asc") as $objDato){
+																	$labels.= "'".Funciones::fechaFormateadaIdioma($objDato->getGudFecha(), $_SESSION["sesIdidioma"])."', ";
+																	$g1Data1.= "'".str_replace(",", ".", $objDato->getGudDato())."', ";
+																}
+																
 																$labels = trim($labels, ", ");
 																$g1Data1 = trim($g1Data1, ", ");
 															?>

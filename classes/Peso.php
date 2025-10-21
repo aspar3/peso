@@ -135,13 +135,15 @@ class Peso {
 		$this->setPeso($result->fetch_assoc());
 	}
 	
-	public function getPesos($conMsi, $pageCode){
+	public function getPesos($conMsi, $pageCode, $ascDesc){
 		$list = array();
 		$sql = "SELECT *
 				FROM ".$this->tbl."
 				WHERE PES_IDUSER = ".mysqli_real_escape_string($conMsi, $this->pesIduser);
 		
-		if ($this->getOrder()=="") {
+		if ($ascDesc != "") {
+			$sql.= " ORDER BY PES_FECHA $ascDesc";
+		} else if ($this->getOrder()=="") {
 			$sql.= " ORDER BY PES_FECHA DESC";
 		} else {
 			if ($this->getOrder()!=""){

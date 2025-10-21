@@ -121,14 +121,16 @@ class GrupoUserDato {
 		$this->setGrupoUserDato($result->fetch_assoc());
 	}
 	
-	public function getGrupoUserDatos($conMsi, $pageCode){
+	public function getGrupoUserDatos($conMsi, $pageCode, $ascDesc){
 		$list = array();
 		$sql = "SELECT *
 				FROM ".$this->tbl."
 				WHERE GUD_IDGRUPO = ".mysqli_real_escape_string($conMsi, $this->gudIdgrupo)."
 				  AND GUD_IDUSER = ".mysqli_real_escape_string($conMsi, $this->gudIduser);
 		
-		if ($this->getOrder()=="") {
+		if ($ascDesc != "") {
+			$sql.= " ORDER BY GUD_FECHA $ascDesc";
+		} else if ($this->getOrder()=="") {
 			$sql.= " ORDER BY GUD_FECHA DESC";
 		} else {
 			if ($this->getOrder()!=""){
