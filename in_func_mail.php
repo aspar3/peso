@@ -274,8 +274,10 @@ function enviarMailAlert($from, $to, $replyTo, $subject, $body){
 	}
 		
 	$headers = "From: $from\r\n";
+	$headers.= "Content-type: text/plain; charset=UTF-8" . "\r\n";
 	$headers.= "X-Mailer: php";
-	if (mail($to, $subject, $body, $headers)) {
+	$encoded_subject = '=?UTF-8?B?' . base64_encode($subject) . '?=';
+	if (mail($to, $encoded_subject, $body, $headers)) {
 		$enviado = true;
 	} else {
 		$enviado = false;

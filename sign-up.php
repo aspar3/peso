@@ -48,7 +48,7 @@
 				$_SESSION["sesIduser"] = $user->getUseIduser();
 				$_SESSION["sesIdidioma"] = $user->getUseIdidioma();
 				$_SESSION["sesIdunidad"] = $user->getUseIdunidad();
-				$_SESSION["sesType"] = "1";
+				$_SESSION["sesStatus"] = "1";
 				$_SESSION["sesName"] = $user->getUseName();
 				$_SESSION["sesLastname"] = $user->getUseLastname();
 				$_SESSION["sesMail"] = $user->getUseMail();
@@ -183,6 +183,10 @@
 													echo "<div class='$classMsgBox'><span>$mensaje1</span><br/>$mensaje2</div><br/><br/>";
 												} else {
 											?>
+											<a class="aGoogle" href="<?php echo $authUrl?>"><img src="/images/google-logo.png"> <span class="txtGoogle"><?php echo sprintf(litIniciaGoogle)?></span></a>
+											<br>
+											<hr>
+											<br>
 											<header>
 												<h2><?=litRelleneFormReg?></h2>
 											</header>

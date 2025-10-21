@@ -30,7 +30,7 @@ if ($idiomaTxt != "" && $idiomaTxt != "es") {
 									<li><a class="icon solid fa-cog" href="left-sidebar.html"><span>Left Sidebar</span></a></li>
 									<li><a class="icon solid fa-retweet" href="right-sidebar.html"><span>Right Sidebar</span></a></li>
 									*/?>
-									<?php if (!isset($_SESSION["sesIduser"]) || $_SESSION["sesIduser"]=="" || $_SESSION["sesType"]!=1){?>
+									<?php if (!isset($_SESSION["sesIduser"]) || $_SESSION["sesIduser"]=="" || $_SESSION["sesStatus"]!=1){?>
 										<li><a class="icon solid fa-sign-in-alt" href="/login<?=$idiomaUrlOut?>"><span><?=sprintf(litMenuIniciarSesion)?></span></a></li>
 										<li><a class="icon solid fa-user-plus" href="/sign-up<?=$idiomaUrlOut?>"><span><?=sprintf(litMenuRegistrarse)?></span></a></li>
 									<?php } else {?>

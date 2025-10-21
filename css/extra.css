@@ -15,6 +15,15 @@
     vertical-align: middle;
 }
 
+a.aGoogle {
+	display: flex;
+	border-bottom: 0px;
+}
+
+.txtGoogle {
+    margin-left: 5px;
+}
+
 a.noUnderlined {
 	text-decoration: none;
 	border-bottom: 0px;

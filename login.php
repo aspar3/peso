@@ -4,6 +4,20 @@
 
 // 	error_reporting(E_ALL);
 // 	ini_set("display_errors", 1);
+
+	// 	require_once 'lib/google-api-php-client-2.18.4/src/Google_Client.php';
+	// 	require_once 'lib/google-api-php-client-2.18.4/src/contrib/Google_Oauth2Service.php';
+	
+	require_once 'vendor/autoload.php';
+	
+	$client = new Google_Client();
+	$client->setClientId('806600875143-ji40vpge8tvu8knbthj8q98c3fooqf20.apps.googleusercontent.com');
+	$client->setClientSecret('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');
+	$client->setRedirectUri('https://challenges.group/login-third-google.php');
+	$client->addScope('openid');
+	$client->addScope('email');
+	$client->addScope('profile');	
+	$authUrl = $client->createAuthUrl();
 	
 	include("admin/in_variables.php");
 
@@ -53,7 +67,7 @@
 				$_SESSION["sesIduser"] = $user->getUseIduser();
 				$_SESSION["sesIdidioma"] = $user->getUseIdidioma();
 				$_SESSION["sesIdunidad"] = $user->getUseIdunidad();
-				$_SESSION["sesType"] = $user->getUseIdstatus();
+				$_SESSION["sesStatus"] = $user->getUseIdstatus();
 				$_SESSION["sesName"] = $user->getUseName();
 				$_SESSION["sesLastname"] = $user->getUseLastname();
 				$_SESSION["sesMail"] = $user->getUseMail();
@@ -83,6 +97,7 @@
 					setcookie("cookie", "", time() - 3600, "/");
 				}
 				
+				mysqli_close($conMsi);
 				header("Location: ".funUrlRedir());
 				die();
 			}
@@ -181,6 +196,11 @@
 									<header>
 										<h2><?=litIntroDatosAcceso?></h2>
 									</header>
+									<a class="aGoogle" href="<?php echo $authUrl?>"><img src="/images/google-logo.png"> <span class="txtGoogle"><?php echo sprintf(litIniciaGoogle)?></span></a>
+									<br>
+									<hr>
+									<br>
+									<div><?php echo sprintf(litIntroduceDatosAcceso)?></div>
 									<div>
 										<label class="desc" id="title3" for="mail"><?=sprintf(litMail)?> <span class="txtRed">*</span></label>
 										<div>
@@ -237,6 +257,7 @@
 </html>							
 
 <?php
+	$_SESSION["goUrl"] = funUrlRedir();
 	die();
 	
 	function funUrlRedir() {

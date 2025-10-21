@@ -15,7 +15,7 @@ include_once 'classes/User.php';
 include_once 'classes/Idioma.php';
 include_once 'classes/Unidad.php';
 
-if (!isset($_SESSION["sesIduser"]) || $_SESSION["sesIduser"]=="" || $_SESSION["sesType"]!=1){
+if (!isset($_SESSION["sesIduser"]) || $_SESSION["sesIduser"]=="" || $_SESSION["sesStatus"]!=1){
 	//rolLog("$pageCode-01", "No session started or not a signedup user -> (".$_SESSION["sesIduser"].")", 1);
 	header("Location: /login?new=yes&goUrl=".ltrim($_SERVER['REQUEST_URI'], '/'));
 	die();
@@ -40,8 +40,19 @@ $user->setUseIduser($_SESSION["sesIduser"]);
 $user->setUserWithId($conMsi, $pageCode);
 
 $accion = $_POST["accion"];
-if ($accion == "save"){
-	
+if ($accion == "idmChange"){
+	$user->setUseIdidioma($_POST["ididioma"]);
+	if ($user->updateIdioma($conMsi, $pageCode)) {
+		$_SESSION["sesIdidioma"] = $_POST["ididioma"];
+		$idioma = new Idioma();
+		$idioma->setIdmIdidioma($_POST["ididioma"]);
+		$idioma->getIdioma($conMsi, $pageCode);
+		$_SESSION["sesIdmLocale"] = $idioma->getIdmLocale();
+		header("Location: my-profile?msj=ok");
+	}
+}
+
+if ($accion == "save"){	
 	$user->setUseMail($_POST["mail"]);
 	$user->setUseName($_POST["name"]);
 	$user->setUseLastname($_POST["lastname"]);
@@ -155,7 +166,20 @@ if ($accion == "save"){
 										<h2><?=sprintf(litCambiarPerfil)?></h2>
 										<div><?=sprintf(litNoCambiarPass)?></div>
 									</header>
-									  
+
+									<div>
+										<label class="desc" for="ididioma"><?=sprintf(litIdioma)?> <span class="txtRed">*</span></label>
+										<div>
+											<select id="ididioma" name="ididioma" onchange="this.form.accion.value='idmChange';this.form.submit()">
+												<?php
+												$idioma = new Idioma();
+												foreach ($idioma->getIdiomasActive($conMsi, $pageCode) as $objIdioma) {
+													echo "<option ".($objIdioma->getIdmIdidioma() == $user->getUseIdidioma()?"selected":"")." value = '".$objIdioma->getIdmIdidioma()."'>".$objIdioma->getIdmName()."</option>";
+												}
+												?>
+											</select>
+										</div>
+									</div>									  
 									<div>
 										<label class="desc" id="title3" for="mail"><?=sprintf(litMail)?> <span class="txtRed">*</span></label>
 										<div>
@@ -172,19 +196,6 @@ if ($accion == "save"){
 										<label class="desc" for="nombre"><?=sprintf(litApellidos)?></label>
 										<div>
 											<input id="lastname" name="lastname" type="text" value="<?=$user->getUseLastname()?>" maxlength="200">
-										</div>
-									</div>
-									<div>
-										<label class="desc" for="ididioma"><?=sprintf(litIdioma)?> <span class="txtRed">*</span></label>
-										<div>
-											<select id="ididioma" name="ididioma">
-												<?php
-												$idioma = new Idioma();
-												foreach ($idioma->getIdiomasActive($conMsi, $pageCode) as $objIdioma) {
-													echo "<option ".($objIdioma->getIdmIdidioma() == $user->getUseIdidioma()?"selected":"")." value = '".$objIdioma->getIdmIdidioma()."'>".$objIdioma->getIdmName()."</option>";
-												}
-												?>
-											</select>
 										</div>
 									</div>
 									<div>

@@ -15,7 +15,7 @@ include_once 'classes/Grupo.php';
 include_once 'classes/GrupoUser.php';
 include_once 'classes/GrupoUserDato.php';
 
-if (!isset($_SESSION["sesIduser"]) || $_SESSION["sesIduser"]=="" || $_SESSION["sesType"]!=1){
+if (!isset($_SESSION["sesIduser"]) || $_SESSION["sesIduser"]=="" || $_SESSION["sesStatus"]!=1){
 	//rolLog("$pageCode-01", "No session started or not a signedup user -> (".$_SESSION["sesIduser"].")", 1);
 	header("Location: /login?new=yes&goUrl=".ltrim($_SERVER['REQUEST_URI'], '/'));
 	die();
@@ -83,9 +83,9 @@ if ($accion == "save"){
 			if ($grupoUser->updateAvisoRetrasoUser($conMsi, $pageCode)) {
 				$mensaje1=sprintf(litCambiosOk);
 				$classMsgBox = "msgBox bgGreen txtBlack";
-				if ($enviarMails) { 
+ 				if ($enviarMails) { 
 					enviarMailAlert($mailAdmin, $mailAlertasAdmin, "", $nombreGeneral." : ".$_SESSION["sesName"]." -> Nuevo dato para ".$grupo->getGruNombre(), "Se ha metido un nuevo dato para ".$grupo->getGruNombre());
-				}
+ 				}
 				header("Location: /otros-mis-datos.php?idGrupo=".$idGrupo);
 				die();
 			} else {

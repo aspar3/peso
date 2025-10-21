@@ -14,7 +14,7 @@
 	include_once 'classes/Peso.php';
 	include_once 'classes/GrupoUser.php';
 
-	if (!isset($_SESSION["sesIduser"]) || $_SESSION["sesIduser"]=="" || $_SESSION["sesType"]!=1){
+	if (!isset($_SESSION["sesIduser"]) || $_SESSION["sesIduser"]=="" || $_SESSION["sesStatus"]!=1){
 		//rolLog("$pageCode-01", "No session started or not a signedup user -> (".$_SESSION["sesIduser"].")", 1);
 		header("Location: /login?new=yes&goUrl=".ltrim($_SERVER['REQUEST_URI'], '/'));
 		die();
@@ -27,7 +27,7 @@
 	include_once 'literales/idioma_'.$idiomaTxt.'.php';
 	
 	$order=$_GET["order"]==""?"1":$_GET["order"];
-	$asc=$_GET["asc"]==""?"1":$_GET["asc"];
+	$asc=$_GET["asc"]==""?"2":$_GET["asc"];
 	
 	$conMsi= crearConexionMysqli();
 	

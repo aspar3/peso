@@ -353,7 +353,6 @@ class User {
 								USE_AUTH_UID = '".mysqli_real_escape_string($conMsi, $this->useAuthUid)."', 
 								USE_SEX= '".mysqli_real_escape_string($conMsi, $this->useSex)."', 
 								USE_PICTURE = '".mysqli_real_escape_string($conMsi, $this->usePicture)."', 
-								USE_LINK = '".mysqli_real_escape_string($conMsi, $this->useLink)."', 
 								USE_IDSTATUS = 1 
 							WHERE (USE_AUTH_PROVIDER = '".mysqli_real_escape_string($conMsi, $this->useAuthProvider)."' OR USE_AUTH_PROVIDER is null) 
 							  AND (USE_AUTH_UID = '".mysqli_real_escape_string($conMsi, $this->useAuthUid)."' OR USE_AUTH_UID is null) AND UPPER(USE_MAIL) = UPPER('".mysqli_real_escape_string($conMsi, $this->useMail)."')";
@@ -361,7 +360,7 @@ class User {
 			}
 		}else{
 			
-			$this->useName = $this->checkNameForUrl($conMsi, $pageCode, $this->useName);
+			// $this->useName = $this->checkNameForUrl($conMsi, $pageCode, $this->useName);
 			
 			//Insert user data
 			$query = "INSERT INTO ".$this->userTbl." 
@@ -372,7 +371,6 @@ class User {
 							USE_MAIL = '".mysqli_real_escape_string($conMsi, $this->useMail)."', 
 							USE_SEX= '".mysqli_real_escape_string($conMsi, $this->useSex)."', 
 							USE_PICTURE = '".mysqli_real_escape_string($conMsi, $this->usePicture)."', 
-							USE_LINK = '".mysqli_real_escape_string($conMsi, $this->useLink)."', 
 							USE_IDSTATUS = 1";
 			if(!$conMsi->query($query)){ $error = true; rolLog("$pageCode> USE-SQL-11", $query." -> ".$conMsi->error, 3);}
 		}
@@ -431,7 +429,18 @@ class User {
 					USE_MAIL = '".mysqli_real_escape_string($conMsi, $this->useMail)."',
 					USE_IDSTATUS = 1
 				WHERE USE_IDUSER = ".mysqli_real_escape_string($conMsi, $this->useIduser);
-
+		
+		if(!$conMsi->query($sql)){ $error = true; rolLog("$pageCode> USE-SQL-15", $sql." -> ".$conMsi->error, 3);}
+		else return true;
+	}
+	
+	function updateIdioma($conMsi, $pageCode){
+		global $error;
+		
+		$sql = "UPDATE USER SET
+					USE_IDIDIOMA = ".mysqli_real_escape_string($conMsi, $this->useIdidioma)."
+				WHERE USE_IDUSER = ".mysqli_real_escape_string($conMsi, $this->useIduser);
+		
 		if(!$conMsi->query($sql)){ $error = true; rolLog("$pageCode> USE-SQL-15", $sql." -> ".$conMsi->error, 3);}
 		else return true;
 	}
