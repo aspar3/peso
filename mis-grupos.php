@@ -21,7 +21,7 @@
 		die();
 	}
 	
-	// 1: Peso. 2: Otros
+	// 1: Peso. 2: Otros 3: Acciones
 	$gruTipo = "1";
 
 	$idiomaTxt = $_SESSION["sesIdmLocale"];
@@ -106,6 +106,7 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
 		<link rel="stylesheet" href="/assets/css/main.css?<?=rand(0, 999)?>" />
 		<link rel="stylesheet" href="/css/extra.css?<?=rand(0, 999)?>" />
+		<script src="/js/funciones.js?<?=rand(0, 999)?>"></script>
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.3.0/chart.min.js"></script>
 		<script type="text/javascript">
 			function borrar(id) {
@@ -223,8 +224,8 @@
 													<tr>
 														<th <?=Funciones::getArrow("1", $order, $asc)?> onclick="ordenFiltro(1, <?=($asc=="1"?"2":"1")?>)"><?=sprintf(litNombre)?></th>
 														<th <?=Funciones::getArrow("2", $order, $asc)?> onclick="ordenFiltro(2, <?=($asc=="1"?"2":"1")?>)"><?=sprintf(litFechaInicioFin)?></th>
-														<th <?=Funciones::getArrow("4", $order, $asc)?> onclick="ordenFiltro(4, <?=($asc=="1"?"2":"1")?>)"><?=sprintf(litMiembros)?></th>
 														<th <?=Funciones::getArrow("5", $order, $asc)?> onclick="ordenFiltro(5, <?=($asc=="1"?"2":"1")?>)"><?=sprintf(litReto)?></th>
+														<th <?=Funciones::getArrow("4", $order, $asc)?> onclick="ordenFiltro(4, <?=($asc=="1"?"2":"1")?>)"><?=sprintf(litMiembros)?></th>
 														<th></th>
 													</tr>
 												</thead>
@@ -238,7 +239,7 @@
 														$grupo->setAsc($asc);
 														foreach ($grupo->getGruposAceptados($conMsi, $pageCode) as $objGrupo){
 													?>
-														    <tr>
+														    <tr onclick="detalleLinea(<?=$objGrupo->getGruIdgrupo()?>)">
 														      <td><?=$objGrupo->getGruNombre()?></td>
 														      <td>
 														      		<?=Funciones::fechaFormateadaIdioma($objGrupo->getGruFecini(), $_SESSION["sesIdidioma"])?>
@@ -248,18 +249,33 @@
 														      			}
 														      		?>
 														      </td>
+														      <td <?php if ($objGrupo->getGruReto() !="") { echo 'title="'.$objGrupo->getGruReto().'" onclick="alert(\''.$objGrupo->getGruReto().'\')"';}?>><?=(strlen($objGrupo->getGruReto()) > 10?substr($objGrupo->getGruReto(), 0, 10)."...":$objGrupo->getGruReto())?></td>
+														      
 														      <td class="number"><?=$objGrupo->getNumeroMiembros()?></td>
-														      <td title="<?=$objGrupo->getGruReto()?>" onclick="alert('<?=$objGrupo->getGruReto()?>')"><?=(strlen($objGrupo->getGruReto()) > 10?substr($objGrupo->getGruReto(), 0, 10)."...":$objGrupo->getGruReto())?></td>
 														      <td class="centered">
-														      		<?php if ($objGrupo->getEsAdmin() == "1") {?>
-																			<input type="image" class="tdIcon" src="/images/edit.gif" id="imageButton" title="<?=sprintf(litModificar)?>" alt="<?=sprintf(litModificar)?>" onClick="window.location.href='/nuevo-grupo?idGrupo=<?=$objGrupo->getGruIdgrupo()?>';return false;"/><br>
-																	<?php } else { ?>
-																			<img src="/images/blank.gif"><br>
-																	<?php } ?>
-																	<input type="image" class="tdIcon" src="/images/stats.gif" id="imageButton" title="<?=sprintf(litEstadisticas)?>" alt="<?=sprintf(litEstadisticas)?>" onClick="window.location.href='/mis-grupos-estadisticas?idGrupo=<?=$objGrupo->getGruIdgrupo()?>';return false;"/><br>
-																	<input type="image" class="tdIcon" src="/images/users.gif" id="imageButton" title="<?=sprintf(litMiembros)?>" alt="<?=sprintf(litMiembros)?>" onClick="window.location.href='/mis-grupos-miembros?idGrupo=<?=$objGrupo->getGruIdgrupo()?>';return false;"/><br>
-														      		<input type="image" class="tdIcon" src="/images/salir.gif" id="imageButton" title="<?=sprintf(litSalirGrupo)?>" alt="<?=sprintf(litSalirGrupo)?>" onClick="borrar('<?=$objGrupo->getGruIdgrupo()?>');return false;"/>
+														      		<input type="image" class="tdIcon" src="/images/flechaDetalle.gif" id="imageButton" title="<?=sprintf(litVerOpciones)?>" alt="<?=sprintf(litVerOpciones)?>" onClick="detalleLinea(<?=$objGrupo->getGruIdgrupo()?>)';return false;"/><br>
 														      </td>
+														    </tr>
+														    <tr class="oculto"></tr> <!-- para mantener los estilos de las filas de las tablas pares e impares -->
+														    <tr class="ocultoFila" id="linea_<?=$objGrupo->getGruIdgrupo()?>">
+														    	<td colspan="5">
+														    		<button class="botonTabla" onClick="window.location.href='/nuevo-grupo?idGrupo=<?=$objGrupo->getGruIdgrupo()?>';">
+																		<img src="/images/edit.gif" class="imageButton">
+																		<span><?php if ($objGrupo->getEsAdmin() == "1") {echo sprintf(litModificar);} else {echo sprintf(litVerDetalles);}?></span>
+																	</button>
+																	<button class="botonTabla" onClick="window.location.href='/mis-grupos-estadisticas?idGrupo=<?=$objGrupo->getGruIdgrupo()?>';">
+																		<img src="/images/stats.gif" class="imageButton">
+																		<span><?=sprintf(litEstadisticas)?></span>
+																	</button>
+																	<button class="botonTabla" onClick="window.location.href='/mis-grupos-miembros?idGrupo=<?=$objGrupo->getGruIdgrupo()?>';">
+																		<img src="/images/users.gif" class="imageButton">
+																		<span><?=sprintf(litMiembros)?></span>
+																	</button>
+																	<button class="botonTabla" onClick="borrar('<?=$objGrupo->getGruIdgrupo()?>');">
+																		<img src="/images/salir.gif" class="imageButton">
+																		<span><?=sprintf(litSalirGrupo)?></span>
+																	</button>
+																</td>
 														    </tr>
 													<?php
 															$i++;

@@ -186,4 +186,7 @@ define("litAyudaRespuesta", '- '.litRespuestaNumericos.': En un reto de quién d
 define("litIniciaGoogle", 'Inicie sesión con Google');
 define("litIntroduceDatosAcceso", 'O introduzca sus datos de accceso:');
 define("litVerOpciones", 'Ver opciones');
+define("litVerDetalles", 'Ver detalles');
+define("litDetallesGrupo", 'Detalles del grupo');
+define("litModificarGrupo", 'Modificar grupo');
 ?>

@@ -30,11 +30,13 @@ include_once 'literales/idioma_'.$idiomaTxt.'.php';
 
 $conMsi= crearConexionMysqli();
 
-// 1: Peso. 2: Otros
+// 1: Peso. 2: Otros 3: Acciones
 $gruTipo = "2";
 
 $grupo = new Grupo();
 
+$esAdmin = false;
+$disabledNoAdmin = "";
 $editar = false; 
 $idGrupo = $_GET["idGrupo"];
 if ($idGrupo != "") {
@@ -44,10 +46,18 @@ if ($idGrupo != "") {
 	if (!$grupo->getGrupo($conMsi, $pageCode)) {
 		die;
 	}
+	$grupoUser = new GrupoUser();
+	$grupoUser->setGusIdgrupo($grupo->getGruIdgrupo());
+	$grupoUser->setGusIduser($_SESSION["sesIduser"]);
+	$grupoUser->getGrupoUser($conMsi, $pageCode);
+	if ($grupoUser->getGusIdrol() == "1") {
+		$esAdmin = true;
+		$disabledNoAdmin = 'disabled="true"';
+	}
 }
 
 $accion = $_POST["accion"];
-if ($accion == "save"){
+if ($esAdmin && $accion == "save"){
 	$grupo->setGruIduser($_SESSION["sesIduser"]);
 	$grupo->setGruNombre($_POST["nombre"]);
 	$grupo->setGruFecini($_POST["fecini"]);
@@ -172,31 +182,43 @@ if ($accion == "save"){
 										}
 									?>
 									<header>
-										<h2><?=sprintf(litCrearNuevoGrupoTitle)?></h2>
+										<h2>
+											<?php
+												if (!$editar) {
+													echo sprintf(litCrearNuevoGrupoTitle);
+												} else {
+													if ($esAdmin) {
+														echo sprintf(litModificarGrupo);
+													} else {
+														echo sprintf(litDetallesGrupo);
+													}
+												}
+											?>
+										</h2>
 									</header>
 									  
 									<div>
 										<label class="desc" for="nombre"><?=sprintf(litNombreReto)?> <span class="txtRed">*</span></label>
 										<div>
-											<input id="nombre" name="nombre" type="text" maxlength="100" value="<?=$grupo->getGruNombre()?>">
+											<input id="nombre" name="nombre" type="text" maxlength="100" value="<?=$grupo->getGruNombre()?>" <?php echo $disabledNoAdmin?>>
 										</div>
 									</div>
 									<div>
 										<label class="desc" for="fecini"><?=sprintf(litFechaInicio)?> <span class="txtRed">*</span></label>
 										<div>
-											<input id="fecini" name="fecini" type="date" value="<?=($editar?Funciones::fechaFormateadaInput($grupo->getGruFecini()):date('Y-m-d'))?>">
+											<input id="fecini" name="fecini" type="date" value="<?=($editar?Funciones::fechaFormateadaInput($grupo->getGruFecini()):date('Y-m-d'))?>" <?php echo $disabledNoAdmin?>>
 										</div>
 									</div>
 									<div>
 										<label class="desc" for="fecfin"><?=sprintf(litFechaFin)?></label>
 										<div>
-											<input id="fecfin" name="fecfin" type="date" value="<?=($editar?Funciones::fechaFormateadaInput($grupo->getGruFecfin()):"")?>">
+											<input id="fecfin" name="fecfin" type="date" value="<?=($editar?Funciones::fechaFormateadaInput($grupo->getGruFecfin()):"")?>" <?php echo $disabledNoAdmin?>>
 										</div>
 									</div>
 									<div>
 										<label class="desc" for="pregunta"><?=sprintf(litPreguntaIntro)?> <a class="noUnderlined" href="javascript:alert('<?php echo sprintf(litAyudaPregunta)?>')"><img src="/images/infoLeft.gif"></a></label>
 										<div>
-											<input id="pregunta" name="pregunta" type="text" maxlength="255" value="<?=$grupo->getGruPregunta()?>">
+											<input id="pregunta" name="pregunta" type="text" maxlength="255" value="<?=$grupo->getGruPregunta()?>" <?php echo $disabledNoAdmin?>>
 										</div>
 									</div>
 									<script>
@@ -205,7 +227,7 @@ if ($accion == "save"){
 									<div>
 										<label class="desc" for="idrespuesta"><?=sprintf(litTipoRespuesta)?> <span class="txtRed">*</span> <a class="noUnderlined" href="javascript:alert(alertRespuesta)"><img src="/images/infoLeft.gif"></a></label>
 										<div>
-											<select id="idrespuesta" name="idrespuesta" onchange="visibilidadDivGanador()">
+											<select id="idrespuesta" name="idrespuesta" onchange="visibilidadDivGanador()" <?php echo $disabledNoAdmin?>>
 												<?php
 												$respuesta = new Respuesta();
 												foreach ($respuesta->getRespuestas($conMsi, $pageCode) as $objRespuesta) {
@@ -218,7 +240,7 @@ if ($accion == "save"){
 									<div id="divGanador">
 										<label class="desc" for="ganador"><?=sprintf(litQuienGana)?> <span class="txtRed">*</span></label>
 										<div>
-											<select id="ganador" name="ganador">
+											<select id="ganador" name="ganador" <?php echo $disabledNoAdmin?>>
 												<option value="0" <?=($grupo->getGruGanador()=="0"?"selected":"")?>><?=sprintf(litQuienGanaMas)?></option>
 												<option value="1" <?=($grupo->getGruGanador()=="1"?"selected":"")?>><?=sprintf(litQuienGanaMenos)?></option>
 												<option value="2" <?=($grupo->getGruGanador()=="2"?"selected":"")?>><?=sprintf(litQuienGanaMediaMas)?></option>
@@ -230,7 +252,7 @@ if ($accion == "save"){
 									<div>
 										<label class="desc" for="idtiempo"><?=sprintf(litPeriodoDatos)?> <span class="txtRed">*</span></label>
 										<div>
-											<select id="idtiempo" name="idtiempo">
+											<select id="idtiempo" name="idtiempo" <?php echo $disabledNoAdmin?>>
 												<?php
 												$tiempo = new Tiempo();
 												foreach ($tiempo->getTiempos($conMsi, $pageCode) as $objTiempo) {
@@ -243,14 +265,17 @@ if ($accion == "save"){
 									<div>
 										<label class="desc" for="reto"><?=sprintf(litDescriReto)?></label>
 										<div>
-											<input id="reto" name="reto" type="text" maxlength="255" value="<?=$grupo->getGruReto()?>">
+											<input id="reto" name="reto" type="text" maxlength="255" value="<?=$grupo->getGruReto()?>" <?php echo $disabledNoAdmin?>>
 										</div>
 									</div>
 									<div>
 										<div>
-									  		<br><input class="button" id="saveForm" name="saveForm" type="submit" onclick="saveData(this.form);return false;" value="<?=sprintf(litEnviarDatos)?>">
+									  		<br>
+									  		<?php if ($esAdmin) {?>
+									  				<input class="button" id="saveForm" name="saveForm" type="submit" onclick="saveData(this.form);return false;" value="<?=sprintf(litEnviarDatos)?>">&nbsp;
+									  		<?php }?>
 									  		<?php if ($editar) {?>
-									  			&nbsp;<input class="button" id="volver" name="volver" type="button" onclick="history.back();" value="<?=sprintf(litVolver)?>">
+									  				<input class="button" id="volver" name="volver" type="button" onclick="history.back();" value="<?=sprintf(litVolver)?>">
 									  		<?php }?>
 									    </div>
 									</div>

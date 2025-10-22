@@ -29,8 +29,13 @@ include_once 'literales/idioma_'.$idiomaTxt.'.php';
 
 $conMsi= crearConexionMysqli();
 
+// 1: Peso. 2: Otros 3: Acciones
+$gruTipo = "1";
+
 $grupo = new Grupo();
 
+$esAdmin = false;
+$disabledNoAdmin = "";
 $editar = false; 
 $idGrupo = $_GET["idGrupo"];
 if ($idGrupo != "") {
@@ -40,10 +45,18 @@ if ($idGrupo != "") {
 	if (!$grupo->getGrupo($conMsi, $pageCode)) {
 		die;
 	}
+	$grupoUser = new GrupoUser();
+	$grupoUser->setGusIdgrupo($grupo->getGruIdgrupo());
+	$grupoUser->setGusIduser($_SESSION["sesIduser"]);
+	$grupoUser->getGrupoUser($conMsi, $pageCode);	
+	if ($grupoUser->getGusIdrol() == "1") {
+		$esAdmin = true;
+		$disabledNoAdmin = 'disabled="true"';
+	}
 }
 
 $accion = $_POST["accion"];
-if ($accion == "save"){
+if ($esAdmin && $accion == "save"){
 	$grupo->setGruIduser($_SESSION["sesIduser"]);
 	$grupo->setGruNombre($_POST["nombre"]);
 	$grupo->setGruFecini($_POST["fecini"]);
@@ -51,7 +64,7 @@ if ($accion == "save"){
 	$grupo->setGruMostrarPeso($_POST["mostrarPeso"]);
 	$grupo->setGruIdtiempo($_POST["idtiempo"]);
 	$grupo->setGruReto($_POST["reto"]);
-	$grupo->setGruTipo("1");
+	$grupo->setGruTipo($gruTipo);
 	
 	if (!$editar) {		
 		if ($grupo->insertGrupo($conMsi, $pageCode)){
@@ -153,31 +166,43 @@ if ($accion == "save"){
 										}
 									?>
 									<header>
-										<h2><?=sprintf(litCrearNuevoGrupoTitle)?></h2>
+										<h2>
+											<?php
+												if (!$editar) {
+													echo sprintf(litCrearNuevoGrupoTitle);
+												} else {
+													if ($esAdmin) {
+														echo sprintf(litModificarGrupo);
+													} else {
+														echo sprintf(litDetallesGrupo);
+													}
+												}
+											?>
+										</h2>
 									</header>
 									  
 									<div>
 										<label class="desc" for="nombre"><?=sprintf(litNombreGrupo)?> <span class="txtRed">*</span></label>
 										<div>
-											<input id="nombre" name="nombre" type="text" maxlength="100" value="<?=$grupo->getGruNombre()?>">
+											<input id="nombre" name="nombre" type="text" maxlength="100" value="<?=$grupo->getGruNombre()?>" <?php echo $disabledNoAdmin?>>
 										</div>
 									</div>
 									<div>
 										<label class="desc" for="fecini"><?=sprintf(litFechaInicio)?> <span class="txtRed">*</span></label>
 										<div>
-											<input id="fecini" name="fecini" type="date" value="<?=($editar?Funciones::fechaFormateadaInput($grupo->getGruFecini()):date('Y-m-d'))?>">
+											<input id="fecini" name="fecini" type="date" value="<?=($editar?Funciones::fechaFormateadaInput($grupo->getGruFecini()):date('Y-m-d'))?>" <?php echo $disabledNoAdmin?>>
 										</div>
 									</div>
 									<div>
 										<label class="desc" for="fecfin"><?=sprintf(litFechaFin)?></label>
 										<div>
-											<input id="fecfin" name="fecfin" type="date" value="<?=($editar?Funciones::fechaFormateadaInput($grupo->getGruFecfin()):"")?>">
+											<input id="fecfin" name="fecfin" type="date" value="<?=($editar?Funciones::fechaFormateadaInput($grupo->getGruFecfin()):"")?>" <?php echo $disabledNoAdmin?>>
 										</div>
 									</div>
 									<div>
 										<label class="desc" for="mostrarPeso"><?=sprintf(litMostrarPeso)?> <span class="txtRed">*</span></label>
 										<div>
-											<select id="mostrarPeso" name="mostrarPeso">
+											<select id="mostrarPeso" name="mostrarPeso" <?php echo $disabledNoAdmin?>>
 												<option <?=($grupo->getGruMostrarPeso() == "S"?" selected ":"")?> value="S"><?=sprintf(litSi)?></option>
 												<option <?=($grupo->getGruMostrarPeso() == "N"?" selected ":"")?> value="N"><?=sprintf(litNoPorcen)?></option>
 											</select>
@@ -186,7 +211,7 @@ if ($accion == "save"){
 									<div>
 										<label class="desc" for="idtiempo"><?=sprintf(litPeriodoPesajes)?> <span class="txtRed">*</span></label>
 										<div>
-											<select id="idtiempo" name="idtiempo">
+											<select id="idtiempo" name="idtiempo" <?php echo $disabledNoAdmin?>>
 												<?php
 												$tiempo = new Tiempo();
 												foreach ($tiempo->getTiempos($conMsi, $pageCode) as $objTiempo) {
@@ -199,14 +224,17 @@ if ($accion == "save"){
 									<div>
 										<label class="desc" for="reto"><?=sprintf(litDescriReto)?></label>
 										<div>
-											<input id="reto" name="reto" type="text" maxlength="255" value="<?=$grupo->getGruReto()?>">
+											<input id="reto" name="reto" type="text" maxlength="255" value="<?=$grupo->getGruReto()?>" <?php echo $disabledNoAdmin?>>
 										</div>
 									</div>
 									<div>
 										<div>
-									  		<br><input class="button" id="saveForm" name="saveForm" type="submit" onclick="saveData(this.form);return false;" value="<?=sprintf(litEnviarDatos)?>">
+									  		<br>
+									  		<?php if ($esAdmin) {?>
+									  				<input class="button" id="saveForm" name="saveForm" type="submit" onclick="saveData(this.form);return false;" value="<?=sprintf(litEnviarDatos)?>">&nbsp;
+									  		<?php }?>
 									  		<?php if ($editar) {?>
-									  			&nbsp;<input class="button" id="volver" name="volver" type="button" onclick="history.back();" value="<?=sprintf(litVolver)?>">
+									  				<input class="button" id="volver" name="volver" type="button" onclick="history.back();" value="<?=sprintf(litVolver)?>">
 									  		<?php }?>
 									    </div>
 									</div>

@@ -187,4 +187,7 @@ define("litAyudaRespuesta", '- '.litRespuestaNumericos.': In a challenge to see 
 define("litIniciaGoogle", 'Sign in with Google');
 define("litIntroduceDatosAcceso", 'Or enter your sign in details:');
 define("litVerOpciones", 'View options');
+define("litVerDetalles", 'View details');
+define("litDetallesGrupo", 'Group details');
+define("litModificarGrupo", 'Group modify');
 ?>
