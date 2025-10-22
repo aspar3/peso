@@ -183,6 +183,12 @@
 									<canvas id="myChart1" width="870" height="435" style="display: block; width: 870px; height: 435px;"></canvas>
 								</div>
 							</div>
+							<div>
+								<div>
+							  		<br>
+					  				<input class="button" id="saveForm" name="saveForm" type="submit" onclick="window.location.href='/nuevo-peso'" value="<?=sprintf(litNuevoPeso)?>">&nbsp;
+							    </div>
+							</div>
 
 						</div>
 					</div>

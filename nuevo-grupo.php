@@ -57,7 +57,7 @@ if ($idGrupo != "") {
 }
 
 $accion = $_POST["accion"];
-if ($esAdmin && $accion == "save"){
+if ($accion == "save"){
 	$grupo->setGruIduser($_SESSION["sesIduser"]);
 	$grupo->setGruNombre($_POST["nombre"]);
 	$grupo->setGruFecini($_POST["fecini"]);
@@ -90,7 +90,7 @@ if ($esAdmin && $accion == "save"){
 			$mensaje2=sprintf(litError2, $mailAdmin);
 			$classMsgBox = "msgBox bgRed txtWhite";
 		}
-	} else {
+	} else if ($esAdmin) {
 		$grupo->setGruIdgrupo($idGrupo);
 		if ($grupo->updateGrupo($conMsi, $pageCode)){
 			$mensaje1=sprintf(litCambiosOk);
@@ -231,7 +231,7 @@ if ($esAdmin && $accion == "save"){
 									<div>
 										<div>
 									  		<br>
-									  		<?php if ($esAdmin) {?>
+									  		<?php if ($esAdmin || $idGrupo == "") {?>
 									  				<input class="button" id="saveForm" name="saveForm" type="submit" onclick="saveData(this.form);return false;" value="<?=sprintf(litEnviarDatos)?>">&nbsp;
 									  		<?php }?>
 									  		<?php if ($editar) {?>
