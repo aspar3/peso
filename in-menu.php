@@ -44,6 +44,15 @@ if ($idiomaTxt != "" && $idiomaTxt != "es") {
 											</ul>
 										</li>
 										<li>
+											<a class="icon solid fa-tasks" href="#"><?=sprintf(litMenuRetosAcciones)?></a>
+											<ul>
+												<li><a class="icon solid fa-running" href="/acciones-nuevo-grupo.php"><span><?=sprintf(litMenuNuevoRetoAcciones)?></span></a></li>
+												<li><a class="icon solid fa-users" href="/acciones-mis-grupos.php"><span><?=sprintf(litMenuMisGrupos)?></span></a></li>
+												<li><a class="icon solid fa-balance-scale" href="/mis-pesos"><span><?=sprintf(litMenuMisPesos)?></span></a></li>
+												<li><a class="icon solid fa-weight-hanging" href="/nuevo-peso"><span><?=sprintf(litMenuNuevoPeso)?></span></a></li>
+											</ul>
+										</li>
+										<li>
 											<a class="icon solid fa-compress-arrows-alt" href="#"><?=sprintf(litMenuOtrosRetos)?></a>
 											<ul>
 												<li><a class="icon solid fa-running" href="/otros-nuevo-grupo.php"><span><?=sprintf(litMenuNuevoRetoOtros)?></span></a></li>

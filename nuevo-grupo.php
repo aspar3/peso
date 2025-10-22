@@ -51,6 +51,7 @@ if ($idGrupo != "") {
 	$grupoUser->getGrupoUser($conMsi, $pageCode);	
 	if ($grupoUser->getGusIdrol() == "1") {
 		$esAdmin = true;
+	} else {
 		$disabledNoAdmin = 'disabled="true"';
 	}
 }
