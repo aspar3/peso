@@ -334,3 +334,14 @@ function fechaMayorIgualFechaFactura(campo) {
 		alert('Fecha de cobro es anterior a la Fecha factura');
 	}
 }
+
+function detalleLinea(id) {
+	if (document.getElementById("linea_"+id).classList.contains("ocultoFila")) {
+		document.getElementById("linea_"+id).classList.remove("ocultoFila");
+//		document.getElementById("linea_"+id).classList.add("visibleFila");
+		document.getElementById("linea_"+id).classList.add("fade-in");
+	} else {
+		document.getElementById("linea_"+id).classList.add("ocultoFila");
+		document.getElementById("linea_"+id).classList.remove("visibleFila");
+	}
+}

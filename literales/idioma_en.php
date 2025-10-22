@@ -186,4 +186,5 @@ define("litRespuestaSiNoNo", '"Yes" and "No", where the "No" is the good thing')
 define("litAyudaRespuesta", '- '.litRespuestaNumericos.': In a challenge to see who takes the most steps, each time data is entered, the NUMBER OF STEPS taken would be entered.\n\n- '.litRespuestaSiNoSi.': In a challenge to see who exercises the most days, what GIVES POINTS is ANSWERING YES to the question "Have you exercised today?"\n\n- '.litRespuestaSiNoNo.': In a challenge to see who smokes the fewest days, what GIVES POINTS is ANSWERING NO to the question "Have you smoked today?"');
 define("litIniciaGoogle", 'Sign in with Google');
 define("litIntroduceDatosAcceso", 'Or enter your sign in details:');
+define("litVerOpciones", 'View options');
 ?>

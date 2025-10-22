@@ -185,5 +185,5 @@ define("litRespuestaSiNoNo", '"Sí" y "No", donde lo que suma es el "No"');
 define("litAyudaRespuesta", '- '.litRespuestaNumericos.': En un reto de quién da más pasos, cada vez que se meten datos se metería el NÚMERO DE PASOS que se han dado.\n\n- '.litRespuestaSiNoSi.': En un reto de quién hace deporte más dias, lo que DA PUNTOS es RESPONDER SÍ a la pregunta "¿Has hecho deporte hoy?"\n\n- '.litRespuestaSiNoNo.': En un reto de quién fuma menos dias, lo que DA PUNTOS es RESPONDER NO a la pregunta "¿Has fumado hoy?"');
 define("litIniciaGoogle", 'Inicie sesión con Google');
 define("litIntroduceDatosAcceso", 'O introduzca sus datos de accceso:');
-
+define("litVerOpciones", 'Ver opciones');
 ?>

@@ -21,7 +21,7 @@
 		die();
 	}
 
-	// 1: Peso. 2: Otros
+	// 1: Peso. 2: Otros 3: Acciones
 	$gruTipo = "2";
 	
 	$idiomaTxt = $_SESSION["sesIdmLocale"];
@@ -107,6 +107,7 @@
 		<link rel="stylesheet" href="/assets/css/main.css?<?=rand(0, 999)?>" />
 		<link rel="stylesheet" href="/css/extra.css?<?=rand(0, 999)?>" />
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.3.0/chart.min.js"></script>
+		<script src="/js/funciones.js?<?=rand(0, 999)?>"></script>
 		<script type="text/javascript">
 			function borrar(id) {
 				if (confirm("<?=sprintf(litSeguroElimGrupo)?>")){
@@ -238,7 +239,7 @@
 														$grupo->setAsc($asc);
 														foreach ($grupo->getGruposAceptados($conMsi, $pageCode) as $objGrupo){
 													?>
-														    <tr>
+														    <tr onclick="detalleLinea(<?=$objGrupo->getGruIdgrupo()?>)">
 														      <td><?=$objGrupo->getGruNombre()?></td>
 														      <td>
 														      		<?=Funciones::fechaFormateadaIdioma($objGrupo->getGruFecini(), $_SESSION["sesIdidioma"])?>
@@ -249,17 +250,31 @@
 														      		?>
 														      </td>
 														      <td class="number"><?=$objGrupo->getNumeroMiembros()?></td>
-														      <td title="<?=$objGrupo->getGruReto()?>" onclick="alert('<?=$objGrupo->getGruReto()?>')"><?=(strlen($objGrupo->getGruReto()) > 10?substr($objGrupo->getGruReto(), 0, 10)."...":$objGrupo->getGruReto())?></td>
+														      <td <?php if ($objGrupo->getGruReto() !="") { echo 'title="'.$objGrupo->getGruReto().'" onclick="alert(\''.$objGrupo->getGruReto().'\')"';}?>><?=(strlen($objGrupo->getGruReto()) > 10?substr($objGrupo->getGruReto(), 0, 10)."...":$objGrupo->getGruReto())?></td>
 														      <td class="centered">
-														      		<?php if ($objGrupo->getEsAdmin() == "1") {?>
-																			<input type="image" class="tdIcon" src="/images/edit.gif" id="imageButton" title="<?=sprintf(litModificar)?>" alt="<?=sprintf(litModificar)?>" onClick="window.location.href='/otros-nuevo-grupo.php?idGrupo=<?=$objGrupo->getGruIdgrupo()?>';return false;"/><br>
-																	<?php } else { ?>
-																			<img src="/images/blank.gif"><br>
-																	<?php } ?>
-																	<input type="image" class="tdIcon" src="/images/stats.gif" id="imageButton" title="<?=sprintf(litEstadisticas)?>" alt="<?=sprintf(litEstadisticas)?>" onClick="window.location.href='/otros-mis-grupos-estadisticas.php?idGrupo=<?=$objGrupo->getGruIdgrupo()?>';return false;"/><br>
-																	<input type="image" class="tdIcon" src="/images/users.gif" id="imageButton" title="<?=sprintf(litMiembros)?>" alt="<?=sprintf(litMiembros)?>" onClick="window.location.href='/mis-grupos-miembros?idGrupo=<?=$objGrupo->getGruIdgrupo()?>';return false;"/><br>
-														      		<input type="image" class="tdIcon" src="/images/salir.gif" id="imageButton" title="<?=sprintf(litSalirGrupo)?>" alt="<?=sprintf(litSalirGrupo)?>" onClick="borrar('<?=$objGrupo->getGruIdgrupo()?>');return false;"/>
+																	<input type="image" class="tdIcon" src="/images/flechaDetalle.gif" id="imageButton" title="<?=sprintf(litVerOpciones)?>" alt="<?=sprintf(litVerOpciones)?>" onClick="detalleLinea(<?=$objGrupo->getGruIdgrupo()?>)';return false;"/><br>
 														      </td>
+														    </tr>
+														    <tr class="oculto"></tr> <!-- para mantener los estilos de las filas de las tablas pares e impares -->
+														    <tr class="ocultoFila" id="linea_<?=$objGrupo->getGruIdgrupo()?>">
+														    	<td colspan="5">
+														    		<button class="botonTabla <?php if ($objGrupo->getEsAdmin() != "1") {echo "ocultoOcupando";}?>" onClick="window.location.href='/otros-nuevo-grupo.php?idGrupo=<?=$objGrupo->getGruIdgrupo()?>';">
+																		<img src="/images/edit.gif" class="imageButton">
+																		<span><?=sprintf(litModificar)?></span>
+																	</button>
+																	<button class="botonTabla" onClick="window.location.href='/otros-mis-grupos-estadisticas.php?idGrupo=<?=$objGrupo->getGruIdgrupo()?>';">
+																		<img src="/images/stats.gif" class="imageButton">
+																		<span><?=sprintf(litEstadisticas)?></span>
+																	</button>
+																	<button class="botonTabla" onClick="window.location.href='/mis-grupos-miembros?idGrupo=<?=$objGrupo->getGruIdgrupo()?>';">
+																		<img src="/images/users.gif" class="imageButton">
+																		<span><?=sprintf(litMiembros)?></span>
+																	</button>
+																	<button class="botonTabla" onClick="borrar('<?=$objGrupo->getGruIdgrupo()?>');">
+																		<img src="/images/salir.gif" class="imageButton">
+																		<span><?=sprintf(litSalirGrupo)?></span>
+																	</button>
+																</td>
 														    </tr>
 													<?php
 															$i++;
