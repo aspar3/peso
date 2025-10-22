@@ -33,8 +33,8 @@
 	
 	$conMsi= crearConexionMysqli();
 
-	// 1: Peso. 2: Otros
-	$gruTipo = "2";
+	// 1: Peso. 2: Otros. 3: Acciones.
+	// $gruTipo = "2";
 	
 	$conMsi= crearConexionMysqli();
 	
@@ -154,14 +154,11 @@
 										<header>
 											<h2><?=sprintf(litMenuMisDatos)?></h2>
 											<div>
-												<label class="desc" for="idgrupo"><?=($idGrupo==""?sprintf(litPrimeroGrupo):sprintf(litGrupo))?> <span class="txtRed">*</span></label>
+												<label class="desc" for="idGrupo"><?=($idGrupo==""?sprintf(litPrimeroGrupo):sprintf(litGrupo))?> <span class="txtRed">*</span></label>
 												<div>
-													<select id="idgrupo" name="idgrupo" onchange="window.location.href='/otros-mis-datos.php?idGrupo=' + this.value">
+													<select id="idGrupo" name="idGrupo" onchange="window.location.href='/otros-mis-datos.php?idGrupo=' + this.value">
 														<option value=""></option>
 														<?php
-															$grupoSelect = new Grupo();
-															$grupoSelect->setGruTipo($gruTipo);
-															$grupoSelect->setGruIduser($_SESSION["sesIduser"]);
 															foreach ($listGruposAceptados as $objGrupo) {
 																echo "<option ".($objGrupo->getGruIdgrupo() == $idGrupo?"selected":"")." value = '".$objGrupo->getGruIdgrupo()."'>".$objGrupo->getGruNombre()."</option>";
 															}
@@ -235,8 +232,16 @@
 								<div>
 									<div>
 								  		<br>
-						  				<input class="button" id="saveForm" name="saveForm" type="submit" onclick="window.location.href='/otros-nuevo-dato.php?idGrupo=<?=$objGrupo->getGruIdgrupo()?>'" value="<?=sprintf(litMenuNuevoDato)?>">&nbsp;
-						  				<input class="button" id="volver" name="volver" type="button" onclick="window.location.href='/otros-mis-grupos.php'" value="<?=sprintf(litVolver)?>">
+						  				<?php
+							  				$urlNuevoDato = "/otros-nuevo-dato.php";
+							  				$urlVolver = "/otros-mis-grupos.php";
+							  				if ($grupo->getGruTipo() == "3") {
+							  					$urlNuevoDato = "/acciones-nuevo-dato.php";
+							  					$urlVolver = "/acciones-mis-grupos.php";
+						  					}
+						  				?>
+						  				<input class="button" id="saveForm" name="saveForm" type="submit" onclick="window.location.href='<?php echo $urlNuevoDato?>?idGrupo=<?=$grupo->getGruIdgrupo()?>'" value="<?=sprintf(litMenuNuevoDato)?>">&nbsp;
+						  				<input class="button" id="volver" name="volver" type="button" onclick="window.location.href='<?php echo $urlVolver?>'" value="<?=sprintf(litVolver)?>">
 								    </div>
 								</div>
 							

@@ -37,29 +37,36 @@ if ($idiomaTxt != "" && $idiomaTxt != "es") {
 										<li>
 											<a class="icon solid fa-balance-scale" href="#"><?=sprintf(litMenuRetosPeso)?></a>
 											<ul>
+												<?php /*
 												<li><a class="icon solid fa-running" href="/nuevo-grupo"><span><?=sprintf(litMenuNuevoRetoPeso)?></span></a></li>
+												*/?>
 												<li><a class="icon solid fa-users" href="/mis-grupos"><span><?=sprintf(litMenuMisGrupos)?></span></a></li>
 												<li><a class="icon solid fa-balance-scale" href="/mis-pesos"><span><?=sprintf(litMenuMisPesos)?></span></a></li>
 												<li><a class="icon solid fa-weight-hanging" href="/nuevo-peso"><span><?=sprintf(litMenuNuevoPeso)?></span></a></li>
 											</ul>
 										</li>
 										<li>
-											<a class="icon solid fa-tasks" href="#"><?=sprintf(litMenuRetosAcciones)?></a>
-											<ul>
-												<li><a class="icon solid fa-running" href="/acciones-nuevo-grupo.php"><span><?=sprintf(litMenuNuevoRetoAcciones)?></span></a></li>
-												<li><a class="icon solid fa-users" href="/acciones-mis-grupos.php"><span><?=sprintf(litMenuMisGrupos)?></span></a></li>
-												<li><a class="icon solid fa-balance-scale" href="/mis-pesos"><span><?=sprintf(litMenuMisPesos)?></span></a></li>
-												<li><a class="icon solid fa-weight-hanging" href="/nuevo-peso"><span><?=sprintf(litMenuNuevoPeso)?></span></a></li>
-											</ul>
+											<a class="icon solid fa-tasks" href="/acciones-mis-grupos.php"><?=sprintf(litMenuRetosAcciones)?></a>
+												<?php /*
+												<ul>
+													<li><a class="icon solid fa-running" href="/acciones-nuevo-grupo.php"><span><?=sprintf(litMenuNuevoRetoAcciones)?></span></a></li>
+													<li><a class="icon solid fa-users" href="/acciones-mis-grupos.php"><span><?=sprintf(litMenuMisGrupos)?></span></a></li>
+													<li><a class="icon solid fa-balance-scale" href="/mis-pesos"><span><?=sprintf(litMenuMisPesos)?></span></a></li>
+													<li><a class="icon solid fa-weight-hanging" href="/nuevo-peso"><span><?=sprintf(litMenuNuevoPeso)?></span></a></li>
+												</ul>
+												*/?>
 										</li>
 										<li>
-											<a class="icon solid fa-compress-arrows-alt" href="#"><?=sprintf(litMenuOtrosRetos)?></a>
-											<ul>
-												<li><a class="icon solid fa-running" href="/otros-nuevo-grupo.php"><span><?=sprintf(litMenuNuevoRetoOtros)?></span></a></li>
-												<li><a class="icon solid fa-compress-arrows-alt" href="/otros-mis-grupos.php"><span><?=sprintf(litMenuOtrosGrupos)?></span></a></li>
-												<li><a class="icon solid fa-balance-scale" href="/otros-mis-datos.php"><span><?=sprintf(litMenuMisDatos)?></span></a></li>
-												<li><a class="icon solid fa-plus-circle" href="/otros-nuevo-dato.php"><span><?=sprintf(litMenuNuevoDato)?></span></a></li>
-											</ul>
+											<a class="icon solid fa-compress-arrows-alt" href="/otros-mis-grupos.php"><?=sprintf(litMenuOtrosRetos)?></a>
+												<?php /*
+												<ul>
+													<li><a class="icon solid fa-running" href="/otros-nuevo-grupo.php"><span><?=sprintf(litMenuNuevoRetoOtros)?></span></a></li>
+													<li><a class="icon solid fa-compress-arrows-alt" href="/otros-mis-grupos.php"><span><?=sprintf(litMenuOtrosGrupos)?></span></a></li>
+													<li><a class="icon solid fa-balance-scale" href="/otros-mis-datos.php"><span><?=sprintf(litMenuMisDatos)?></span></a></li>
+													<li><a class="icon solid fa-plus-circle" href="/otros-nuevo-dato.php"><span><?=sprintf(litMenuNuevoDato)?></span></a></li>
+												</ul>
+												*/
+												?>
 										</li>
 										<li><a class="icon solid fa-user" href="/my-profile"><span><?=sprintf(litMenuMiPerfil)?></span></a></li>
 										<li><a class="icon solid fa-sign-out-alt" href="/sign-out"><span><?=sprintf(litMenuSalir)?></span></a></li>

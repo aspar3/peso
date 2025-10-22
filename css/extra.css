@@ -66,6 +66,20 @@ a.noUnderlined {
 	float: left;
 }
 
+label.descCheck {
+	font-weight: 100;
+}
+
+.checkbox {
+  display: flex;
+  align-items: center; /* Alineación vertical */
+  gap: 8px; /* Espacio entre el checkbox y el label */
+}
+
+.checkbox label {
+  margin-top: 0px;
+}
+
 .oculto {
 	display: none;
 }

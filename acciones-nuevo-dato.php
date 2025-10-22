@@ -2,7 +2,7 @@
 // error_reporting(E_ALL);
 // ini_set("display_errors", 1);
 session_start();
-$pageCode = "NPE";
+$pageCode = "AND";
 
 include("admin/in_variables.php");
 include("in_www.php");
@@ -14,6 +14,7 @@ include_once 'classes/Funciones.php';
 include_once 'classes/Grupo.php';
 include_once 'classes/GrupoUser.php';
 include_once 'classes/GrupoUserDato.php';
+include_once 'classes/GrupoAccion.php';
 
 if (!isset($_SESSION["sesIduser"]) || $_SESSION["sesIduser"]=="" || $_SESSION["sesStatus"]!=1){
 	//rolLog("$pageCode-01", "No session started or not a signedup user -> (".$_SESSION["sesIduser"].")", 1);
@@ -27,8 +28,8 @@ if ($idiomaTxt == "") {
 }
 include_once 'literales/idioma_'.$idiomaTxt.'.php';
 
-// 1: Peso. 2: Otros
-$gruTipo = "2";
+// 1: Peso. 2: Otros 3: Acciones
+$gruTipo = "3";
 
 $conMsi= crearConexionMysqli();
 
@@ -71,7 +72,20 @@ if ($accion == "save"){
 	$grupoUserDato->setGudIdgrupo($grupo->getGruIdgrupo());
 	$grupoUserDato->setGudIduser($_SESSION["sesIduser"]);
 	$grupoUserDato->setGudComent($_POST["coment"]);
-	$grupoUserDato->setGudDato($_POST["dato"]);
+	
+	$datos = [];
+	foreach ($_POST as $clave => $valor) {
+		if (strpos($clave, 'dato') === 0) {
+			$datos[$clave] = $valor;
+		}
+	}
+	if (count($datos) == 0) {
+		die;
+	}
+	
+	$grupoAccionCalculo = new GrupoAccion();
+	$grupoAccionCalculo->setGacIdgrupo($grupo->getGruIdgrupo());
+	$grupoUserDato->setGudDato($grupoAccionCalculo->calcularValor($conMsi, $pageCode, $datos));
 	
 	if (!$editar) {
 		$grupoUserDato->setGudFecha($_POST["fecha"]." ".$_POST["hora"]);
@@ -99,7 +113,7 @@ if ($accion == "save"){
 			$classMsgBox = "msgBox bgRed txtWhite";
 		}
 	} else {
-		
+
 		if ($grupoUserDato->update($conMsi, $pageCode)){
 			$grupoUser = new GrupoUser();
 			$grupoUser->setGusIduser($_SESSION["sesIduser"]);
@@ -126,20 +140,22 @@ if ($accion == "save"){
 <!DOCTYPE HTML>
 <html>
 	<head>
-		<title><?=$nombreGeneral." - ".sprintf(litNuevoDato)?></title>
-		<meta name="title" content="<?=$nombreGeneral." - ".sprintf(litNuevoDato)?>">
+		<title><?=$nombreGeneral." - ".sprintf(litNuevoDatoGrupo, $grupo->getGruNombre())?></title>
+		<meta name="title" content="<?=$nombreGeneral." - ".sprintf(litNuevoDatoGrupo, $grupo->getGruNombre())?>">
 		<?php include("in-metas.php");?>
 		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
-		<link rel="stylesheet" href="/assets/css/main.css?<?=rand(0, 9999999)?>" />
-		<link rel="stylesheet" href="/css/extra.css?<?=rand(0, 9999999)?>" />
+		<link rel="stylesheet" href="/assets/css/main.css?<?=rand(0, 999)?>" />
+		<link rel="stylesheet" href="/css/extra.css?<?=rand(0, 999)?>" />
 		<script type="text/javascript">
 			function saveData(formulario){
+				const checkboxes = document.querySelectorAll('input[type="checkbox"][name^="dato"], input[type="checkbox"][id^="dato"]');
+				const algunoMarcado = Array.from(checkboxes).some(cb => cb.checked);
+								
 				if (formulario.fecha.value==""){
 					alert("<?=sprintf(litCampoOblig, sprintf(litFecha))?>");
 					formulario.fecha.focus();
-				} else if (formulario.dato.value==""){
-					alert("<?=$grupo->getGruPregunta()?>");
-					formulario.dato.focus();
+				} else if (!algunoMarcado){
+					alert("<?=sprintf(litMarcaAccionesOblig)?>");
 				} else formulario.submit();
 			}
 		</script>
@@ -172,67 +188,46 @@ if ($accion == "save"){
 									<?php
 										if ($accion == "save"){
 											echo "<div class='$classMsgBox'><span>$mensaje1</span><br/>$mensaje2</div><br/>";
-											if ($mensaje2_1 != "") echo "<div class='$classMsgBox2'><span>$mensaje2_1</span><br/>$mensaje2_2</div><br/>";
 											echo "<br/>";
 										}
 									?>
 									<header>
-										<h2><?=sprintf(litIntroNuevoDato)?></h2>
+										<h2><?=sprintf(litNuevoDatoGrupo, $grupo->getGruNombre())?></h2>
 									</header>
-
 									<div>
-										<label class="desc" for="idGrupo"><?=($idGrupo==""?sprintf(litPrimeroGrupo):sprintf(litGrupo))?> <span class="txtRed">*</span></label>
+										<label class="desc" for="fecha"><?=sprintf(litFecha)?> <span class="txtRed">*</span></label>
 										<div>
-											<select id="idGrupo" name="idGrupo" onchange="window.location.href='/otros-nuevo-dato.php?idGrupo=' + this.value">
-												<option value=""></option>
-												<?php
-													$grupoSelect = new Grupo();
-													$grupoSelect->setGruTipo($gruTipo);
-													$grupoSelect->setGruIduser($_SESSION["sesIduser"]);
-													foreach ($listGruposAceptados as $objGrupo) {
-														echo "<option ".($objGrupo->getGruIdgrupo() == $idGrupo?"selected":"")." value = '".$objGrupo->getGruIdgrupo()."'>".$objGrupo->getGruNombre()."</option>";
-													}
-												?>
-											</select>
+											<input id="fecha" class="mitad" name="fecha" type="date" value="<?=($editar?Funciones::fechaFormateadaInput($grupoUserDato->getGudFecha()):"")?>" <?=($editar?" disabled ":"")?>>
+											<input id="hora" class="mitad" name="hora" type="time" value="<?=($editar?Funciones::horaFormateadaInput($grupoUserDato->getGudFecha()):"")?>" <?=($editar?" disabled ":"")?>>
 										</div>
 									</div>
-									<?php if ($idGrupo != "") {?>
-											<div>
-												<label class="desc" for="fecha"><?=sprintf(litFecha)?> <span class="txtRed">*</span></label>
+									<div>
+										<label class="desc"><?=sprintf(litMarcaAcciones)?></label>
+									</div>
+									<?php
+										$grupoAccion = new GrupoAccion();
+										$grupoAccion->setGacIdgrupo($grupo->getGruIdgrupo());
+										foreach ($grupoAccion->getGrupoAcciones($conMsi, $pageCode, $ascDesc) as $objAccion){
+									?>
+											<div class="checkbox">
 												<div>
-													<input id="fecha" class="mitad" name="fecha" type="date" value="<?=($editar?Funciones::fechaFormateadaInput($grupoUserDato->getGudFecha()):"")?>" <?=($editar?" disabled ":"")?>>
-													<input id="hora" class="mitad" name="hora" type="time" value="<?=($editar?Funciones::horaFormateadaInput($grupoUserDato->getGudFecha()):"")?>" <?=($editar?" disabled ":"")?>>
+													<input type="checkbox" name="dato<?=$objAccion->getGacIdaccion()?>" id="dato<?=$objAccion->getGacIdaccion()?>" value="<?=$objAccion->getGacIdaccion()?>">
 												</div>
-											</div>
-											<div>
-												<label class="desc" for="dato"><?=$grupo->getGruPregunta()?> <span class="txtRed">*</span></label>
-												<div>
-													<?php if ($grupo->getGruIdrespuesta() == 1) { ?>
-															<input id="dato" name="dato" type="number" maxlength="8" value="<?=$grupoUserDato->getGudDato()?>">
-													<?php } else if ($grupo->getGruIdrespuesta() == 2) { ?>
-															<select id="dato" name="dato">
-																<option value="1"><?=sprintf(litSi)?></option>
-															</select>
-													<?php } else if ($grupo->getGruIdrespuesta() == 3) { ?>
-															<select id="dato" name="dato">
-																<option value="1"><?=sprintf(litNo)?></option>
-															</select>
-													<?php } ?>
-												</div>
-											</div>
-											<div>
-												<label class="desc" for="coment"><?=sprintf(litComentario)?></label>
-												<div>
-													<input id="coment" name="coment" type="text" maxlength="100" value="<?=$grupoUserDato->getGudComent()?>">
-												</div>
-											</div>
-											<div>
-												<div>
-											  		<br><input class="button" id="saveForm" name="saveForm" type="submit" onclick="saveData(this.form);return false;" value="<?=sprintf(litEnviarDatos)?>">
-											  		<input class="button" id="volver" name="volver" type="button" onclick="history.back();" value="<?=sprintf(litVolver)?>">
-											    </div>
+												<label class="descCheck" for="dato<?=$objAccion->getGacIdaccion()?>"><?=$objAccion->getGacNombre()?></label>
 											</div>
 									<?php }?>
+									<div>
+										<label class="desc" for="coment"><?=sprintf(litComentario)?></label>
+										<div>
+											<input id="coment" name="coment" type="text" maxlength="100" value="<?=$grupoUserDato->getGudComent()?>">
+										</div>
+									</div>
+									<div>
+										<div>
+									  		<br><input class="button" id="saveForm" name="saveForm" type="submit" onclick="saveData(this.form);return false;" value="<?=sprintf(litEnviarDatos)?>">
+									  		&nbsp;<input class="button" id="volver" name="volver" type="button" onclick="history.back();" value="<?=sprintf(litVolver)?>">
+									    </div>
+									</div>
 									  
 								</form>
 								
@@ -242,7 +237,8 @@ if ($accion == "save"){
 						</div>
 					</div>
 					<br>
-				</section>
+				</div>
+			</section>
 		</div>
 
 		<!-- Scripts -->
