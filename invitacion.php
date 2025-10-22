@@ -133,8 +133,8 @@
 		<meta name="title" content="<?=$nombreGeneral?> - <?=litRechazarInvitacionTitle?>">
 		<?php include("in-metas.php");?>
 		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
-		<link rel="stylesheet" href="/assets/css/main.css?<?=rand(0, 999)?>" />
-		<link rel="stylesheet" href="/css/extra.css?<?=rand(0, 999)?>" />
+		<link rel="stylesheet" href="/assets/css/main.css?<?=rand(0, 9999999)?>" />
+		<link rel="stylesheet" href="/css/extra.css?<?=rand(0, 9999999)?>" />
 	</head>
 	<body class="homepage is-preload">
 		<div id="page-wrapper">

@@ -104,9 +104,9 @@
 		<meta name="verify-v1" content="iktchguQVSJTd8nwo6NGXdZ0nuE1URIv9bJN/OODK8E=" />
 		<?php include("in-metas.php");?>
 		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
-		<link rel="stylesheet" href="/assets/css/main.css?<?=rand(0, 999)?>" />
-		<link rel="stylesheet" href="/css/extra.css?<?=rand(0, 999)?>" />
-		<script src="/js/funciones.js?<?=rand(0, 999)?>"></script>
+		<link rel="stylesheet" href="/assets/css/main.css?<?=rand(0, 9999999)?>" />
+		<link rel="stylesheet" href="/css/extra.css?<?=rand(0, 9999999)?>" />
+		<script src="/js/funciones.js?<?=rand(0, 9999999)?>"></script>
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.3.0/chart.min.js"></script>
 		<script type="text/javascript">
 			function borrar(id) {
@@ -202,7 +202,7 @@
 												<br><br>
 										<?php }?>
 										<header>
-											<h2><?=sprintf(litMisOtrosGrupos)?> <?php /*<input class="button" id="saveForm" name="saveForm" type="button" onclick="window.location.href='/otros-nuevo-grupo.php'" value="<?=sprintf(litCrearNuevoGrupo)?>">*/?></h2>
+											<h2><?=sprintf(litMisOtrosGrupos)?> <input class="button" id="saveForm" name="saveForm" type="button" onclick="window.location.href='/otros-nuevo-grupo.php'" value="<?=sprintf(litMenuNuevoRetoOtros)?>"></h2>
 											<div><?=sprintf(litMisOtrosGrupos01)?></div>
 											<br>
 											<div><?=sprintf(litReordenarColumnas)?></div>
@@ -258,6 +258,14 @@
 														    <tr class="oculto"></tr> <!-- para mantener los estilos de las filas de las tablas pares e impares -->
 														    <tr class="ocultoFila" id="linea_<?=$objGrupo->getGruIdgrupo()?>">
 														    	<td colspan="5">
+																	<button class="botonTabla" onClick="window.location.href='/otros-nuevo-dato.php?idGrupo=<?=$objGrupo->getGruIdgrupo()?>';">
+																		<img src="/images/addOn.gif" class="imageButton">
+																		<span><?=sprintf(litMenuNuevoDato)?></span>
+																	</button>
+																	<button class="botonTabla" onClick="window.location.href='/otros-mis-datos.php?idGrupo=<?=$objGrupo->getGruIdgrupo()?>';">
+																		<img src="/images/misDatos.gif" class="imageButton">
+																		<span><?=sprintf(litMenuMisDatos)?></span>
+																	</button>
 														    		<button class="botonTabla" onClick="window.location.href='/otros-nuevo-grupo.php?idGrupo=<?=$objGrupo->getGruIdgrupo()?>';">
 																		<img src="/images/edit.gif" class="imageButton">
 																		<span><?php if ($objGrupo->getEsAdmin() == "1") {echo sprintf(litModificar);} else {echo sprintf(litVerDetalles);}?></span>

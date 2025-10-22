@@ -104,9 +104,9 @@
 		<meta name="verify-v1" content="iktchguQVSJTd8nwo6NGXdZ0nuE1URIv9bJN/OODK8E=" />
 		<?php include("in-metas.php");?>
 		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
-		<link rel="stylesheet" href="/assets/css/main.css?<?=rand(0, 999)?>" />
-		<link rel="stylesheet" href="/css/extra.css?<?=rand(0, 999)?>" />
-		<script src="/js/funciones.js?<?=rand(0, 999)?>"></script>
+		<link rel="stylesheet" href="/assets/css/main.css?<?=rand(0, 9999999)?>" />
+		<link rel="stylesheet" href="/css/extra.css?<?=rand(0, 9999999)?>" />
+		<script src="/js/funciones.js?<?=rand(0, 9999999)?>"></script>
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.3.0/chart.min.js"></script>
 		<script type="text/javascript">
 			function borrar(id) {
@@ -203,7 +203,7 @@
 										<?php }?>
 										
 										<header>
-											<h2><?=sprintf(litMisGrupos)?> <?php /* <input class="button" id="saveForm" name="saveForm" type="button" onclick="window.location.href='/nuevo-grupo'" value="<?=sprintf(litCrearNuevoGrupo)?>">*/?></h2>
+											<h2><?=sprintf(litMisGrupos)?> <input class="button" id="saveForm" name="saveForm" type="button" onclick="window.location.href='/nuevo-grupo'" value="<?=sprintf(litCrearNuevoGrupo)?>"></h2>
 											<div><?=sprintf(litReordenarColumnas)?></div>
 										</header>
 										

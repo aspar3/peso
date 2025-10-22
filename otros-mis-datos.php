@@ -93,8 +93,8 @@
 		<meta name="verify-v1" content="iktchguQVSJTd8nwo6NGXdZ0nuE1URIv9bJN/OODK8E=" />
 		<?php include("in-metas.php");?>
 		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
-		<link rel="stylesheet" href="/assets/css/main.css?<?=rand(0, 999)?>" />
-		<link rel="stylesheet" href="/css/extra.css?<?=rand(0, 999)?>" />
+		<link rel="stylesheet" href="/assets/css/main.css?<?=rand(0, 9999999)?>" />
+		<link rel="stylesheet" href="/css/extra.css?<?=rand(0, 9999999)?>" />
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.3.0/chart.min.js"></script>
 		
 		<script type="text/javascript">
@@ -154,7 +154,7 @@
 										<header>
 											<h2><?=sprintf(litMenuMisDatos)?></h2>
 											<div>
-												<label class="desc" for="idgrupo"><?=sprintf(litPrimeroGrupo)?> <span class="txtRed">*</span></label>
+												<label class="desc" for="idgrupo"><?=($idGrupo==""?sprintf(litPrimeroGrupo):sprintf(litGrupo))?> <span class="txtRed">*</span></label>
 												<div>
 													<select id="idgrupo" name="idgrupo" onchange="window.location.href='/otros-mis-datos.php?idGrupo=' + this.value">
 														<option value=""></option>
@@ -232,6 +232,14 @@
 										</div>
 									</div>
 							<?php }?>
+								<div>
+									<div>
+								  		<br>
+						  				<input class="button" id="saveForm" name="saveForm" type="submit" onclick="window.location.href='/otros-nuevo-dato.php?idGrupo=<?=$objGrupo->getGruIdgrupo()?>'" value="<?=sprintf(litMenuNuevoDato)?>">&nbsp;
+						  				<input class="button" id="volver" name="volver" type="button" onclick="window.location.href='/otros-mis-grupos.php'" value="<?=sprintf(litVolver)?>">
+								    </div>
+								</div>
+							
 						</div>
 					</div>
 					<br>

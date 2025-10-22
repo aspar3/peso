@@ -58,7 +58,7 @@ if ($idGrupo != "") {
 }
 
 $accion = $_POST["accion"];
-if ($esAdmin && $accion == "save"){
+if ($accion == "save"){
 	$grupo->setGruIduser($_SESSION["sesIduser"]);
 	$grupo->setGruNombre($_POST["nombre"]);
 	$grupo->setGruFecini($_POST["fecini"]);
@@ -98,7 +98,7 @@ if ($esAdmin && $accion == "save"){
 			$mensaje2=sprintf(litError2, $mailAdmin);
 			$classMsgBox = "msgBox bgRed txtWhite";
 		}
-	} else {
+	} else if ($esAdmin) {
 		$grupo->setGruIdgrupo($idGrupo);
 		if ($grupo->updateGrupo($conMsi, $pageCode)){
 			$mensaje1=sprintf(litCambiosOk);
@@ -122,8 +122,8 @@ if ($esAdmin && $accion == "save"){
 		<meta name="title" content="<?=$nombreGeneral." - ".sprintf(litNuevoGrupo)?>">
 		<?php include("in-metas.php");?>
 		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
-		<link rel="stylesheet" href="/assets/css/main.css?<?=rand(0, 999)?>" />
-		<link rel="stylesheet" href="/css/extra.css?<?=rand(0, 999)?>" />
+		<link rel="stylesheet" href="/assets/css/main.css?<?=rand(0, 9999999)?>" />
+		<link rel="stylesheet" href="/css/extra.css?<?=rand(0, 9999999)?>" />
 		<script type="text/javascript">
 			function saveData(formulario){
 				if (formulario.nombre.value==""){
@@ -272,7 +272,7 @@ if ($esAdmin && $accion == "save"){
 									<div>
 										<div>
 									  		<br>
-									  		<?php if ($esAdmin) {?>
+									  		<?php if ($esAdmin || $idGrupo == "") {?>
 									  				<input class="button" id="saveForm" name="saveForm" type="submit" onclick="saveData(this.form);return false;" value="<?=sprintf(litEnviarDatos)?>">&nbsp;
 									  		<?php }?>
 									  		<?php if ($editar) {?>
