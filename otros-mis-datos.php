@@ -95,6 +95,7 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
 		<link rel="stylesheet" href="/assets/css/main.css?<?=rand(0, 9999999)?>" />
 		<link rel="stylesheet" href="/css/extra.css?<?=rand(0, 9999999)?>" />
+		<script src="/js/funciones.js?<?=rand(0, 9999999)?>"></script>
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.3.0/chart.min.js"></script>
 		
 		<script type="text/javascript">
@@ -195,14 +196,26 @@
 																		$datoMostrar = Funciones::formatNum2dec($datoMostrar);
 																	}
 															?>
-																    <tr>
+																    <tr onclick="detalleLinea(<?=$objDato->getGudIdgud()?>)">
 																      <td><?=Funciones::fechaFormateadaIdioma($objDato->getGudFecha(), $_SESSION["sesIdidioma"])?></td>
 																      <td class="number"><?=$datoMostrar?></td>
-																      <td title="<?=$objDato->getGudComent()?>" onclick="alert('<?=$objDato->getGudComent()?>')"><?=(strlen($objDato->getGudComent()) > 10?substr($objDato->getGudComent(), 0, 10)."...":$objDato->getGudComent())?></td>
+																      <td <?php if ($objDato->getGudComent() !="") { echo 'title="'.$objDato->getGudComent().'" onclick="alert(\''.$objDato->getGudComent().'\')"';}?>><?=(strlen($objDato->getGudComent()) > 10?substr($objDato->getGudComent(), 0, 10)."...":$objDato->getGudComent())?></td>
 																      <td class="centered">
-																			<input type="image" class="tdIcon" src="/images/edit.gif" id="imageButton" title="<?=sprintf(litModificar)?>" alt="<?=sprintf(litModificar)?>" onClick="window.location.href='/otros-nuevo-dato.php?idGrupo=<?=$idGrupo?>&idGud=<?=$objDato->getGudIdgud()?>';return false;"/>
-																      		<input type="image" class="tdIcon" src="/images/delete.png" id="imageButton" title="<?=sprintf(litBorrar)?>" alt="<?=sprintf(litBorrar)?>" onClick="borrar('<?=$objDato->getGudIdgud()?>');return false;"/>
+																			<input type="image" class="tdIcon" src="/images/flechaDetalle.gif" id="imageButton" title="<?=sprintf(litVerOpciones)?>" alt="<?=sprintf(litVerOpciones)?>" onClick="detalleLinea(<?=$objDato->getGudIdgud()?>)';return false;"/><br>
 																      </td>
+																    </tr>
+																    <tr class="oculto"></tr> <!-- para mantener los estilos de las filas de las tablas pares e impares -->
+																    <tr class="ocultoFila" id="linea_<?=$objDato->getGudIdgud()?>">
+																    	<td colspan="5">
+																			<button class="botonTabla" onClick="window.location.href='/otros-nuevo-dato.php?idGrupo=<?=$idGrupo?>&idGud=<?=$objDato->getGudIdgud()?>';">
+																				<img src="/images/edit.gif" class="imageButton">
+																				<span><?=sprintf(litModificar)?></span>
+																			</button>
+																			<button class="botonTabla" onClick="borrar('<?=$objDato->getGudIdgud()?>')">
+																				<img src="/images/delete.png" class="imageButton">
+																				<span><?=sprintf(litBorrar)?></span>
+																			</button>
+																		</td>
 																    </tr>
 															<?php
 																}

@@ -66,6 +66,7 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
 		<link rel="stylesheet" href="/assets/css/main.css?<?=rand(0, 9999999)?>" />
 		<link rel="stylesheet" href="/css/extra.css?<?=rand(0, 9999999)?>" />
+		<script src="/js/funciones.js?<?=rand(0, 9999999)?>"></script>
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.3.0/chart.min.js"></script>
 		<script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-annotation@1.1.0"></script>
 		
@@ -148,16 +149,27 @@
 														$litPesos = $peso->getPesos($conMsi, $pageCode, "");
 														foreach ($litPesos as $objPeso){
 													?>
-														    <tr>
+														    <tr onclick="detalleLinea(<?=$objPeso->getPesIdpeso()?>)">
 														      <td><?=Funciones::fechaFormateadaIdioma($objPeso->getPesFecha(), $_SESSION["sesIdidioma"])?></td>
 														      <td class="number"><?=Funciones::pesoConvertido($objPeso->getPesPeso(), $_SESSION["sesIdunidad"], $_SESSION["sesUniMultipli"])?></td>
-														      <td title="<?=$objPeso->getPesComent()?>" onclick="alert('<?=$objPeso->getPesComent()?>')"><?=(strlen($objPeso->getPesComent()) > 10?substr($objPeso->getPesComent(), 0, 10)."...":$objPeso->getPesComent())?></td>
+														      <td <?php if ($objPeso->getPesComent() !="") { echo 'title="'.$objPeso->getPesComent().'" onclick="alert(\''.$objPeso->getPesComent().'\')"';}?>><?=(strlen($objPeso->getPesComent()) > 10?substr($objPeso->getPesComent(), 0, 10)."...":$objPeso->getPesComent())?></td>
 														      <td class="centered">
-																	<input type="image" class="tdIcon" src="/images/edit.gif" id="imageButton" title="<?=sprintf(litModificar)?>" alt="<?=sprintf(litModificar)?>" onClick="window.location.href='/nuevo-peso?idPeso=<?=$objPeso->getPesIdpeso()?>';return false;"/>
-														      		<input type="image" class="tdIcon" src="/images/delete.png" id="imageButton" title="<?=sprintf(litBorrar)?>" alt="<?=sprintf(litBorrar)?>" onClick="borrar('<?=$objPeso->getPesIdpeso()?>');return false;"/>
+														      		<input type="image" class="tdIcon" src="/images/flechaDetalle.gif" id="imageButton" title="<?=sprintf(litVerOpciones)?>" alt="<?=sprintf(litVerOpciones)?>" onClick="detalleLinea(<?=$objPeso->getPesIdpeso()?>)';return false;"/><br>
 														      </td>
 														    </tr>
-													<?php
+														    <tr class="oculto"></tr> <!-- para mantener los estilos de las filas de las tablas pares e impares -->
+														    <tr class="ocultoFila" id="linea_<?=$objPeso->getPesIdpeso()?>">
+														    	<td colspan="5">
+																	<button class="botonTabla" onClick="window.location.href='/nuevo-peso?idPeso=<?=$objPeso->getPesIdpeso()?>';">
+																		<img src="/images/edit.gif" class="imageButton">
+																		<span><?=sprintf(litModificar)?></span>
+																	</button>
+																	<button class="botonTabla" onClick="borrar('<?=$objPeso->getPesIdpeso()?>')">
+																		<img src="/images/delete.png" class="imageButton">
+																		<span><?=sprintf(litBorrar)?></span>
+																	</button>
+																</td>
+														    </tr>													<?php
 														}
 														
 														$sumaTotal = 0;
