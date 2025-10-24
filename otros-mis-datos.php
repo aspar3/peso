@@ -225,8 +225,8 @@
 																	$g1Data1.= "'".str_replace(",", ".", $objDato->getGudDato())."', ";
 																}
 																
-																$labels = trim($labels, ", ");
-																$g1Data1 = trim($g1Data1, ", ");
+																if ($labels !== "") { $labels = substr($labels, 0, -1);}
+																if ($g1Data !== "") { $g1Data = substr($g1Data, 0, -1);}
 															?>
 														</tbody>
 													</table>

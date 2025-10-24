@@ -124,7 +124,7 @@
 											  				}
 											  			}
 											  		}
-											  		$labels = trim($labels, ", ");
+											  		if ($labels !== "") { $labels = substr($labels, 0, -1);}
 										  		?>
 										    </div>
 										</div>
@@ -209,7 +209,7 @@
 			        					$g1Data.= ($pesoComparar * 100 / $pesoInicial).", ";
 			        				}
 				        		}
-				        		$g1Data = trim($g1Data, ", ");
+				        		if ($g1Data !== "") { $g1Data = substr($g1Data, 0, -1);}
 				        ?>
 				        		{
 					            label: '<?=$objUser[1]?>',
@@ -252,7 +252,7 @@
 							        		foreach ($objUser[3] as $objPeso){
 						        				$g1Data.= str_replace(",", ".", $objPeso).", ";
 							        		}
-							        		$g1Data = trim($g1Data, ", ");
+							        		if ($g1Data !== "") { $g1Data = substr($g1Data, 0, -1);}
 							        ?>
 							        		{
 								            label: '<?=$objUser[1]?>',
@@ -300,7 +300,7 @@
 							        				$g1Data.= ($pesoComparar - $pesoInicial).", ";
 							        			}
 							        		}
-							        		$g1Data = trim($g1Data, ", ");
+							        		if ($g1Data !== "") { $g1Data = substr($g1Data, 0, -1);}
 							        ?>
 							        		{
 								            label: '<?=$objUser[1]?>',

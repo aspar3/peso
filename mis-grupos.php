@@ -376,10 +376,10 @@
 			        				if ($pesoComparar == "" || $pesoInicial == "") {
 			        					$g1Data.= ", ";
 			        				} else {
-			        					$g1Data.= ($pesoComparar * 100 / $pesoInicial).", ";
+			        					$g1Data.= ($pesoComparar * 100 / $pesoInicial).",";
 			        				}
 				        		}
-				        		$g1Data = trim($g1Data, ", ");
+				        		if ($g1Data !== "") { $g1Data = substr($g1Data, 0, -1);}
 				        ?>
 				        		{
 					            label: '<?=$objUser[1]?>',

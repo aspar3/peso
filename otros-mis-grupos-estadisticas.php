@@ -110,9 +110,9 @@
 													if ($end == "" || $end > $hoy) { $end = $hoy;}											  		
 													$days = Funciones::getDaysBetweenDates($start, $end);
 													foreach ($days as $day) {
-														$labels.= "'".Funciones::fechaFormateadaIdioma($day, $_SESSION["sesIdidioma"])."', ";
+														$labels.= "'".Funciones::fechaFormateadaIdioma($day, $_SESSION["sesIdidioma"])."',";
 											  		}
-											  		$labels = trim($labels, ", ");
+											  		if ($labels !== "") { $labels = substr($labels, 0, -1);}
 											  		
 											  		$grupoUserSemana = new GrupoUserDato();
 											  		$grupoUserSemana->setGudIdgrupo($grupo->getGruIdgrupo());
@@ -209,7 +209,7 @@
 					        			$g1Data.= ", ";
 					        		}
 					        	}
-				        		$g1Data = trim($g1Data, ", ");
+					        	if ($g1Data !== "") { $g1Data = substr($g1Data, 0, -1);}
 				        ?>
 				        		{
 					            label: '<?=$objUser[1]?>',
@@ -251,7 +251,7 @@
 					        	foreach ($days as $day) {
 					        		$g1Data.= str_replace(",", ".", $objUser[3][$day]).", ";
 					        	}
-				        		$g1Data = trim($g1Data, ", ");
+					        	if ($g1Data !== "") { $g1Data = substr($g1Data, 0, -1);}
 				        ?>
 				        		{
 					            label: '<?=$objUser[1]?>',
