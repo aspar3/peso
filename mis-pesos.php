@@ -176,8 +176,8 @@
 														$labels = $g1Data1 = "";
 														foreach ($peso->getPesos($conMsi, $pageCode, "asc") as $objPeso){
 															$sumaTotal += $objPeso->getPesPeso()/1000;
-															$labels.= "'".Funciones::fechaFormateadaIdioma($objPeso->getPesFecha(), $_SESSION["sesIdidioma"])."', ";
-															$g1Data1.= "'".str_replace(",", ".", Funciones::pesoConvertido($objPeso->getPesPeso(), $_SESSION["sesIdunidad"], $_SESSION["sesUniMultipli"]))."', ";
+															$labels.= "'".Funciones::fechaFormateadaIdioma($objPeso->getPesFecha(), $_SESSION["sesIdidioma"])."',";
+															$g1Data1.= "'".str_replace(",", ".", Funciones::pesoConvertido($objPeso->getPesPeso(), $_SESSION["sesIdunidad"], $_SESSION["sesUniMultipli"]))."',";
 														}
 														
 														$media = $sumaTotal / count($litPesos);

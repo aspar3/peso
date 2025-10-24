@@ -109,7 +109,7 @@
 											  		$weeks = Funciones::getIsoWeeksWithStartDates($start, $end);
 											  		foreach ($weeks as $week) {
 											  			//echo $week['year'] . '-W' . sprintf('%02d', $week['week']) . " starts on " . $week['start_of_week'];
-											  			$labels.= "'".Funciones::fechaFormateadaIdioma($week['start_of_week'], $_SESSION["sesIdidioma"])."', ";
+											  			$labels.= "'".Funciones::fechaFormateadaIdioma($week['start_of_week'], $_SESSION["sesIdidioma"])."',";
 											  			
 											  			$grupoUserSemana = new GrupoUser();
 											  			$grupoUserSemana->setGusIdgrupo($grupo->getGruIdgrupo());

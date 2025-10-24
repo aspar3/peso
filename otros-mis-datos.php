@@ -221,8 +221,8 @@
 																}
 																$labels = $g1Data1 = "";
 																foreach ($grupoUserDato->getGrupoUserDatos($conMsi, $pageCode, "asc") as $objDato){
-																	$labels.= "'".Funciones::fechaFormateadaIdioma($objDato->getGudFecha(), $_SESSION["sesIdidioma"])."', ";
-																	$g1Data1.= "'".str_replace(",", ".", $objDato->getGudDato())."', ";
+																	$labels.= "'".Funciones::fechaFormateadaIdioma($objDato->getGudFecha(), $_SESSION["sesIdidioma"])."',";
+																	$g1Data1.= "'".str_replace(",", ".", $objDato->getGudDato())."',";
 																}
 																
 																if ($labels !== "") { $labels = substr($labels, 0, -1);}
