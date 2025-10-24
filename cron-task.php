@@ -71,7 +71,7 @@ foreach ($user->getDistinctUsersMailPendientes($conMsi, $pageCode, $idiomaTxt) a
 	// FIN grupos PESO
 
 	// INICIO grupos OTROS
-	foreach ($user->getUsersMailPendientes($conMsi, $pageCode, $objUser["GUS_IDUSER"], "2") as $objGruposPeso) {
+	foreach ($user->getUsersMailPendientes($conMsi, $pageCode, $objUser["GUS_IDUSER"], "") as $objGruposPeso) {
 		$grupoUserDato = new GrupoUserDato();
 		$grupoUserDato->setGudIduser($objUser["GUS_IDUSER"]);
 		$grupoUserDato->setGudIdgrupo($objGruposPeso["GUS_IDGRUPO"]);
@@ -83,8 +83,12 @@ foreach ($user->getDistinctUsersMailPendientes($conMsi, $pageCode, $idiomaTxt) a
 			if ($grupoUser->getGusAvisoRetraso() != "S") {
 				// solo se manda si no se ha enviado antes
 				$algunGrupoParaAvisar = true;
+				$urlNuevoDato = "/otros-nuevo-dato";
+				if ($objGruposPeso["GRU_TIPO"] == "3") {
+					$urlNuevoDato = "/acciones-nuevo-dato";
+				}
 				$bodyUser.= " - ".$objGruposPeso["GRU_NOMBRE"]."\n".
-						$accesoHttp.$rootURL."/otros-nuevo-dato/".$objGruposPeso["GUS_IDGRUPO"]."\n\n";
+							$accesoHttp.$rootURL.$urlNuevoDato."/".$objGruposPeso["GUS_IDGRUPO"]."\n\n";
 				$grupoUser->setGusAvisoRetraso("S");
 				$grupoUser->updateAvisoRetrasoUserGrupo($conMsi, $pageCode);
 			}

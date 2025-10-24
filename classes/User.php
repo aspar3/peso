@@ -605,6 +605,8 @@ class User {
 
 	function getUsersMailPendientes($conMsi, $pageCode, $iduser, $gruTipo){
 		global $error;
+		$iduser = mysqli_real_escape_string($conMsi, $iduser);
+		$gruTipo = mysqli_real_escape_string($conMsi, $gruTipo);
 		$list = array();
 		
 		$sql = "SELECT *
@@ -613,9 +615,15 @@ class User {
 					LEFT JOIN ".$this->grupoTbl." ON GRU_IDGRUPO = GUS_IDGRUPO
     				LEFT JOIN ".$this->tiempoTbl." ON GRU_IDTIEMPO = TIE_IDTIEMPO
     				LEFT JOIN ".$this->idiomaTbl." ON USE_IDIDIOMA = IDM_IDIDIOMA
-				WHERE GUS_IDUSER = '".mysqli_real_escape_string($conMsi, $iduser)."'
-				  AND GRU_TIPO = ".mysqli_real_escape_string($conMsi, $gruTipo)."
-				  AND USE_IDSTATUS = 1
+				WHERE GUS_IDUSER = '".$iduser."'";
+
+		if ($gruTipo != "") {
+			$sql.= " AND GRU_TIPO = ".mysqli_real_escape_string($conMsi, $this->gruTipo);
+		} else {
+			$sql.= " AND GRU_TIPO IN (2, 3)";
+		}
+		
+		$sql.= "  AND USE_IDSTATUS = 1
 				  AND GRU_STATUS = 1
 				  AND GRU_FECINI <= NOW()
 				  AND (GRU_FECFIN is null OR GRU_FECFIN = '' OR GRU_FECFIN >= NOW())
