@@ -213,4 +213,12 @@ define("litRetosAccionesTareas", 'Retos de acciones / tareas');
 define("litRetosAccionesTareas02", 'Elija esta opción si quiere llevar un control sobre tareas o acciones que desea realizar periódicamente.');
 define("litOtrosRetos", 'Otros retos');
 define("litOtrosRetos02", 'Elija esta opción para cualquier otro tipo de retos. Pueden ser medibles numéricamente, o con una pregunta que usted incluya, configurando qué valor es el que da puntos.');
+define("litEstadPorDiaSemana", 'Datos por día de la semana para el grupo %1$s');
+define("litLunes", 'Lunes');
+define("litMartes", 'Martes');
+define("litMiercoles", 'Miércoles');
+define("litJueves", 'Jueves');
+define("litViernes", 'Viernes');
+define("litSabado", 'Sábado');
+define("litDomingo", 'Domingo');
 ?>

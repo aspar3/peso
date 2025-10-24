@@ -214,5 +214,12 @@ define("litRetosAccionesTareas", 'Action / Task Challenges');
 define("litRetosAccionesTareas02", 'Choose this option if you want to track tasks or actions you wish to perform regularly.');
 define("litOtrosRetos", 'Other Challenges');
 define("litOtrosRetos02", 'Choose this option for any other type of challenge. They can be measured numerically, or with a custom question you include, where you define which answer gives points.');
-
+define("litEstadPorDiaSemana", 'Data by day of the week for group %1$s');
+define("litLunes", 'Monday');
+define("litMartes", 'Tuesday');
+define("litMiercoles", 'Wednesday');
+define("litJueves", 'Thursday');
+define("litViernes", 'Friday');
+define("litSabado", 'Saturday');
+define("litDomingo", 'Sunday');
 ?>

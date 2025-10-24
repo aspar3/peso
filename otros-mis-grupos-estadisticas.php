@@ -94,12 +94,14 @@
 											  		// 1) nombre usuario
 											  		// 2) peso inicial
 											  		// 3) array tipo map con los datos, estilo $users[$fila][3]["una fecha"] te da el dato de esa fecha
+											  		// 4) array tipo map con los comentarios, estilo $users[$fila][4]["una fecha"] te da el comentario de esa fecha
 											  		$users = [];
 											  		$fila = 0;
 											  		foreach ($grupoUser->getGrupoUsers($conMsi, $pageCode) as $objGrupoUser){
 											  			$users[$fila][0] = $objGrupoUser->getGusIduser();
 											  			$users[$fila][1] = $objGrupoUser->getUseName();
 											  			$users[$fila][3] = array();
+											  			$users[$fila][4] = array();
 											  			$fila++;
 											  		}
 											  			
@@ -116,7 +118,7 @@
 											  		
 											  		$grupoUserSemana = new GrupoUserDato();
 											  		$grupoUserSemana->setGudIdgrupo($grupo->getGruIdgrupo());
-											  		foreach ($grupoUserSemana->getGrupoUsersDatos($conMsi, $pageCode, $grupo->getGruFecini()) as $objUserSemana) {
+											  		foreach ($grupoUserSemana->getGrupoUsersDatos($conMsi, $pageCode) as $objUserSemana) {
 											  			for ($fila = 0; $fila < count($users); $fila++) {
 // 											  				echo "<br>".$objUserSemana->getGudIduser()."  ".$users[$fila][0];
 											  				if ($objUserSemana->getGudIduser() == $users[$fila][0]){
@@ -126,6 +128,7 @@
 // 											  					echo "<br>".$objUserSemana->getGudFecha()."  ".$objUserSemana->getPesoMedio();
 											  					//array_push($users[$fila][3][$objUserSemana->getGudFecha()], $objUserSemana->getPesoMedio());
 											  					$users[$fila][3][$objUserSemana->getGudFecha()] = $objUserSemana->getPesoMedio();
+											  					$users[$fila][4][$objUserSemana->getGudFecha()] = $objUserSemana->getGudComent();
 											  				}
 											  			}
 											  		}
@@ -158,6 +161,13 @@
 									<span class="tituloGraph"><?=sprintf(litEstadGrupoReal, $grupo->getGruNombre())?></span>
 									<canvas id="myChart2" width="870" height="435" style="display: block; width: 870px; height: 435px;"></canvas>
 								</div>
+								<?php if ($grupo->getGruIdtiempo() == "1") {?>
+										<div class="graph100">
+											<br>
+											<span class="tituloGraph"><?=sprintf(litEstadPorDiaSemana, $grupo->getGruNombre())?></span>
+											<canvas id="myChart3" width="870" height="435" style="display: block; width: 870px; height: 435px;"></canvas>
+										</div>
+								<?php } ?>
 								<div>
 							  		<br><input class="button" id="volver" name="volver" type="button" onclick="history.back();" value="<?=sprintf(litVolver)?>">
 							    </div>
@@ -179,6 +189,7 @@
 			<?php 	
 				$graph2Config = "cubicInterpolationMode: 'monotone', tension: 0.4, borderWidth: 2, spanGaps: true";
 				$graph1Config = $graph2Config.", fill: true";
+				$graph2ConfigBarras = "borderWidth: 2";
 				$colores = array();
 				foreach ($users as $objUser){
 					$color = array();
@@ -204,7 +215,7 @@
 					        	foreach ($days as $day) {
 					        		if ($objUser[3][$day] != "") {
 					        			$valorAcumulado += $objUser[3][$day];
-					        			$g1Data.= str_replace(",", ".", $valorAcumulado).", ";
+					        			$g1Data.= str_replace(",", ".", $valorAcumulado).",";
 					        		} else {
 					        			$g1Data.= ", ";
 					        		}
@@ -238,6 +249,7 @@
 					    }
 				    }
 				});
+				
 			    var ctx2 = document.getElementById('myChart2').getContext('2d');
 				var myChart = new Chart(ctx2, {
 				    type: 'line',
@@ -248,14 +260,18 @@
 					        $indiceUser = 0;
 					        foreach ($users as $objUser){
 					        	$g1Data = "";
+					        	$g1Coment = "";
 					        	foreach ($days as $day) {
-					        		$g1Data.= str_replace(",", ".", $objUser[3][$day]).", ";
+					        		$g1Data.= str_replace(",", ".", $objUser[3][$day]).",";
+					        		$g1Coment.= "'".str_replace("'", " ", $objUser[4][$day])."',";
 					        	}
 					        	if ($g1Data !== "") { $g1Data = substr($g1Data, 0, -1);}
+					        	if ($g1Coment !== "") { $g1Coment = substr($g1Coment, 0, -1);}
 				        ?>
 				        		{
 					            label: '<?=$objUser[1]?>',
 					            data: [<?=$g1Data?>],
+					            extra: [<?=$g1Coment?>],
 					            <?=$graph2Config?>,
 					            borderColor: 'rgba(<?=$colores[$indiceUser][0]?>, <?=$colores[$indiceUser][1]?>, <?=$colores[$indiceUser][2]?>, 1)',
 					            backgroundColor: 'rgba(<?=$colores[$indiceUser][0]?>, <?=$colores[$indiceUser][1]?>, <?=$colores[$indiceUser][2]?>, 1)'
@@ -311,10 +327,70 @@
 							        }
 							    ?>
 						        }
-						      }
+						      },
+					            tooltip: {
+					                callbacks: {
+					                    label: function(context) {
+					                        const valor = context.raw;
+					                        const nota = context.dataset.extra?.[context.dataIndex];
+					                        const notaGuion = (nota !== undefined && nota !== null && nota !== '')? ' - ' + nota : '';
+					                        return `${valor}${notaGuion}`;
+					                    }
+					                }
+					            }
 						}
 				    }
 				});
+				<?php if ($grupo->getGruIdtiempo() == "1") {?>
+					    var ctx3 = document.getElementById('myChart3').getContext('2d');
+						var myChart = new Chart(ctx3, {
+						    type: 'bar',
+						    data: {
+						        labels: ['<?=sprintf(litLunes)?>','<?=sprintf(litMartes)?>','<?=sprintf(litMiercoles)?>','<?=sprintf(litJueves)?>','<?=sprintf(litViernes)?>','<?=sprintf(litSabado)?>','<?=sprintf(litDomingo)?>'],
+						        datasets: [
+						        <?php 
+						        	$grupoUserDato = new GrupoUserDato();
+						        	$grupoUserDato->setGudIdgrupo($idGrupo);
+							        $indiceUser = 0;
+							        foreach ($users as $objUser){
+							        	$grupoUserDato->setGudIduser($objUser[0]);
+							        	$datosPorDia = $grupoUserDato->getDatosPorUserDiaDeLaSemana($conMsi, $pageCode);
+							        	$g1Data = ($datosPorDia[2]??0).",".
+									        	($datosPorDia[3]??0).",".
+									        	($datosPorDia[4]??0).",".
+									        	($datosPorDia[5]??0).",".
+									        	($datosPorDia[6]??0).",".
+									        	($datosPorDia[7]??0).",".
+									        	($datosPorDia[1]??0);
+						        ?>
+						        		{
+							            label: '<?=$objUser[1]?>',
+							            data: [<?=$g1Data?>],
+							            <?=$graph2ConfigBarras?>,
+							            borderColor: 'rgba(<?=$colores[$indiceUser][0]?>, <?=$colores[$indiceUser][1]?>, <?=$colores[$indiceUser][2]?>, 1)',
+							            backgroundColor: 'rgba(<?=$colores[$indiceUser][0]?>, <?=$colores[$indiceUser][1]?>, <?=$colores[$indiceUser][2]?>, 1)'
+							            }
+						        <?php 
+						        		if ($objUser !== end($users)) {
+								        	echo ", ";
+								        }
+								        $indiceUser++;
+							        }
+							    ?>
+						        ]
+						    },
+						    options: {
+							    scales: {
+							      x: {
+							        stacked: false
+							      },
+							      y: {
+							        stacked: false
+							      }
+							    }
+						    }
+						});
+				<?php } ?>
 			</script>
 			
 		<?php include("in-footer.php");?>

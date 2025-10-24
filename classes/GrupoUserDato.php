@@ -6,8 +6,9 @@ class GrupoUserDato {
 	//private $dbUsername = "root";
 	//private $dbPassword = "";
 	//private $dbName     = "codexworld";
-	private $tbl    = 'GRUPO_USER_DATO';
-	private $tblGrupoUser    = 'GRUPO_USER';
+	private $tbl    		= 'GRUPO_USER_DATO';
+	private $tblGrupo    	= 'GRUPO';
+	private $tblGrupoUser	= 'GRUPO_USER';
 	
 	private $gudIdgud;
 	private $gudIdgrupo;
@@ -238,18 +239,20 @@ class GrupoUserDato {
 		}
 	}
 	
-	function getGrupoUsersDatos($conMsi, $pageCode, $fecini){
+	function getGrupoUsersDatos($conMsi, $pageCode){
 		global $error;
 		$list = array();
-		$fecini = mysqli_real_escape_string($conMsi, $fecini);
 		
 		$sql = "SELECT GUD_IDUSER,
-				GUD_DATO AS peso_medio,
-				date(GUD_FECHA) AS GUD_FECHA
+					   GUD_DATO AS peso_medio,
+					   date(GUD_FECHA) AS GUD_FECHA,
+					   GUD_COMENT
 				FROM ".$this->tbl."
+					JOIN ".$this->tblGrupo." ON GRU_IDGRUPO = GUD_IDGRUPO
 					JOIN ".$this->tblGrupoUser." ON GUS_IDGRUPO = GUD_IDGRUPO AND GUS_IDUSER = GUD_IDUSER
 				WHERE GUD_IDGRUPO = ".mysqli_real_escape_string($conMsi, $this->gudIdgrupo)."
-				  AND GUD_FECHA >= '".$fecini."'
+				  AND GUD_FECHA >= GRU_FECINI
+				  AND (GUD_FECHA <= GRU_FECFIN OR GRU_FECFIN IS NULL)
 				ORDER BY GUD_IDUSER";
 
 		if(!$result = $conMsi->query($sql)){ $error = true; rolLog("$pageCode> GUD-SQL-08", $sql." -> ".$conMsi->error, 3);}
@@ -259,6 +262,46 @@ class GrupoUserDato {
 			array_push($list, $obj);
 		}
 		return $list;
+	}
+
+	function getDatosPorUserDiaDeLaSemana($conMsi, $pageCode){
+		global $error;
+		$resultado = [];
+		/*
+		$sql = "SELECT d.dia_semana,
+					   COALESCE(ROUND(AVG(p.GUD_DATO), 2), 0) AS media
+				FROM (
+						SELECT 1 AS dia_semana UNION
+						SELECT 2 UNION
+						SELECT 3 UNION
+						SELECT 4 UNION
+						SELECT 5 UNION
+						SELECT 6 UNION
+						SELECT 7
+						) AS d
+					LEFT JOIN ".$this->tbl." p ON DAYOFWEEK(p.GUD_FECHA) = d.dia_semana
+							AND GUD_IDGRUPO = ".mysqli_real_escape_string($conMsi, $this->gudIdgrupo)."
+							AND GUD_IDUSER = ".mysqli_real_escape_string($conMsi, $this->gudIduser)."
+				GROUP BY d.dia_semana
+				ORDER BY d.dia_semana";
+		*/
+		
+		$sql = "SELECT DAYOFWEEK(GUD_FECHA) AS dia_semana,
+					   ROUND(AVG(GUD_DATO), 2) AS media
+				FROM ".$this->tbl."
+					JOIN ".$this->tblGrupo." ON GRU_IDGRUPO = GUD_IDGRUPO
+				WHERE GUD_FECHA >= GRU_FECINI
+					AND (GUD_FECHA <= GRU_FECFIN OR GRU_FECFIN IS NULL)
+					AND GUD_IDGRUPO = ".mysqli_real_escape_string($conMsi, $this->gudIdgrupo)."
+					AND GUD_IDUSER = ".mysqli_real_escape_string($conMsi, $this->gudIduser)."
+				GROUP BY DAYOFWEEK(GUD_FECHA)
+				ORDER BY dia_semana";
+
+		if(!$result = $conMsi->query($sql)){ $error = true; rolLog("$pageCode> GUD-SQL-09", $sql." -> ".$conMsi->error, 3);}
+		while ($row = $result->fetch_assoc()) {
+			$resultado[$row['dia_semana']] = $row['media'];
+		}
+		return $resultado;
 	}
 }
 ?>

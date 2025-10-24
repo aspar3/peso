@@ -206,7 +206,7 @@
 			        				if ($pesoComparar == "") {
 			        					$g1Data.= ", ";
 			        				} else {
-			        					$g1Data.= ($pesoComparar * 100 / $pesoInicial).", ";
+			        					$g1Data.= ($pesoComparar * 100 / $pesoInicial).",";
 			        				}
 				        		}
 				        		if ($g1Data !== "") { $g1Data = substr($g1Data, 0, -1);}
@@ -250,7 +250,7 @@
 								        foreach ($users as $objUser){
 								        	$g1Data = "";
 							        		foreach ($objUser[3] as $objPeso){
-						        				$g1Data.= str_replace(",", ".", $objPeso).", ";
+						        				$g1Data.= str_replace(",", ".", $objPeso).",";
 							        		}
 							        		if ($g1Data !== "") { $g1Data = substr($g1Data, 0, -1);}
 							        ?>
@@ -297,7 +297,7 @@
 							        			if ($pesoComparar == "") {
 							        				$g1Data.= ", ";
 							        			} else {
-							        				$g1Data.= ($pesoComparar - $pesoInicial).", ";
+							        				$g1Data.= ($pesoComparar - $pesoInicial).",";
 							        			}
 							        		}
 							        		if ($g1Data !== "") { $g1Data = substr($g1Data, 0, -1);}
