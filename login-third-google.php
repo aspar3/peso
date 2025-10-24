@@ -161,12 +161,10 @@ ini_set("display_errors", 1);
 			
 			mysqli_close($conMsi);
 			
-			if (count($listGruposOtros) == 1) {
-				return "/otros-nuevo-dato.php?idGrupo=".$listGruposOtros[0]->getGruIdgrupo();
-			} else if (count($listGruposOtros) > 1) {
-				return "/otros-nuevo-dato.php";
+			if (count($listGruposOtros) > 0) {
+				return "/otros-mis-grupos.php";
 			} else {
-				return "/nuevo-peso";
+				return "/mis-grupos";
 			}
 		}
 	}

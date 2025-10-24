@@ -42,6 +42,10 @@ if ($idGrupo != "") {
 	}
 }
 
+if ($idGrupo == "") {
+	die;
+}
+
 $grupoSelect = new Grupo();
 $grupoSelect->setGruTipo($gruTipo);
 $grupoSelect->setGruIduser($_SESSION["sesIduser"]);
@@ -126,8 +130,8 @@ if ($accion == "save"){
 <!DOCTYPE HTML>
 <html>
 	<head>
-		<title><?=$nombreGeneral." - ".sprintf(litNuevoDato)?></title>
-		<meta name="title" content="<?=$nombreGeneral." - ".sprintf(litNuevoDato)?>">
+		<title><?=$nombreGeneral." - ".sprintf(litNuevoDatoGrupo, $grupo->getGruNombre())?></title>
+		<meta name="title" content="<?=$nombreGeneral." - ".sprintf(litNuevoDatoGrupo, $grupo->getGruNombre())?>">
 		<?php include("in-metas.php");?>
 		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
 		<link rel="stylesheet" href="/assets/css/main.css?<?=rand(0, 9999999)?>" />
@@ -177,9 +181,11 @@ if ($accion == "save"){
 										}
 									?>
 									<header>
-										<h2><?=sprintf(litIntroNuevoDato)?></h2>
+										<h2><?=sprintf(litNuevoDatoGrupo, $grupo->getGruNombre())?></h2>
 									</header>
 
+									<input type="hidden" id="idGrupo" name="idGrupo" value="$idGrupo">
+									<?php /*
 									<div>
 										<label class="desc" for="idGrupo"><?=($idGrupo==""?sprintf(litPrimeroGrupo):sprintf(litGrupo))?> <span class="txtRed">*</span></label>
 										<div>
@@ -196,6 +202,7 @@ if ($accion == "save"){
 											</select>
 										</div>
 									</div>
+									*/?>
 									<?php if ($idGrupo != "") {?>
 											<div>
 												<label class="desc" for="fecha"><?=sprintf(litFecha)?> <span class="txtRed">*</span></label>

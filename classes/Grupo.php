@@ -259,9 +259,13 @@ class Grupo {
 																	   AND GUS_IDUSER = ".mysqli_real_escape_string($conMsi, $this->gruIduser)."
 																	   AND GUS_IDROL = 1) ES_ADMIN
 				FROM ".$this->tbl."
-				WHERE GRU_STATUS = 1
-				  AND GRU_TIPO = ".mysqli_real_escape_string($conMsi, $this->gruTipo)."
-				  AND EXISTS (SELECT 1 FROM GRUPO_USER
+				WHERE GRU_STATUS = 1";
+		if ($this->gruTipo != "") {
+			$sql.= " AND GRU_TIPO = ".mysqli_real_escape_string($conMsi, $this->gruTipo);
+		} else {
+			$sql.= " AND GRU_TIPO IN (2, 3)";
+		}
+		$sql.= " AND EXISTS (SELECT 1 FROM GRUPO_USER
 							  WHERE GUS_IDGRUPO = GRU_IDGRUPO
 								AND GUS_IDUSER = ".mysqli_real_escape_string($conMsi, $this->gruIduser)."
 								AND GUS_VERIFY_CODE != '' AND GUS_VERIFY_CODE IS NOT NULL)

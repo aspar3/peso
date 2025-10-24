@@ -163,8 +163,21 @@ class GrupoAccion {
 		$sql = "DELETE FROM ".$this->tbl."
 				WHERE GAC_IDACCION = ".mysqli_real_escape_string($conMsi, $this->gacIdaccion)."
 				  AND GAC_IDGRUPO = ".mysqli_real_escape_string($conMsi, $this->gacIdgrupo);
-
+		
 		if(!$conMsi->query($sql)){ $error = true; rolLog("$pageCode> GAC-SQL-05", $sql." -> ".$conMsi->error, 3);}
+		
+		if (!$error){
+			return true;
+		}else return false;
+	}
+	
+	function deleteAccionesGrupo($conMsi, $pageCode){
+		global $error;
+		
+		$sql = "DELETE FROM ".$this->tbl."
+				WHERE GAC_IDGRUPO = ".mysqli_real_escape_string($conMsi, $this->gacIdgrupo);
+		
+		if(!$conMsi->query($sql)){ $error = true; rolLog("$pageCode> GAC-SQL-06", $sql." -> ".$conMsi->error, 3);}
 		
 		if (!$error){
 			return true;
@@ -176,7 +189,7 @@ class GrupoAccion {
 				FROM ".$this->tbl."
 				WHERE GAC_IDGRUPO = ".mysqli_real_escape_string($conMsi, $this->gacIdgrupo);
 		echo $sql;
-		if(!$result = $conMsi->query($sql)){ $error = true; rolLog("$pageCode> GAC-SQL-06", $sql." -> ".$conMsi->error, 3);}
+		if(!$result = $conMsi->query($sql)){ $error = true; rolLog("$pageCode> GAC-SQL-07", $sql." -> ".$conMsi->error, 3);}
 		$row = $result->fetch_assoc();
 		$totalValor = $row["TOTAL_VALOR"];
 	
@@ -190,7 +203,7 @@ class GrupoAccion {
 				WHERE GAC_IDGRUPO = ".mysqli_real_escape_string($conMsi, $this->gacIdgrupo)."
 				  AND GAC_IDACCION IN (".$listaRealizados.")";
 		echo $sql;
-		if(!$result = $conMsi->query($sql)){ $error = true; rolLog("$pageCode> GAC-SQL-07", $sql." -> ".$conMsi->error, 3);}
+		if(!$result = $conMsi->query($sql)){ $error = true; rolLog("$pageCode> GAC-SQL-08", $sql." -> ".$conMsi->error, 3);}
 		$row = $result->fetch_assoc();
 		$valorRealizado = $row["VALOR_REALIZADO"];
 		

@@ -7,7 +7,8 @@ class GrupoUserDato {
 	//private $dbPassword = "";
 	//private $dbName     = "codexworld";
 	private $tbl    = 'GRUPO_USER_DATO';
-
+	private $tblGrupoUser    = 'GRUPO_USER';
+	
 	private $gudIdgud;
 	private $gudIdgrupo;
 	private $gudIduser;
@@ -195,8 +196,22 @@ class GrupoUserDato {
 				WHERE GUD_IDGUD = ".mysqli_real_escape_string($conMsi, $this->gudIdgud)."
 				  AND GUD_IDGRUPO = ".mysqli_real_escape_string($conMsi, $this->gudIdgrupo)."
 				  AND GUD_IDUSER = ".mysqli_real_escape_string($conMsi, $this->gudIduser);
-
+		
 		if(!$conMsi->query($sql)){ $error = true; rolLog("$pageCode> GUD-SQL-05", $sql." -> ".$conMsi->error, 3);}
+		
+		if (!$error){
+			return true;
+		}else return false;
+	}
+	
+	
+	function deleteTodosDatosGrupo($conMsi, $pageCode){
+		global $error;
+		
+		$sql = "DELETE FROM ".$this->tbl."
+				WHERE GUD_IDGRUPO = ".mysqli_real_escape_string($conMsi, $this->gudIdgrupo);
+		
+		if(!$conMsi->query($sql)){ $error = true; rolLog("$pageCode> GUD-SQL-06", $sql." -> ".$conMsi->error, 3);}
 		
 		if (!$error){
 			return true;
@@ -211,7 +226,7 @@ class GrupoUserDato {
 				WHERE GUD_IDUSER = ".mysqli_real_escape_string($conMsi, $this->gudIduser)."
 				  AND GUD_IDGRUPO = ".mysqli_real_escape_string($conMsi, $this->gudIdgrupo);
 		
-		if(!$result = $conMsi->query($sql)){ $error = true; rolLog("$pageCode> GUD-SQL-05", $sql." -> ".$conMsi->error, 3);}
+		if(!$result = $conMsi->query($sql)){ $error = true; rolLog("$pageCode> GUD-SQL-07", $sql." -> ".$conMsi->error, 3);}
 		if ($row = $result->fetch_assoc()) {
 			if ($row["retraso_dato"] == "S") {
 				return true;
@@ -232,11 +247,12 @@ class GrupoUserDato {
 				GUD_DATO AS peso_medio,
 				date(GUD_FECHA) AS GUD_FECHA
 				FROM ".$this->tbl."
+					JOIN ".$this->tblGrupoUser." ON GUS_IDGRUPO = GUD_IDGRUPO AND GUS_IDUSER = GUD_IDUSER
 				WHERE GUD_IDGRUPO = ".mysqli_real_escape_string($conMsi, $this->gudIdgrupo)."
 				  AND GUD_FECHA >= '".$fecini."'
 				ORDER BY GUD_IDUSER";
 
-		if(!$result = $conMsi->query($sql)){ $error = true; rolLog("$pageCode> GUD-SQL-14", $sql." -> ".$conMsi->error, 3);}
+		if(!$result = $conMsi->query($sql)){ $error = true; rolLog("$pageCode> GUD-SQL-08", $sql." -> ".$conMsi->error, 3);}
 		while ($row = $result->fetch_assoc()){
 			$obj = new GrupoUserDato();
 			$obj->setGrupoUserDato($row);

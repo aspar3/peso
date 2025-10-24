@@ -207,7 +207,7 @@
 												</tbody>
 											</table>
 										</div>
-										<input class="button" id="volver" name="volver" type="button" onclick="window.location.href='/acciones-mis-grupos.php'" value="<?=sprintf(litVolver)?>">
+										<input class="button" id="volver" name="volver" type="button" onclick="window.location.href='/otros-mis-grupos.php'" value="<?=sprintf(litVolver)?>">
 									</section>
 								</div>
 							</div>

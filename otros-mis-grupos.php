@@ -14,6 +14,8 @@
 	include_once 'classes/User.php';
 	include_once 'classes/Grupo.php';
 	include_once 'classes/GrupoUser.php';
+	include_once 'classes/GrupoUserDato.php';
+	include_once 'classes/GrupoUserAccion.php';
 	
 	if (!isset($_SESSION["sesIduser"]) || $_SESSION["sesIduser"]=="" || $_SESSION["sesStatus"]!=1){
 		//rolLog("$pageCode-01", "No session started or not a signedup user -> (".$_SESSION["sesIduser"].")", 1);
@@ -22,7 +24,7 @@
 	}
 
 	// 1: Peso. 2: Otros 3: Acciones
-	$gruTipo = "2";
+	// $gruTipo = "2";
 	
 	$idiomaTxt = $_SESSION["sesIdmLocale"];
 	if ($idiomaTxt == "") {
@@ -59,7 +61,7 @@
 		$grupo->setGruIduser($_SESSION["sesIduser"]);
 		$grupo->getGrupo($conMsi, $pageCode);
 		
-		if ($grupo->getEsAdmin()) {
+// 		if ($grupo->getEsAdmin()) {
 			$grupoUser = new GrupoUser();
 			$grupoUser->setGusIdgrupo($idGrupo);
 			$grupoUser->setGusIduser($_SESSION["sesIduser"]);
@@ -78,21 +80,36 @@
 					}
 				} else {
 					// no quedan usuarios, se borra el grupo y se vuelve atras
-					$grupo = new Grupo();
-					$grupo->setGruIduser($_SESSION["sesIduser"]);
-					$grupo->setGruIdgrupo($idGrupo);
-					if (!$grupo->deleteGrupo($conMsi, $pageCode)){
+					$grupoUserDato = new GrupoUserDato();
+					$grupoUserDato->setGudIdgrupo($idGrupo);
+					if ($grupoUserDato->deleteTodosDatosGrupo($conMsi, $pageCode)) {					
+						// Si es un grupo de acciones, se borran las acciones antes de borrar el grupo
+						if ($grupo->getGruTipo() == "2") {
+							$grupoAccion = new GrupoAccion();
+							$grupoAccion->setGacIdgrupo($idGrupo);
+							$grupoAccion->deleteAccionesGrupo($conMsi, $pageCode);
+						}
+						
+						$grupo = new Grupo();
+						$grupo->setGruIduser($_SESSION["sesIduser"]);
+						$grupo->setGruIdgrupo($idGrupo);
+						if (!$grupo->deleteGrupo($conMsi, $pageCode)){
+							$mensaje1=sprintf(litError1);
+							$mensaje2=sprintf(litError2, $mailAdmin);
+							$classMsgBox = "msgBox bgRed txtWhite";
+						}
+					} else {
 						$mensaje1=sprintf(litError1);
 						$mensaje2=sprintf(litError2, $mailAdmin);
 						$classMsgBox = "msgBox bgRed txtWhite";
 					}
 				}
 			}
-		} else {
-			$mensaje1=sprintf(litBorrarGrupoNoAdmin01);
-			$mensaje2=sprintf(litBorrarGrupoNoAdmin02);
-			$classMsgBox = "msgBox bgRed txtWhite";
-		}
+// 		} else {
+// 			$mensaje1=sprintf(litBorrarGrupoNoAdmin01);
+// 			$mensaje2=sprintf(litBorrarGrupoNoAdmin02);
+// 			$classMsgBox = "msgBox bgRed txtWhite";
+// 		}
 	}
 	
 ?>
@@ -202,7 +219,7 @@
 												<br><br>
 										<?php }?>
 										<header>
-											<h2><?=sprintf(litMisOtrosGrupos)?> <input class="button" id="saveForm" name="saveForm" type="button" onclick="window.location.href='/otros-nuevo-grupo.php'" value="<?=sprintf(litMenuNuevoRetoOtros)?>"></h2>
+											<h2><?=sprintf(litMisOtrosGrupos)?> <input class="button" id="saveForm" name="saveForm" type="button" onclick="window.location.href='/nuevo-grupo-varios.php'" value="<?=sprintf(litMenuNuevoRetoOtros)?>"></h2>
 											<div><?=sprintf(litMisOtrosGrupos01)?></div>
 											<br>
 											<div><?=sprintf(litReordenarColumnas)?></div>
@@ -238,6 +255,10 @@
 														$grupo->setOrder($order);
 														$grupo->setAsc($asc);
 														foreach ($grupo->getGruposAceptados($conMsi, $pageCode) as $objGrupo){
+															$esGrupoAcciones = false;
+															if ($objGrupo->getGruTipo() == "3") {
+																$esGrupoAcciones = true;
+															}
 													?>
 														    <tr onclick="detalleLinea(<?=$objGrupo->getGruIdgrupo()?>)">
 														      <td><?=$objGrupo->getGruNombre()?></td>
@@ -258,18 +279,38 @@
 														    <tr class="oculto"></tr> <!-- para mantener los estilos de las filas de las tablas pares e impares -->
 														    <tr class="ocultoFila" id="linea_<?=$objGrupo->getGruIdgrupo()?>">
 														    	<td colspan="5">
-																	<button class="botonTabla" onClick="window.location.href='/otros-nuevo-dato.php?idGrupo=<?=$objGrupo->getGruIdgrupo()?>';">
-																		<img src="/images/addOn.gif" class="imageButton">
-																		<span><?=sprintf(litMenuNuevoDato)?></span>
-																	</button>
+														    		<?php if ($esGrupoAcciones) {?>
+																				<button class="botonTabla" onClick="window.location.href='/acciones-nuevo-dato.php?idGrupo=<?=$objGrupo->getGruIdgrupo()?>';">
+																					<img src="/images/addOn.gif" class="imageButton">
+																					<span><?=sprintf(litMenuNuevoDato)?></span>
+																				</button>
+																	<?php } else { ?>
+																				<button class="botonTabla" onClick="window.location.href='/otros-nuevo-dato.php?idGrupo=<?=$objGrupo->getGruIdgrupo()?>';">
+																					<img src="/images/addOn.gif" class="imageButton">
+																					<span><?=sprintf(litMenuNuevoDato)?></span>
+																				</button>
+																	<?php } ?>
 																	<button class="botonTabla" onClick="window.location.href='/otros-mis-datos.php?idGrupo=<?=$objGrupo->getGruIdgrupo()?>';">
 																		<img src="/images/misDatos.gif" class="imageButton">
 																		<span><?=sprintf(litMenuMisDatos)?></span>
 																	</button>
-														    		<button class="botonTabla" onClick="window.location.href='/otros-nuevo-grupo.php?idGrupo=<?=$objGrupo->getGruIdgrupo()?>';">
-																		<img src="/images/edit.gif" class="imageButton">
-																		<span><?php if ($objGrupo->getEsAdmin() == "1") {echo sprintf(litModificar);} else {echo sprintf(litVerDetalles);}?></span>
-																	</button>
+																	<?php if ($esGrupoAcciones) {?>
+																	    		<button class="botonTabla" onClick="window.location.href='/acciones-nuevo-grupo.php?idGrupo=<?=$objGrupo->getGruIdgrupo()?>';">
+																					<img src="/images/edit.gif" class="imageButton">
+																					<span><?php if ($objGrupo->getEsAdmin() == "1") {echo sprintf(litModificar);} else {echo sprintf(litVerDetalles);}?></span>
+																				</button>
+																	<?php } else { ?>
+																	    		<button class="botonTabla" onClick="window.location.href='/otros-nuevo-grupo.php?idGrupo=<?=$objGrupo->getGruIdgrupo()?>';">
+																					<img src="/images/edit.gif" class="imageButton">
+																					<span><?php if ($objGrupo->getEsAdmin() == "1") {echo sprintf(litModificar);} else {echo sprintf(litVerDetalles);}?></span>
+																				</button>
+																	<?php } ?>
+																	<?php if ($esGrupoAcciones) {?>
+																	    		<button class="botonTabla" onClick="window.location.href='/acciones-listado.php?idGrupo=<?=$objGrupo->getGruIdgrupo()?>';">
+																					<img src="/images/checksGreen.gif" class="imageButton">
+																					<span><?php if ($objGrupo->getEsAdmin() == "1") {echo sprintf(litGestionarAcciones);} else {echo sprintf(litVerAcciones);}?></span>
+																				</button>
+																	<?php } ?>
 																	<button class="botonTabla" onClick="window.location.href='/otros-mis-grupos-estadisticas.php?idGrupo=<?=$objGrupo->getGruIdgrupo()?>';">
 																		<img src="/images/stats.gif" class="imageButton">
 																		<span><?=sprintf(litEstadisticas)?></span>

@@ -275,9 +275,7 @@ if ($accion == "save"){
 									  		<?php if ($esAdmin || $idGrupo == "") {?>
 									  				<input class="button" id="saveForm" name="saveForm" type="submit" onclick="saveData(this.form);return false;" value="<?=sprintf(litEnviarDatos)?>">&nbsp;
 									  		<?php }?>
-									  		<?php if ($editar) {?>
-									  				<input class="button" id="volver" name="volver" type="button" onclick="history.back();" value="<?=sprintf(litVolver)?>">
-									  		<?php }?>
+									  		&nbsp;<input class="button" id="volver" name="volver" type="button" onclick="history.back();" value="<?=sprintf(litVolver)?>">
 									    </div>
 									</div>
 									  

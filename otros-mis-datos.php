@@ -247,14 +247,12 @@
 								  		<br>
 						  				<?php
 							  				$urlNuevoDato = "/otros-nuevo-dato.php";
-							  				$urlVolver = "/otros-mis-grupos.php";
 							  				if ($grupo->getGruTipo() == "3") {
 							  					$urlNuevoDato = "/acciones-nuevo-dato.php";
-							  					$urlVolver = "/acciones-mis-grupos.php";
 						  					}
 						  				?>
 						  				<input class="button" id="saveForm" name="saveForm" type="submit" onclick="window.location.href='<?php echo $urlNuevoDato?>?idGrupo=<?=$grupo->getGruIdgrupo()?>'" value="<?=sprintf(litMenuNuevoDato)?>">&nbsp;
-						  				<input class="button" id="volver" name="volver" type="button" onclick="window.location.href='<?php echo $urlVolver?>'" value="<?=sprintf(litVolver)?>">
+						  				<input class="button" id="volver" name="volver" type="button" onclick="window.location.href='/otros-mis-grupos.php'" value="<?=sprintf(litVolver)?>">
 								    </div>
 								</div>
 							

@@ -120,7 +120,7 @@
 											  			for ($fila = 0; $fila < count($users); $fila++) {
 // 											  				echo "<br>".$objUserSemana->getGudIduser()."  ".$users[$fila][0];
 											  				if ($objUserSemana->getGudIduser() == $users[$fila][0]){
-											  					if (count($users[$fila][3]) == 0) {
+											  					if ($users[$fila][2] == "" && $objUserSemana->getPesoMedio() != "") {
 											  						$users[$fila][2] = $objUserSemana->getPesoMedio();
 											  					}
 // 											  					echo "<br>".$objUserSemana->getGudFecha()."  ".$objUserSemana->getPesoMedio();

@@ -42,6 +42,9 @@ if ($idGrupo != "") {
 		die;
 	}
 }
+if ($idGrupo == "") {
+	die;
+}
 
 $grupoSelect = new Grupo();
 $grupoSelect->setGruTipo($gruTipo);

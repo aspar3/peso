@@ -86,7 +86,7 @@ if ($accion == "save"){
 				$mensaje1=sprintf(litCambiosOk);
 				$classMsgBox = "msgBox bgGreen txtBlack";
 				
-				header("Location: /acciones-mis-grupos.php");
+				header("Location: /acciones-nueva.php?idGrupo=".$grupo->getGruIdgrupo());
 				die();
 			} else {
 				$mensaje1=sprintf(litError1);
@@ -104,7 +104,7 @@ if ($accion == "save"){
 			$mensaje1=sprintf(litCambiosOk);
 			$classMsgBox = "msgBox bgGreen txtBlack";
 			
-			header("Location: /acciones-mis-grupos.php");
+			header("Location: /otros-mis-grupos.php");
 			die();
 		}else{
 			$mensaje1=sprintf(litError1);
@@ -230,9 +230,7 @@ if ($accion == "save"){
 									  		<?php if ($esAdmin || $idGrupo == "") {?>
 									  				<input class="button" id="saveForm" name="saveForm" type="submit" onclick="saveData(this.form);return false;" value="<?=sprintf(litEnviarDatos)?>">&nbsp;
 									  		<?php }?>
-									  		<?php if ($editar) {?>
-									  				<input class="button" id="volver" name="volver" type="button" onclick="history.back();" value="<?=sprintf(litVolver)?>">
-									  		<?php }?>
+											&nbsp;<input class="button" id="volver" name="volver" type="button" onclick="history.back();" value="<?=sprintf(litVolver)?>">
 									    </div>
 									</div>
 									  

@@ -116,7 +116,7 @@
 											  			foreach ($grupoUserSemana->getGrupoUsersPeso($conMsi, $pageCode, $week['year'], $week['week']) as $objUserSemana) {
 											  				for ($fila = 0; $fila < count($users); $fila++) {
 											  					if ($objUserSemana->getGusIduser() == $users[$fila][0]){
-											  						if (count($users[$fila][3]) == 0) {
+											  						if ($users[$fila][2] == "" && $objUserSemana->getPesoMedio() != "") {
 											  							$users[$fila][2] = Funciones::pesoConvertido($objUserSemana->getPesoMedio(), $_SESSION["sesIdunidad"], $_SESSION["sesUniMultipli"]);
 											  						}
 										  							array_push($users[$fila][3], Funciones::pesoConvertido($objUserSemana->getPesoMedio(), $_SESSION["sesIdunidad"], $_SESSION["sesUniMultipli"]));
@@ -203,7 +203,11 @@
 				        		foreach ($objUser[3] as $objPeso){
 			        				$pesoInicial = str_replace(",", ".", $objUser[2]);
 			        				$pesoComparar = str_replace(",", ".", $objPeso);
-			        				$g1Data.= ($pesoComparar * 100 / $pesoInicial).", ";
+			        				if ($pesoComparar == "") {
+			        					$g1Data.= ", ";
+			        				} else {
+			        					$g1Data.= ($pesoComparar * 100 / $pesoInicial).", ";
+			        				}
 				        		}
 				        		$g1Data = trim($g1Data, ", ");
 				        ?>
@@ -290,7 +294,11 @@
 							        		foreach ($objUser[3] as $objPeso){
 							        			$pesoInicial = str_replace(",", ".", $objUser[2]);
 							        			$pesoComparar = str_replace(",", ".", $objPeso);
-							        			$g1Data.= ($pesoComparar - $pesoInicial).", ";
+							        			if ($pesoComparar == "") {
+							        				$g1Data.= ", ";
+							        			} else {
+							        				$g1Data.= ($pesoComparar - $pesoInicial).", ";
+							        			}
 							        		}
 							        		$g1Data = trim($g1Data, ", ");
 							        ?>

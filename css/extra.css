@@ -110,6 +110,19 @@ label.descCheck {
   visibility: hidden;
 }
 
+header > span > ul {
+  padding: 0;
+  margin: 0;
+  list-style-position: inside; /* Opcional: mejora alineación */
+}
+
+header > span > ul > li {
+  margin: 0;
+  padding: 2px 0 2px 25px;
+  line-height: 1.2; /* Reduce la altura de línea */
+}
+
+
 .txtRed {
 	color: red;
 }

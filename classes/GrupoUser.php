@@ -351,9 +351,9 @@ class GrupoUser {
 				AVG(PES_PESO) AS peso_medio
 				FROM ".$this->tbl."
 					LEFT JOIN ".$this->tblPeso." ON GUS_IDUSER = PES_IDUSER
+						  AND YEAR(PES_FECHA) = ".mysqli_real_escape_string($conMsi, $year)."
+						  AND WEEK(PES_FECHA, 3) = ".mysqli_real_escape_string($conMsi, $week)."
 				WHERE GUS_IDGRUPO = ".mysqli_real_escape_string($conMsi, $this->gusIdgrupo)."
-				  AND YEAR(PES_FECHA) = ".mysqli_real_escape_string($conMsi, $year)."
-				  AND WEEK(PES_FECHA, 3) = ".mysqli_real_escape_string($conMsi, $week)."
 				GROUP BY GUS_IDUSER
 				ORDER BY GUS_IDUSER";
 
@@ -374,11 +374,11 @@ class GrupoUser {
 				AVG(PES_PESO) AS peso_medio
 				FROM ".$this->tbl."
 					LEFT JOIN ".$this->tblPeso." ON GUS_IDUSER = PES_IDUSER
+							  AND YEAR(PES_FECHA) = ".mysqli_real_escape_string($conMsi, $year)."
+							  AND WEEK(PES_FECHA, 3) = ".mysqli_real_escape_string($conMsi, $week)."
 				WHERE GUS_IDGRUPO IN (SELECT gu2.GUS_IDGRUPO 
 									   FROM ".$this->tbl." gu2
 									   WHERE gu2.GUS_IDUSER = ".mysqli_real_escape_string($conMsi, $this->gusIduser).")
-				  AND YEAR(PES_FECHA) = ".mysqli_real_escape_string($conMsi, $year)."
-				  AND WEEK(PES_FECHA, 3) = ".mysqli_real_escape_string($conMsi, $week)."
 				GROUP BY GUS_IDUSER
 				ORDER BY GUS_IDUSER";
 		

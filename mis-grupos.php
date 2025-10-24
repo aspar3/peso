@@ -59,7 +59,7 @@
 		$grupo->setGruIduser($_SESSION["sesIduser"]);
 		$grupo->getGrupo($conMsi, $pageCode);
 		
-		if ($grupo->getEsAdmin()) {
+// 		if ($grupo->getEsAdmin()) {
 			$grupoUser = new GrupoUser();
 			$grupoUser->setGusIdgrupo($idGrupo);
 			$grupoUser->setGusIduser($_SESSION["sesIduser"]);
@@ -88,11 +88,11 @@
 					}
 				}
 			}
-		} else {
-			$mensaje1=sprintf(litBorrarGrupoNoAdmin01);
-			$mensaje2=sprintf(litBorrarGrupoNoAdmin02);
-			$classMsgBox = "msgBox bgRed txtWhite";
-		}
+// 		} else {
+// 			$mensaje1=sprintf(litBorrarGrupoNoAdmin01);
+// 			$mensaje2=sprintf(litBorrarGrupoNoAdmin02);
+// 			$classMsgBox = "msgBox bgRed txtWhite";
+// 		}
 	}
 	
 ?>
@@ -343,7 +343,7 @@
 					foreach ($grupoUserSemana->getTodosLosGruposUsersPeso($conMsi, $pageCode, $week['year'], $week['week']) as $objUserSemana) {
 						for ($fila = 0; $fila < count($users); $fila++) {
 							if ($objUserSemana->getGusIduser() == $users[$fila][0]){
-								if (count($users[$fila][3]) == 0) {
+								if ($users[$fila][2] == "" && $objUserSemana->getPesoMedio() != "") {
 									$users[$fila][2] = Funciones::pesoConvertido($objUserSemana->getPesoMedio(), $_SESSION["sesIdunidad"], $_SESSION["sesUniMultipli"]);
 								}
 								array_push($users[$fila][3], Funciones::pesoConvertido($objUserSemana->getPesoMedio(), $_SESSION["sesIdunidad"], $_SESSION["sesUniMultipli"]));
@@ -371,7 +371,13 @@
 				        		foreach ($objUser[3] as $objPeso){
 			        				$pesoInicial = str_replace(",", ".", $objUser[2]);
 			        				$pesoComparar = str_replace(",", ".", $objPeso);
-			        				$g1Data.= ($pesoComparar * 100 / $pesoInicial).", ";
+			        				// echo "pesoComparar=".$pesoComparar;
+			        				// echo "pesoInicial=".$pesoInicial;
+			        				if ($pesoComparar == "" || $pesoInicial == "") {
+			        					$g1Data.= ", ";
+			        				} else {
+			        					$g1Data.= ($pesoComparar * 100 / $pesoInicial).", ";
+			        				}
 				        		}
 				        		$g1Data = trim($g1Data, ", ");
 				        ?>

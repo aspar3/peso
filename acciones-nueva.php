@@ -52,8 +52,14 @@ if ($grupoUser->getGusIdrol() == "1") {
 	die;
 }
 
-$grupoAccion = new GrupoAccion();
+$ayudaInicial = true;
+$grupoAccionCount = new GrupoAccion();
+$grupoAccionCount->setGacIdgrupo($grupo->getGruIdgrupo());
+if (count($grupoAccionCount->getGrupoAcciones($conMsi, $pageCode, $ascDesc)) > 0) {
+	$ayudaInicial = false;
+}
 
+$grupoAccion = new GrupoAccion();
 $editar = false; 
 $idGac = $_GET["idGac"];
 if ($idGac != "") {
@@ -160,6 +166,9 @@ if ($accion == "save"){
 									?>
 									<header>
 										<h2><?=sprintf(litNuevaAccionGrupo, $grupo->getGruNombre())?></h2>
+										<?php if ($ayudaInicial) {?>
+												<span><?php echo sprintf(litAyudaNewAccion01)?><br><?php echo sprintf(litAyudaNewAccion02)?></span>
+										<?php }?>		
 									</header>
 									<div>
 										<label class="desc" for="nombre"><?=sprintf(litNombreAccion)?></label>
@@ -168,7 +177,7 @@ if ($accion == "save"){
 										</div>
 									</div>
 									<div>
-										<label class="desc" for="valor"><?=sprintf(litImportanciaAccion)?><span class="txtRed">*</span></label>
+										<label class="desc" for="valor"><?=sprintf(litImportanciaAccion)?><span class="txtRed">*</span> <a class="noUnderlined" href="javascript:alert('<?php echo sprintf(litAyudaImportancia)?>')"><img src="/images/infoLeft.gif"></a></label>
 										<div>
 											<input id="valor" name="valor" type="number" maxlength="3" value="<?=$grupoAccion->getGacValor()?>">
 										</div>
