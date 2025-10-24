@@ -62,11 +62,22 @@ include_once 'literales/idioma_'.$idiomaTxt.'.php';
 									<header>
 										<h2><?=sprintf(litBienvenido, $nombreGeneral)?></strong>!</h2>
 									</header>
-									<p><?=sprintf(litBienvenido01)?></p>
-									<p><?=sprintf(litBienvenido02)?></p>
-									<p><?=sprintf(litBienvenido03)?></p>									
+									<p><?=sprintf(litBienvenido05)?></p>
+									<h3><?=sprintf(litBienvenido06)?></h3>
+									<p><?=sprintf(litBienvenido07)?></p>
+									<hr>
+									<h2><?=sprintf(litBienvenido08)?></h2>
+									<p><?=sprintf(litBienvenido09)?></p>									
 									<h3><?=sprintf(litIntimidad)?></h3>
-									<p><?=sprintf(litIntimidad01)?></p>
+									<p><?=sprintf(litBienvenido10)?></p>
+									<hr>
+									<h2><?=sprintf(litBienvenido11)?></h2>
+									<p><?=sprintf(litBienvenido12)?></p>
+									<span><?=sprintf(litAyudaNewAccion02)?></span>
+									<br>
+									<hr>
+									<h2><?=sprintf(litRetosPersonalizados)?></h2>
+									<p><?=sprintf(litRetosPersonalizados02)?></p>
 
 								</article>
 								<div>
