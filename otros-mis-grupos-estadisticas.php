@@ -261,28 +261,30 @@
 				        <?php 
 					        $indiceUser = 0;
 					        foreach ($users as $objUser){
-					        	$g1Data = "";
-					        	$g1Coment = "";
-					        	foreach ($days as $day) {
-					        		$g1Data.= str_replace(",", ".", $objUser[3][$day]).",";
-					        		$g1Coment.= "'".str_replace("'", " ", $objUser[4][$day])."',";
-					        	}
-					        	if ($g1Data !== "") { $g1Data = substr($g1Data, 0, -1);}
-					        	if ($g1Coment !== "") { $g1Coment = substr($g1Coment, 0, -1);}
+					        	if (count($objUser[3]) > 0) {
+						        	$g1Data = "";
+						        	$g1Coment = "";
+						        	foreach ($days as $day) {
+						        		$g1Data.= str_replace(",", ".", $objUser[3][$day]).",";
+						        		$g1Coment.= "'".str_replace("'", " ", $objUser[4][$day])."',";
+						        	}
+						        	if ($g1Data !== "") { $g1Data = substr($g1Data, 0, -1);}
+						        	if ($g1Coment !== "") { $g1Coment = substr($g1Coment, 0, -1);}
 				        ?>
-				        		{
-					            label: '<?=$objUser[1]?>',
-					            data: [<?=$g1Data?>],
-					            extra: [<?=$g1Coment?>],
-					            <?=$graph2Config?>,
-					            borderColor: 'rgba(<?=$colores[$indiceUser][0]?>, <?=$colores[$indiceUser][1]?>, <?=$colores[$indiceUser][2]?>, 1)',
-					            backgroundColor: 'rgba(<?=$colores[$indiceUser][0]?>, <?=$colores[$indiceUser][1]?>, <?=$colores[$indiceUser][2]?>, 1)'
-					            }
+					        		{
+						            label: '<?=$objUser[1]?>',
+						            data: [<?=$g1Data?>],
+						            extra: [<?=$g1Coment?>],
+						            <?=$graph2Config?>,
+						            borderColor: 'rgba(<?=$colores[$indiceUser][0]?>, <?=$colores[$indiceUser][1]?>, <?=$colores[$indiceUser][2]?>, 1)',
+						            backgroundColor: 'rgba(<?=$colores[$indiceUser][0]?>, <?=$colores[$indiceUser][1]?>, <?=$colores[$indiceUser][2]?>, 1)'
+						            }
 				        <?php 
-				        		if ($objUser !== end($users)) {
-						        	echo ", ";
+					        		if ($objUser !== end($users)) {
+							        	echo ", ";
+							        }
+							        $indiceUser++;
 						        }
-						        $indiceUser++;
 					        }
 					    ?>
 				        ]
@@ -302,30 +304,32 @@
 						        <?php 
 							        $indiceUser = 0;
 							        foreach ($users as $objUser){
-							        	$g1Data = "";
-							        	$valorTotal = 0;
-							        	foreach ($objUser[3] as $valor) {
-							        		$valorTotal += $valor;
-							        	}
-							        	$media = $valorTotal / count($objUser[3]);
+							        	if (count($objUser[3]) > 0) {
+								        	$g1Data = "";
+								        	$valorTotal = 0;
+								        	foreach ($objUser[3] as $valor) {
+								        		$valorTotal += $valor;
+								        	}
+								        	$media = $valorTotal / count($objUser[3]);
 								?>
-								          media<?=$objUser[0]?>: {
-								            type: 'line',
-								            yMin: <?php echo str_replace(",", ".", $media)?>,
-								            yMax: <?php echo str_replace(",", ".", $media)?>,
-								            borderColor: 'rgba(<?=$colores[$indiceUser][0]?>, <?=$colores[$indiceUser][1]?>, <?=$colores[$indiceUser][2]?>, 1)',
-								            borderWidth: 1,
-								            label: {
-								              content: '<?=sprintf(litMedia, $objUser[1])?>',
-								              enabled: false,
-								              position: 'start'
-								            }
-								          }
+									          media<?=$objUser[0]?>: {
+									            type: 'line',
+									            yMin: <?php echo str_replace(",", ".", $media)?>,
+									            yMax: <?php echo str_replace(",", ".", $media)?>,
+									            borderColor: 'rgba(<?=$colores[$indiceUser][0]?>, <?=$colores[$indiceUser][1]?>, <?=$colores[$indiceUser][2]?>, 1)',
+									            borderWidth: 1,
+									            label: {
+									              content: '<?=sprintf(litMedia, $objUser[1])?>',
+									              enabled: false,
+									              position: 'start'
+									            }
+									          }
 								<?php
-										if ($objUser !== end($users)) {
-											echo ", ";
-										}
-										$indiceUser++;
+											if ($objUser !== end($users)) {
+												echo ", ";
+											}
+											$indiceUser++;
+								        }
 							        }
 							    ?>
 						        }
@@ -355,28 +359,30 @@
 						        	$grupoUserDato->setGudIdgrupo($idGrupo);
 							        $indiceUser = 0;
 							        foreach ($users as $objUser){
-							        	$grupoUserDato->setGudIduser($objUser[0]);
-							        	$datosPorDia = $grupoUserDato->getDatosPorUserDiaDeLaSemana($conMsi, $pageCode);
-							        	$g1Data = ($datosPorDia[2]??0).",".
-									        	($datosPorDia[3]??0).",".
-									        	($datosPorDia[4]??0).",".
-									        	($datosPorDia[5]??0).",".
-									        	($datosPorDia[6]??0).",".
-									        	($datosPorDia[7]??0).",".
-									        	($datosPorDia[1]??0);
+							        	if (count($objUser[3]) > 0) {
+								        	$grupoUserDato->setGudIduser($objUser[0]);
+								        	$datosPorDia = $grupoUserDato->getDatosPorUserDiaDeLaSemana($conMsi, $pageCode);
+								        	$g1Data = ($datosPorDia[2]??0).",".
+										        	($datosPorDia[3]??0).",".
+										        	($datosPorDia[4]??0).",".
+										        	($datosPorDia[5]??0).",".
+										        	($datosPorDia[6]??0).",".
+										        	($datosPorDia[7]??0).",".
+										        	($datosPorDia[1]??0);
 						        ?>
-						        		{
-							            label: '<?=$objUser[1]?>',
-							            data: [<?=$g1Data?>],
-							            <?=$graph2ConfigBarras?>,
-							            borderColor: 'rgba(<?=$colores[$indiceUser][0]?>, <?=$colores[$indiceUser][1]?>, <?=$colores[$indiceUser][2]?>, 1)',
-							            backgroundColor: 'rgba(<?=$colores[$indiceUser][0]?>, <?=$colores[$indiceUser][1]?>, <?=$colores[$indiceUser][2]?>, 1)'
-							            }
+							        		{
+								            label: '<?=$objUser[1]?>',
+								            data: [<?=$g1Data?>],
+								            <?=$graph2ConfigBarras?>,
+								            borderColor: 'rgba(<?=$colores[$indiceUser][0]?>, <?=$colores[$indiceUser][1]?>, <?=$colores[$indiceUser][2]?>, 1)',
+								            backgroundColor: 'rgba(<?=$colores[$indiceUser][0]?>, <?=$colores[$indiceUser][1]?>, <?=$colores[$indiceUser][2]?>, 1)'
+								            }
 						        <?php 
-						        		if ($objUser !== end($users)) {
-								        	echo ", ";
+							        		if ($objUser !== end($users)) {
+									        	echo ", ";
+									        }
+									        $indiceUser++;
 								        }
-								        $indiceUser++;
 							        }
 							    ?>
 						        ]

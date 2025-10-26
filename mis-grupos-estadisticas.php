@@ -199,30 +199,32 @@
 				        <?php
 				        	$indiceUser = 0;
 					        foreach ($users as $objUser){
-					        	$g1Data = "";
-				        		foreach ($objUser[3] as $objPeso){
-			        				$pesoInicial = str_replace(",", ".", $objUser[2]);
-			        				$pesoComparar = str_replace(",", ".", $objPeso);
-			        				if ($pesoComparar == "") {
-			        					$g1Data.= ", ";
-			        				} else {
-			        					$g1Data.= ($pesoComparar * 100 / $pesoInicial).",";
-			        				}
-				        		}
-				        		if ($g1Data !== "") { $g1Data = substr($g1Data, 0, -1);}
+					        	if (count($objUser[3]) > 0) {
+						        	$g1Data = "";
+					        		foreach ($objUser[3] as $objPeso){
+				        				$pesoInicial = str_replace(",", ".", $objUser[2]);
+				        				$pesoComparar = str_replace(",", ".", $objPeso);
+				        				if ($pesoComparar == "") {
+				        					$g1Data.= ", ";
+				        				} else {
+				        					$g1Data.= ($pesoComparar * 100 / $pesoInicial).",";
+				        				}
+					        		}
+					        		if ($g1Data !== "") { $g1Data = substr($g1Data, 0, -1);}
 				        ?>
-				        		{
-					            label: '<?=$objUser[1]?>',
-					            data: [<?=$g1Data?>],
-					            <?=$graph2Config?>,
-					            borderColor: 'rgba(<?=$colores[$indiceUser][0]?>, <?=$colores[$indiceUser][1]?>, <?=$colores[$indiceUser][2]?>, 1)',
-					            backgroundColor: 'rgba(<?=$colores[$indiceUser][0]?>, <?=$colores[$indiceUser][1]?>, <?=$colores[$indiceUser][2]?>, 1)'
-					            }
+					        		{
+						            label: '<?=$objUser[1]?>',
+						            data: [<?=$g1Data?>],
+						            <?=$graph2Config?>,
+						            borderColor: 'rgba(<?=$colores[$indiceUser][0]?>, <?=$colores[$indiceUser][1]?>, <?=$colores[$indiceUser][2]?>, 1)',
+						            backgroundColor: 'rgba(<?=$colores[$indiceUser][0]?>, <?=$colores[$indiceUser][1]?>, <?=$colores[$indiceUser][2]?>, 1)'
+						            }
 				        <?php 
-				        		if ($objUser !== end($users)) {
-						        	echo ", ";
+					        		if ($objUser !== end($users)) {
+							        	echo ", ";
+							        }
+							        $indiceUser++;
 						        }
-						        $indiceUser++;
 					        }
 					    ?>
 				        ]
@@ -248,24 +250,26 @@
 							        <?php
 				        				$indiceUser = 0;
 								        foreach ($users as $objUser){
-								        	$g1Data = "";
-							        		foreach ($objUser[3] as $objPeso){
-						        				$g1Data.= str_replace(",", ".", $objPeso).",";
-							        		}
-							        		if ($g1Data !== "") { $g1Data = substr($g1Data, 0, -1);}
+								        	if (count($objUser[3]) > 0) {
+									        	$g1Data = "";
+								        		foreach ($objUser[3] as $objPeso){
+							        				$g1Data.= str_replace(",", ".", $objPeso).",";
+								        		}
+								        		if ($g1Data !== "") { $g1Data = substr($g1Data, 0, -1);}
 							        ?>
-							        		{
-								            label: '<?=$objUser[1]?>',
-								            data: [<?=$g1Data?>],
-								            <?=$graph2Config?>,
-								            borderColor: 'rgba(<?=$colores[$indiceUser][0]?>, <?=$colores[$indiceUser][1]?>, <?=$colores[$indiceUser][2]?>, 1)',
-								            backgroundColor: 'rgba(<?=$colores[$indiceUser][0]?>, <?=$colores[$indiceUser][1]?>, <?=$colores[$indiceUser][2]?>, 1)'
-								            }
+								        		{
+									            label: '<?=$objUser[1]?>',
+									            data: [<?=$g1Data?>],
+									            <?=$graph2Config?>,
+									            borderColor: 'rgba(<?=$colores[$indiceUser][0]?>, <?=$colores[$indiceUser][1]?>, <?=$colores[$indiceUser][2]?>, 1)',
+									            backgroundColor: 'rgba(<?=$colores[$indiceUser][0]?>, <?=$colores[$indiceUser][1]?>, <?=$colores[$indiceUser][2]?>, 1)'
+									            }
 							        <?php 
-							        		if ($objUser !== end($users)) {
-									        	echo ", ";
+								        		if ($objUser !== end($users)) {
+										        	echo ", ";
+										        }
+										        $indiceUser++;
 									        }
-									        $indiceUser++;
 								        }
 								    ?>
 							        ]
@@ -290,30 +294,32 @@
 							        <?php 
 								        $indiceUser = 0;
 								        foreach ($users as $objUser){
-								        	$g1Data = "";
-							        		foreach ($objUser[3] as $objPeso){
-							        			$pesoInicial = str_replace(",", ".", $objUser[2]);
-							        			$pesoComparar = str_replace(",", ".", $objPeso);
-							        			if ($pesoComparar == "") {
-							        				$g1Data.= ", ";
-							        			} else {
-							        				$g1Data.= ($pesoComparar - $pesoInicial).",";
-							        			}
-							        		}
-							        		if ($g1Data !== "") { $g1Data = substr($g1Data, 0, -1);}
+								        	if (count($objUser[3]) > 0) {
+									        	$g1Data = "";
+								        		foreach ($objUser[3] as $objPeso){
+								        			$pesoInicial = str_replace(",", ".", $objUser[2]);
+								        			$pesoComparar = str_replace(",", ".", $objPeso);
+								        			if ($pesoComparar == "") {
+								        				$g1Data.= ", ";
+								        			} else {
+								        				$g1Data.= ($pesoComparar - $pesoInicial).",";
+								        			}
+								        		}
+								        		if ($g1Data !== "") { $g1Data = substr($g1Data, 0, -1);}
 							        ?>
-							        		{
-								            label: '<?=$objUser[1]?>',
-								            data: [<?=$g1Data?>],
-								            <?=$graph2Config?>,
-								            borderColor: 'rgba(<?=$colores[$indiceUser][0]?>, <?=$colores[$indiceUser][1]?>, <?=$colores[$indiceUser][2]?>, 1)',
-								            backgroundColor: 'rgba(<?=$colores[$indiceUser][0]?>, <?=$colores[$indiceUser][1]?>, <?=$colores[$indiceUser][2]?>, 1)'
-								            }
+								        		{
+									            label: '<?=$objUser[1]?>',
+									            data: [<?=$g1Data?>],
+									            <?=$graph2Config?>,
+									            borderColor: 'rgba(<?=$colores[$indiceUser][0]?>, <?=$colores[$indiceUser][1]?>, <?=$colores[$indiceUser][2]?>, 1)',
+									            backgroundColor: 'rgba(<?=$colores[$indiceUser][0]?>, <?=$colores[$indiceUser][1]?>, <?=$colores[$indiceUser][2]?>, 1)'
+									            }
 							        <?php 
-							        		if ($objUser !== end($users)) {
-									        	echo ", ";
+								        		if ($objUser !== end($users)) {
+										        	echo ", ";
+										        }
+										        $indiceUser++;
 									        }
-									        $indiceUser++;
 								        }
 								    ?>
 							        ]
