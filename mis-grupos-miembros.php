@@ -184,7 +184,7 @@
 														$grupoUser->setGusIdgrupo($idGrupo);
 														$grupoUser->setOrder($order);
 														$grupoUser->setAsc($asc);
-														foreach ($grupoUser->getGrupoUsers($conMsi, $pageCode) as $objGrupoUser){
+														foreach ($grupoUser->getGrupoUsersTodos($conMsi, $pageCode) as $objGrupoUser){
 															$clase="";
 															if ($objGrupoUser->getGusVerifyCode() != "") {
 																$clase="bgLightRed";

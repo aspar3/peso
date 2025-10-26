@@ -97,7 +97,7 @@
 											  		// 4) array tipo map con los comentarios, estilo $users[$fila][4]["una fecha"] te da el comentario de esa fecha
 											  		$users = [];
 											  		$fila = 0;
-											  		foreach ($grupoUser->getGrupoUsers($conMsi, $pageCode) as $objGrupoUser){
+											  		foreach ($grupoUser->getGrupoUsersTodos($conMsi, $pageCode) as $objGrupoUser){
 											  			$users[$fila][0] = $objGrupoUser->getGusIduser();
 											  			$users[$fila][1] = $objGrupoUser->getUseName();
 											  			$users[$fila][3] = array();
@@ -210,30 +210,32 @@
 				        <?php
 	        				$indiceUser = 0;
 					        foreach ($users as $objUser){
-					        	$g1Data = "";
-					        	$valorAcumulado = 0;
-					        	foreach ($days as $day) {
-					        		if ($objUser[3][$day] != "") {
-					        			$valorAcumulado += $objUser[3][$day];
-					        			$g1Data.= str_replace(",", ".", $valorAcumulado).",";
-					        		} else {
-					        			$g1Data.= ", ";
-					        		}
-					        	}
-					        	if ($g1Data !== "") { $g1Data = substr($g1Data, 0, -1);}
+					        	if (count($objUser[3]) > 0) {
+						        	$g1Data = "";
+						        	$valorAcumulado = 0;
+						        	foreach ($days as $day) {
+						        		if ($objUser[3][$day] != "") {
+						        			$valorAcumulado += $objUser[3][$day];
+						        			$g1Data.= str_replace(",", ".", $valorAcumulado).",";
+						        		} else {
+						        			$g1Data.= ", ";
+						        		}
+						        	}
+						        	if ($g1Data !== "") { $g1Data = substr($g1Data, 0, -1);}
 				        ?>
-				        		{
-					            label: '<?=$objUser[1]?>',
-					            data: [<?=$g1Data?>],
-					            <?=$graph2Config?>,
-					            borderColor: 'rgba(<?=$colores[$indiceUser][0]?>, <?=$colores[$indiceUser][1]?>, <?=$colores[$indiceUser][2]?>, 1)',
-					            backgroundColor: 'rgba(<?=$colores[$indiceUser][0]?>, <?=$colores[$indiceUser][1]?>, <?=$colores[$indiceUser][2]?>, 1)'
-					            }
+					        		{
+						            label: '<?=$objUser[1]?>',
+						            data: [<?=$g1Data?>],
+						            <?=$graph2Config?>,
+						            borderColor: 'rgba(<?=$colores[$indiceUser][0]?>, <?=$colores[$indiceUser][1]?>, <?=$colores[$indiceUser][2]?>, 1)',
+						            backgroundColor: 'rgba(<?=$colores[$indiceUser][0]?>, <?=$colores[$indiceUser][1]?>, <?=$colores[$indiceUser][2]?>, 1)'
+						            }
 				        <?php 
-				        		if ($objUser !== end($users)) {
-						        	echo ", ";
-						        }
-						        $indiceUser++;
+					        		if ($objUser !== end($users)) {
+							        	echo ", ";
+							        }
+							        $indiceUser++;
+					        	}
 					        }
 					    ?>
 				        ]

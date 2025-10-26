@@ -170,7 +170,7 @@ class GrupoUser {
 		}else return false;
 	}
 	
-	function getGrupoUsers($conMsi, $pageCode){
+	function getGrupoUsersTodos($conMsi, $pageCode){
 		global $error;
 		$list = array();
 		
@@ -197,6 +197,42 @@ class GrupoUser {
 		}
 
 		if(!$result = $conMsi->query($sql)){ $error = true; rolLog("$pageCode> GUS-SQL-03", $sql." -> ".$conMsi->error, 3);}
+		while ($row = $result->fetch_assoc()){
+			$obj = new GrupoUser();
+			$obj->setGrupoUser($row);
+			array_push($list, $obj);
+		}
+		return $list;
+	}
+
+	function getGrupoUsersActivos($conMsi, $pageCode){
+		global $error;
+		$list = array();
+		
+		$sql = "SELECT *
+				FROM ".$this->tbl."
+					LEFT JOIN ".$this->tblGrupo." ON GUS_IDGRUPO = GRU_IDGRUPO
+					LEFT JOIN ".$this->tblUser." ON GUS_IDUSER = USE_IDUSER
+					LEFT JOIN ".$this->tblRol." ON GUS_IDROL = ROL_IDROL
+				WHERE GRU_STATUS = 1
+				  AND (GUS_VERIFY_CODE IS NULL OR GUS_VERIFY_CODE = '')
+				  AND GUS_IDGRUPO = ".mysqli_real_escape_string($conMsi, $this->gusIdgrupo);
+		
+		if ($this->getOrder()=="") {
+			$sql.= " ORDER BY USE_NAME";
+		} else {
+			if ($this->getOrder()!=""){
+				if ($this->getOrder()=="1") $orden = " USE_NAME ";
+				else if ($this->getOrder()=="2") $orden = " USE_LASTNAME ";
+				else if ($this->getOrder()=="3") $orden = " ROL_NOMBRE ";
+				
+				if ($this->getAsc()=="1") $orden.= " ASC ";
+				if ($this->getAsc()=="2") $orden.= " DESC ";
+				$sql.= " ORDER BY ".$orden;
+			}
+		}
+		
+		if(!$result = $conMsi->query($sql)){ $error = true; rolLog("$pageCode> GUS-SQL-04", $sql." -> ".$conMsi->error, 3);}
 		while ($row = $result->fetch_assoc()){
 			$obj = new GrupoUser();
 			$obj->setGrupoUser($row);

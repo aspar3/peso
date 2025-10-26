@@ -253,6 +253,7 @@ class GrupoUserDato {
 				WHERE GUD_IDGRUPO = ".mysqli_real_escape_string($conMsi, $this->gudIdgrupo)."
 				  AND GUD_FECHA >= GRU_FECINI
 				  AND (GUD_FECHA <= GRU_FECFIN OR GRU_FECFIN IS NULL)
+				  AND (GUS_VERIFY_CODE IS NULL OR GUS_VERIFY_CODE = '')
 				ORDER BY GUD_IDUSER";
 
 		if(!$result = $conMsi->query($sql)){ $error = true; rolLog("$pageCode> GUD-SQL-08", $sql." -> ".$conMsi->error, 3);}

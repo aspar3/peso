@@ -94,7 +94,7 @@
 											  		// 3) array con los pesos
 											  		$users = [];
 											  		$fila = 0;
-											  		foreach ($grupoUser->getGrupoUsers($conMsi, $pageCode) as $objGrupoUser){
+											  		foreach ($grupoUser->getGrupoUsersActivos($conMsi, $pageCode) as $objGrupoUser){
 											  			$users[$fila][0] = $objGrupoUser->getGusIduser();
 											  			$users[$fila][1] = $objGrupoUser->getUseName();
 											  			$users[$fila][3] = array();
