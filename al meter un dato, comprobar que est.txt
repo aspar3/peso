@@ -1,0 +1,1 @@
+al meter un dato, comprobar que está dentro de las fechas del grupo

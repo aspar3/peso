@@ -185,7 +185,7 @@ if ($accion == "save"){
 									<div>
 										<div>
 									  		<br><input class="button" id="saveForm" name="saveForm" type="submit" onclick="saveData(this.form);return false;" value="<?=sprintf(litEnviarDatos)?>">
-								  			&nbsp;<input class="button" id="volver" name="volver" type="button" onclick="history.back();" value="<?=sprintf(litVolver)?>">
+								  			&nbsp;<input class="button" id="volver" name="volver" type="button" onclick="window.location.href='/acciones-listado.php?idGrupo=<?php echo $idGrupo?>'" value="<?=sprintf(litVolver)?>">
 									    </div>
 									</div>
 									  

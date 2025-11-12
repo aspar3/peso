@@ -178,7 +178,7 @@ if ($accion == "save"){
 										<div>
 									  		<br><input class="button" id="saveForm" name="saveForm" type="submit" onclick="saveData(this.form);return false;" value="<?=sprintf(litEnviarDatos)?>">
 									  		<?php if ($editar) {?>
-									  			&nbsp;<input class="button" id="volver" name="volver" type="button" onclick="history.back();" value="<?=sprintf(litVolver)?>">
+									  			&nbsp;<input class="button" id="volver" name="volver" type="button" onclick="window.location.href='/mis-pesos'" value="<?=sprintf(litVolver)?>">
 									  		<?php }?>
 									    </div>
 									</div>

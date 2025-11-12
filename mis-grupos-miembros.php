@@ -208,7 +208,7 @@
 											</table>
 											<div>
 												<div>
-											  		<br><input class="button" id="volver" name="volver" type="button" onclick="history.back();" value="<?=sprintf(litVolver)?>">
+											  		<br><input class="button" id="volver" name="volver" type="button" onclick="window.location.href='/mis-grupos'" value="<?=sprintf(litVolver)?>">
 											    </div>
 											</div>
 										</div>

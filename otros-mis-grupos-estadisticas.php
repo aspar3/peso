@@ -156,11 +156,54 @@
 							    	<span class="tituloGraph"><?=sprintf(litEstadGrupoAcum, $grupo->getGruNombre())?></span>
 									<canvas id="myChart1" width="870" height="435" style="display: block; width: 870px; height: 435px;"></canvas>
 								</div>
+								<table class="gen">
+									<tbody>
+										<?php
+											foreach ($users as $objUser){
+												if (count($objUser[3]) > 0) {
+													$valorAcumulado = 0;
+													foreach ($days as $day) {
+														if ($objUser[3][$day] != "") {
+															$valorAcumulado += $objUser[3][$day];
+														}
+													}
+										?>
+													<tr>
+														<td><?php echo $objUser[1]?></td>
+														<td class="number"><?php echo $valorAcumulado?></td>
+													</tr>
+										<?php
+											 		}
+												}
+										?>
+									</tbody>
+								</table>
 								<div class="graph100">
 									<br>
 									<span class="tituloGraph"><?=sprintf(litEstadGrupoReal, $grupo->getGruNombre())?></span>
 									<canvas id="myChart2" width="870" height="435" style="display: block; width: 870px; height: 435px;"></canvas>
 								</div>
+								<table class="gen">
+									<tbody>
+										<?php
+											foreach ($users as $objUser){
+												if (count($objUser[3]) > 0) {
+													$valorTotal = 0;
+													foreach ($objUser[3] as $valor) {
+														$valorTotal += $valor;
+													}
+													$media = $valorTotal / count($objUser[3]);
+										?>
+													<tr>
+														<td><?php echo $objUser[1]?></td>
+														<td class="number"><?php echo Funciones::formatNum2dec($media)?></td>
+													</tr>
+										<?php
+											 		}
+												}
+										?>
+									</tbody>
+								</table>
 								<?php if ($grupo->getGruIdtiempo() == "1") {?>
 										<div class="graph100">
 											<br>
@@ -169,7 +212,7 @@
 										</div>
 								<?php } ?>
 								<div>
-							  		<br><input class="button" id="volver" name="volver" type="button" onclick="history.back();" value="<?=sprintf(litVolver)?>">
+							  		<br><input class="button" id="volver" name="volver" type="button" onclick="window.location.href='/otros-mis-grupos.php'" value="<?=sprintf(litVolver)?>">
 							    </div>
 							</div>
 						</div>
@@ -361,7 +404,12 @@
 							        foreach ($users as $objUser){
 							        	if (count($objUser[3]) > 0) {
 								        	$grupoUserDato->setGudIduser($objUser[0]);
-								        	$datosPorDia = $grupoUserDato->getDatosPorUserDiaDeLaSemana($conMsi, $pageCode);
+								        	$datosPorDia = [];
+								        	if ($grupo->getGruIdrespuesta() == 1) {
+								        		$datosPorDia = $grupoUserDato->getDatosPorUserDiaDeLaSemanaRespuesta1($conMsi, $pageCode);
+								        	} else {
+								        		$datosPorDia = $grupoUserDato->getDatosPorUserDiaDeLaSemanaRespuesta2y3($conMsi, $pageCode);
+								        	}
 								        	$g1Data = ($datosPorDia[2]??0).",".
 										        	($datosPorDia[3]??0).",".
 										        	($datosPorDia[4]??0).",".

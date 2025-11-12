@@ -230,7 +230,7 @@ if ($accion == "save"){
 									  		<?php if ($esAdmin || $idGrupo == "") {?>
 									  				<input class="button" id="saveForm" name="saveForm" type="submit" onclick="saveData(this.form);return false;" value="<?=sprintf(litEnviarDatos)?>">&nbsp;
 									  		<?php }?>
-											&nbsp;<input class="button" id="volver" name="volver" type="button" onclick="history.back();" value="<?=sprintf(litVolver)?>">
+											&nbsp;<input class="button" id="volver" name="volver" type="button" onclick="window.location.href='/nuevo-grupo-varios.php'" value="<?=sprintf(litVolver)?>">
 									    </div>
 									</div>
 									  
