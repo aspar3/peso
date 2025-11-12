@@ -46,6 +46,8 @@ if (!$grupo->getGrupo($conMsi, $pageCode)) {
 	die;
 }
 
+$urlVolver = "/mis-grupos-miembros?idGrupo=".$idGrupo;
+
 $accion = $_POST["accion"];
 if ($accion == "save" || $accion == "saveAmigo"){
 	
@@ -203,7 +205,7 @@ if ($accion == "save" || $accion == "saveAmigo"){
 									<div>
 										<div>
 									  		<br><input class="button" id="saveForm" name="saveForm" type="submit" onclick="saveDataAmigo(this.form);return false;" value="<?=sprintf(litEnviarDatos)?>">
-									  		&nbsp;<input class="button" id="volver" name="volver" type="button" onclick="window.location.href='/mis-grupos-miembros'" value="<?=sprintf(litVolver)?>">
+									  		&nbsp;<input class="button" id="volver" name="volver" type="button" onclick="window.location.href='<?php echo $urlVolver?>'" value="<?=sprintf(litVolver)?>">
 									    </div>
 									</div>
 									<br>
@@ -244,7 +246,7 @@ if ($accion == "save" || $accion == "saveAmigo"){
 									<div>
 										<div>
 									  		<br><input class="button" id="saveForm" name="saveForm" type="submit" onclick="saveData(this.form);return false;" value="<?=sprintf(litEnviarDatos)?>">
-									  		&nbsp;<input class="button" id="volver" name="volver" type="button" onclick="window.location.href='/mis-grupos-miembros'" value="<?=sprintf(litVolver)?>">
+									  		&nbsp;<input class="button" id="volver" name="volver" type="button" onclick="window.location.href='<?php echo $urlVolver?>'" value="<?=sprintf(litVolver)?>">
 									    </div>
 									</div>
 									  

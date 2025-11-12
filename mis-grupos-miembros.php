@@ -42,6 +42,11 @@
 	if ($grupo->getEsAdmin() == 1) {
 		$esAdmin = true;
 	}
+
+	$urlVolver = "/mis-grupos";
+	if ($grupo->getGruTipo() != 1) {
+		$urlVolver = "/otros-mis-grupos.php";
+	}
 	
 	$accion = $_POST["accion"];
 	if ($esAdmin && $accion == "delete"){
@@ -208,7 +213,7 @@
 											</table>
 											<div>
 												<div>
-											  		<br><input class="button" id="volver" name="volver" type="button" onclick="window.location.href='/mis-grupos'" value="<?=sprintf(litVolver)?>">
+											  		<br><input class="button" id="volver" name="volver" type="button" onclick="window.location.href='<?php echo $urlVolver?>'" value="<?=sprintf(litVolver)?>">
 											    </div>
 											</div>
 										</div>
