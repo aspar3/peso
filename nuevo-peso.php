@@ -59,7 +59,7 @@ if ($accion == "save"){
 				$mensaje1=sprintf(litCambiosOk);
 				$classMsgBox = "msgBox bgGreen txtBlack";
 				if ($enviarMails) { 
-					//enviarMailAlert($mailAdmin, $mailAlertasAdmin, "", $nombreGeneral." : ".$_SESSION["sesName"]." ha metido un nuevo peso", "Nuevo peso");
+					enviarMailAlert($mailAdmin, $mailAlertasAdmin, "", $nombreGeneral." : ".$_SESSION["sesName"]." ha metido un nuevo peso", "Nuevo peso");
 					$grupoUser = new GrupoUser();
 					$grupoUser->setGusIduser($_SESSION["sesIduser"]);
 					foreach ($grupoUser->getEnvioNotificacionesPeso($conMsi, $pageCode) as $objUser) {
