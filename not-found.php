@@ -5,6 +5,9 @@ include("in_www.php");
 
 include("in_idiom.php");
 
+$idiomaTxt = "en";
+include_once 'literales/idioma_'.$idiomaTxt.'.php';
+
 header("HTTP/1.0 404 Not Found");
 header("Status: 404 Not Found");
 ?>

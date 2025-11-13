@@ -20,9 +20,12 @@ if (!isset($_SESSION["sesIduser"]) || $_SESSION["sesIduser"]=="" || $_SESSION["s
 	die();
 }
 
+$idiomaURL = "";
 $idiomaTxt = $_SESSION["sesIdmLocale"];
 if ($idiomaTxt == "") {
 	$idiomaTxt = "es";
+} else {
+	$idiomaURL = "/".$idiomaTxt;
 }
 include_once 'literales/idioma_'.$idiomaTxt.'.php';
 
@@ -56,7 +59,25 @@ if ($accion == "save"){
 				$mensaje1=sprintf(litCambiosOk);
 				$classMsgBox = "msgBox bgGreen txtBlack";
 				if ($enviarMails) { 
-					enviarMailAlert($mailAdmin, $mailAlertasAdmin, "", $nombreGeneral." : ".$_SESSION["sesName"]." ha metido un nuevo peso", "Nuevo peso");
+					//enviarMailAlert($mailAdmin, $mailAlertasAdmin, "", $nombreGeneral." : ".$_SESSION["sesName"]." ha metido un nuevo peso", "Nuevo peso");
+					$grupoUser = new GrupoUser();
+					$grupoUser->setGusIduser($_SESSION["sesIduser"]);
+					foreach ($grupoUser->getEnvioNotificacionesPeso($conMsi, $pageCode) as $objUser) {
+						$subjectUser = $nombreGeneral.": ".sprintf(litMailAvisoDatoSubject, $_SESSION["sesName"], $objUser["gruNombre"]);
+						$bodyUser = sprintf(litEstimado, $objUser["useName"])."\n\n".
+								sprintf(litMailAvisoDatoBody01, $_SESSION["sesName"], $objUser["gruNombre"])."\n\n".
+								sprintf(litMailAvisoDatoBody02)."\n".
+								$accesoHttp.$rootURL."/mis-grupos-estadisticas/".$objUser["gruIdgrupo"]."\n\n".
+								"\n\n".
+								"\n\n".
+								sprintf(litMailAvisoDatoBody03)."\n".
+								$accesoHttp.$rootURL."/stopNotif/".$objUser["gruIdgrupo"]."/".$objUser["useIduser"]."/".$objUser["gusAvisosCode"]."\n\n".
+								sprintf(litMailAvisoDatoBody04)."\n".
+								$accesoHttp.$rootURL."/stopNotifAll/".$objUser["useIduser"]."/".$objUser["useAvisosCode"]."\n\n".
+								sprintf(litAtentamente)."\n".
+								$nombreGeneral.": ".$accesoHttp.$rootURL.$idiomaURL;
+						enviarMailSMTP($mailAdmin, $objUser["useMail"], "", "", $subjectUser, $bodyUser, $objUser["useIduser"]);
+					} 
 				}
 				header("Location: /mis-pesos");
 				die();

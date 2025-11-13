@@ -188,7 +188,7 @@ class GrupoAccion {
 		$sql = "SELECT SUM(GAC_VALOR) AS TOTAL_VALOR
 				FROM ".$this->tbl."
 				WHERE GAC_IDGRUPO = ".mysqli_real_escape_string($conMsi, $this->gacIdgrupo);
-		echo $sql;
+
 		if(!$result = $conMsi->query($sql)){ $error = true; rolLog("$pageCode> GAC-SQL-07", $sql." -> ".$conMsi->error, 3);}
 		$row = $result->fetch_assoc();
 		$totalValor = $row["TOTAL_VALOR"];
@@ -202,7 +202,7 @@ class GrupoAccion {
 				FROM ".$this->tbl."
 				WHERE GAC_IDGRUPO = ".mysqli_real_escape_string($conMsi, $this->gacIdgrupo)."
 				  AND GAC_IDACCION IN (".$listaRealizados.")";
-		echo $sql;
+
 		if(!$result = $conMsi->query($sql)){ $error = true; rolLog("$pageCode> GAC-SQL-08", $sql." -> ".$conMsi->error, 3);}
 		$row = $result->fetch_assoc();
 		$valorRealizado = $row["VALOR_REALIZADO"];

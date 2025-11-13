@@ -71,6 +71,7 @@
 				$_SESSION["sesName"] = $user->getUseName();
 				$_SESSION["sesLastname"] = $user->getUseLastname();
 				$_SESSION["sesMail"] = $user->getUseMail();
+				$_SESSION["sesAvisosMail"] = $user->getUseAvisosMail();
 
 				$unidad = new Unidad();
 				$unidad->setUniIdunidad($user->getUseIdunidad());

@@ -311,7 +311,7 @@
 																					<span><?php if ($objGrupo->getEsAdmin() == "1") {echo sprintf(litGestionarAcciones);} else {echo sprintf(litVerAcciones);}?></span>
 																				</button>
 																	<?php } ?>
-																	<button class="botonTabla" onClick="window.location.href='/otros-mis-grupos-estadisticas.php?idGrupo=<?=$objGrupo->getGruIdgrupo()?>';">
+																	<button class="botonTabla" onClick="window.location.href='/otros-mis-grupos-estadisticas/<?=$objGrupo->getGruIdgrupo()?>';">
 																		<img src="/images/stats.gif" class="imageButton">
 																		<span><?=sprintf(litEstadisticas)?></span>
 																	</button>

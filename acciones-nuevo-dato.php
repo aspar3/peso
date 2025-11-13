@@ -22,9 +22,12 @@ if (!isset($_SESSION["sesIduser"]) || $_SESSION["sesIduser"]=="" || $_SESSION["s
 	die();
 }
 
+$idiomaURL = "";
 $idiomaTxt = $_SESSION["sesIdmLocale"];
 if ($idiomaTxt == "") {
 	$idiomaTxt = "es";
+} else {
+	$idiomaURL = "/".$idiomaTxt;
 }
 include_once 'literales/idioma_'.$idiomaTxt.'.php';
 
@@ -101,7 +104,26 @@ if ($accion == "save"){
 				$mensaje1=sprintf(litCambiosOk);
 				$classMsgBox = "msgBox bgGreen txtBlack";
  				if ($enviarMails) { 
-					enviarMailAlert($mailAdmin, $mailAlertasAdmin, "", $nombreGeneral." : ".$_SESSION["sesName"]." -> Nuevo dato para ".$grupo->getGruNombre(), "Se ha metido un nuevo dato para ".$grupo->getGruNombre());
+					//enviarMailAlert($mailAdmin, $mailAlertasAdmin, "", $nombreGeneral." : ".$_SESSION["sesName"]." -> Nuevo dato para ".$grupo->getGruNombre(), "Se ha metido un nuevo dato para ".$grupo->getGruNombre());
+					$grupoUser = new GrupoUser();
+ 					$grupoUser->setGusIdgrupo($grupo->getGruIdgrupo());
+ 					$grupoUser->setGusIduser($_SESSION["sesIduser"]);
+ 					foreach ($grupoUser->getEnvioNotificacionesOtros($conMsi, $pageCode) as $objUser) {
+ 						$subjectUser = $nombreGeneral.": ".sprintf(litMailAvisoDatoSubject, $_SESSION["sesName"], $grupo->getGruNombre());
+ 						$bodyUser = sprintf(litEstimado, $objUser["useName"])."\n\n".
+ 	 						sprintf(litMailAvisoDatoBody01, $_SESSION["sesName"], $grupo->getGruNombre())."\n\n".
+ 	 						sprintf(litMailAvisoDatoBody02)."\n".
+ 	 						$accesoHttp.$rootURL."/otros-mis-grupos-estadisticas/".$grupo->getGruIdgrupo()."\n\n".
+ 	 						"\n\n".
+ 	 						"\n\n".
+ 	 						sprintf(litMailAvisoDatoBody03)."\n".
+ 	 						$accesoHttp.$rootURL."/stopNotif/".$grupo->getGruIdgrupo()."/".$objUser["useIduser"]."/".$objUser["gusAvisosCode"]."\n\n".
+ 	 						sprintf(litMailAvisoDatoBody04)."\n".
+ 	 						$accesoHttp.$rootURL."/stopNotifAll/".$objUser["useIduser"]."/".$objUser["useAvisosCode"]."\n\n".
+ 	 						sprintf(litAtentamente)."\n".
+ 	 						$nombreGeneral.": ".$accesoHttp.$rootURL.$idiomaURL;
+ 	 					enviarMailSMTP($mailAdmin, $objUser["useMail"], "", "", $subjectUser, $bodyUser, $objUser["useIduser"]);
+ 					} 
  				}
 				header("Location: /otros-mis-datos.php?idGrupo=".$idGrupo);
 				die();

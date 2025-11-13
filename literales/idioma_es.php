@@ -235,4 +235,16 @@ define("litBienvenido12", 'También podrá crear retos basados en acciones concr
 define("litRetosPersonalizados", 'Retos personalizados');
 define("litRetosPersonalizados02", 'Elija esta opción para cualquier otro tipo de reto que se pueda medir numéricamente o mediante una respuesta personalizada (por ejemplo, “¿Ha cumplido con su objetivo hoy?”). Usted decide qué valor otorga puntos y cómo se mide el progreso.');
 define("litTotal", 'Total');
+define("litMetodoNoSoportado", 'Método no soportado');
+define("litDeseoAvisosGeneralSi", 'Poder elegir los grupos de los cuales quiero recibir notificaciones cuando alguien meta un nuevo dato.');
+define("litDeseoAvisosGeneralNo", 'No recibir ninguna notificación de ninguno de mis grupos cuando alguien introduzca un nuevo dato.');
+define("litDeseoAvisosGrupo", 'Deseo recibir una notificación cuando alguien de este grupo introduzca un nuevo dato.');
+define("litRecibirNotificaciones", 'Recibir notificaciones');
+define("litMailAvisoDatoSubject", 'Nuevo dato de %1$s para el reto %2$s');
+define("litMailAvisoDatoBody01", '%1$s ha introducido un nuevo dato en el reto %2$s.');
+define("litMailAvisoDatoBody02", 'Pulsa aquí si quieres ver las estadísticas:');
+define("litMailAvisoDatoBody03", 'Pulsa aquí para dejar de recibir notificaciones de ESTE grupo:');
+define("litMailAvisoDatoBody04", 'Pulsa aquí para dejar de recibir notificaciones de TODOS los grupos:');
+define("litNotifNoAll", 'Ya no recibirá ninguna notificacion de nuevos datos en ningún grupo.');
+define("litNotifNo", 'Ya no recibirá ninguna notificacion de nuevos datos en el grupo seleccionado.');
 ?>

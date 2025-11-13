@@ -40,6 +40,7 @@ RewriteRule ^my-profile$ /my-profile.php [L]
 RewriteRule ^sign-ajax$ /sign-ajax.php [L]
 RewriteRule ^mis-grupos$ /mis-grupos.php [L]
 RewriteRule ^mis-grupos-miembros$ /mis-grupos-miembros.php [L]
+RewriteRule ^mis-grupos-estadisticas/([0-9]+)$ /mis-grupos-estadisticas.php?idGrupo=$1 [L]
 RewriteRule ^mis-grupos-estadisticas$ /mis-grupos-estadisticas.php [L]
 RewriteRule ^nuevo-miembro$ /nuevo-miembro.php [L]
 RewriteRule ^nuevo-grupo$ /nuevo-grupo.php [L]
@@ -51,5 +52,9 @@ RewriteRule ^cron-task/en$ /cron-task.php?idioma=en [L]
 RewriteRule ^cron-task$ /cron-task.php [L]
 RewriteRule ^otros-nuevo-dato/([0-9]+)$ /otros-nuevo-dato.php?idGrupo=$1 [L]
 RewriteRule ^acciones-nuevo-dato/([0-9]+)$ /acciones-nuevo-dato.php?idGrupo=$1 [L]
+RewriteRule ^otros-mis-grupos-estadisticas/([0-9]+)$ /otros-mis-grupos-estadisticas.php?idGrupo=$1 [L]
+RewriteRule ^stopNotif/([0-9]+)/([0-9]+)/([A-Za-z0-9]+)$ /stopNotif.php?idGrupo=$1&idUser=$2&code=$3 [L]
+RewriteRule ^stopNotifAll/([0-9]+)/([A-Za-z0-9]+)$ /stopNotif.php?idUser=$1&code=$2 [L]
+
 </IfModule>
 

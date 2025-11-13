@@ -16,6 +16,8 @@ class GrupoUser {
 	private $gusUsucre;
 	private $gusVerifyCode;
 	private $gusAvisoRetraso;
+	private $gusAvisosMail;
+	private $gusAvisosCode;
 	
 	private $useName;
 	private $useLastname;
@@ -108,15 +110,32 @@ class GrupoUser {
 	public function setPesoMedio($pesoMedio) {
 		$this->pesoMedio = $pesoMedio;
 	}
-
+	
 	public function getGusAvisoRetraso() {
 		return $this->gusAvisoRetraso;
 	}
-
+	
 	public function setGusAvisoRetraso($gusAvisoRetraso) {
 		$this->gusAvisoRetraso = $gusAvisoRetraso;
 	}
-
+	
+	public function getGusAvisosMail() {
+		return $this->gusAvisosMail;
+	}
+	
+	public function setGusAvisosMail($gusAvisosMail) {
+		$this->gusAvisosMail = $gusAvisosMail;
+	}
+	
+	public function getGusAvisosCode() {
+		return $this->gusAvisosCode;
+	}
+	
+	public function setGusAvisosCode($gusAvisosCode) {
+		$this->gusAvisosCode = $gusAvisosCode;
+	}
+	
+	
 	public function setOrder($valor) { $this->order = trim($valor); }
 	public function getOrder() { return $this->order; }
 	
@@ -132,6 +151,8 @@ class GrupoUser {
 		$this->gusUsucre		= $data["GUS_USUCRE"];
 		$this->gusVerifyCode	= $data["GUS_VERIFY_CODE"];
 		$this->gusAvisoRetraso	= $data["GUS_AVISO_RETRASO"];
+		$this->gusAvisosMail	= $data["GUS_AVISOS_MAIL"];
+		$this->gusAvisosCode	= $data["GUS_AVISOS_CODE"];
 		
 		$this->pesoMedio		= $data["peso_medio"];
 		
@@ -456,6 +477,22 @@ class GrupoUser {
 		}else return false;
 	}
 	
+	function updateAvisosMail($conMsi, $pageCode){
+		global $error;
+		
+		$sql = "UPDATE ".$this->tbl." SET
+					GUS_AVISOS_MAIL = '".mysqli_real_escape_string($conMsi, $this->gusAvisosMail)."',
+					GUS_AVISOS_CODE = '".mysqli_real_escape_string($conMsi, $this->gusAvisosCode)."'
+				WHERE GUS_IDGRUPO = ".mysqli_real_escape_string($conMsi, $this->gusIdgrupo)."
+				  AND GUS_IDUSER = ".mysqli_real_escape_string($conMsi, $this->gusIduser);
+
+		if(!$conMsi->query($sql)){ $error = true; rolLog("$pageCode> GUS-SQL-18", $sql." -> ".$conMsi->error, 3);}
+		
+		if (!$error){
+			return true;
+		}else return false;
+	}
+	
 	function getAmigos($conMsi, $pageCode){
 		global $error;
 		$list = array();
@@ -473,7 +510,7 @@ class GrupoUser {
 				  AND g1.GUS_IDUSER != ".mysqli_real_escape_string($conMsi, $this->gusIduser)."
 				ORDER BY USE_NAME, USE_LASTNAME";
 		
-		if(!$result = $conMsi->query($sql)){ $error = true; rolLog("$pageCode> GUS-SQL-18", $sql." -> ".$conMsi->error, 3);}
+		if(!$result = $conMsi->query($sql)){ $error = true; rolLog("$pageCode> GUS-SQL-19", $sql." -> ".$conMsi->error, 3);}
 		while ($row = $result->fetch_assoc()){
 			$obj = new GrupoUser();
 			$obj->setGrupoUser($row);
@@ -493,11 +530,84 @@ class GrupoUser {
 									   WHERE gu2.GUS_IDUSER = ".mysqli_real_escape_string($conMsi, $this->gusIduser).")
 				  AND GUS_IDUSER = ".mysqli_real_escape_string($conMsi, $iduserAmigo);
 		
-		if(!$result = $conMsi->query($sql)){ $error = true; rolLog("$pageCode> GUS-SQL-19", $sql." -> ".$conMsi->error, 3);}
+		if(!$result = $conMsi->query($sql)){ $error = true; rolLog("$pageCode> GUS-SQL-20", $sql." -> ".$conMsi->error, 3);}
 		if (mysqli_num_rows($result)==1){
 			return true;
 		}
 		return false;
 	}
+	
+	function getEnvioNotificacionesPeso($conMsi, $pageCode){
+		global $error;
+		$list = array();
+		
+		$sql = "SELECT USE_IDUSER useIduser,
+					   USE_NAME useName,
+					   USE_LASTNAME useLastname,
+					   USE_MAIL useMail,
+					   USE_AVISOS_CODE useAvisosCode,
+					   g1.GUS_AVISOS_CODE gusAvisosCode,
+					   GRU_IDGRUPO gruIdgrupo,
+					   GRU_NOMBRE gruNombre
+				FROM ".$this->tbl." g1
+					JOIN ".$this->tblUser." ON g1.GUS_IDUSER = USE_IDUSER
+					JOIN ".$this->tblGrupo." ON g1.GUS_IDGRUPO = GRU_IDGRUPO
+				WHERE g1.GUS_IDGRUPO IN (SELECT GUS_IDGRUPO FROM GRUPO_USER g2 WHERE g2.GUS_IDUSER=".mysqli_real_escape_string($conMsi, $this->gusIduser).")
+				  AND GRU_TIPO = 1
+				  AND USE_AVISOS_MAIL = 'S'
+				  AND g1.GUS_AVISOS_MAIL = 'S'
+				  AND USE_IDUSER != ".mysqli_real_escape_string($conMsi, $this->gusIduser)."
+				  AND USE_IDUSER != 14";
+
+		if(!$result = $conMsi->query($sql)){ $error = true; rolLog("$pageCode> GUS-SQL-21", $sql." -> ".$conMsi->error, 3);}
+		while ($row = $result->fetch_assoc()){
+			array_push($list, $row);
+		}
+		return $list;
+	}
+	
+	function getEnvioNotificacionesOtros($conMsi, $pageCode){
+		global $error;
+		$list = array();
+		
+		$sql = "SELECT USE_IDUSER useIduser,
+					   USE_NAME useName,
+					   USE_LASTNAME useLastname,
+					   USE_MAIL useMail,
+					   USE_AVISOS_CODE useAvisosCode,
+					   GUS_AVISOS_CODE gusAvisosCode
+				FROM ".$this->tbl."
+					JOIN ".$this->tblUser." ON GUS_IDUSER = USE_IDUSER
+					JOIN ".$this->tblGrupo." ON GUS_IDGRUPO = GRU_IDGRUPO
+				WHERE GUS_IDGRUPO = ".mysqli_real_escape_string($conMsi, $this->gusIdgrupo)."
+				  AND GRU_TIPO != 1
+				  AND USE_AVISOS_MAIL = 'S'
+				  AND GUS_AVISOS_MAIL = 'S'
+				  AND USE_IDUSER != ".mysqli_real_escape_string($conMsi, $this->gusIduser)."
+				  AND USE_IDUSER != 14";
+		
+		if(!$result = $conMsi->query($sql)){ $error = true; rolLog("$pageCode> GUS-SQL-22", $sql." -> ".$conMsi->error, 3);}
+		while ($row = $result->fetch_assoc()){
+			array_push($list, $row);
+		}
+		return $list;
+	}
+	
+	function desactivarNotifOne($conMsi, $pageCode){
+		global $error;
+		
+		$sql = "UPDATE ".$this->tbl." SET
+						GUS_AVISOS_MAIL = 'N',
+						GUS_AVISOS_CODE = null
+				WHERE GUS_IDGRUPO = ".mysqli_real_escape_string($conMsi, $this->gusIdgrupo)."
+				  AND GUS_IDUSER = ".mysqli_real_escape_string($conMsi, $this->gusIduser)."
+				  AND GUS_AVISOS_CODE = '".mysqli_real_escape_string($conMsi, $this->gusAvisosCode)."'";
+		if(!$conMsi->query($sql)){ $error = true; rolLog("$pageCode> USE-SQL-26", $sql." -> ".$conMsi->error, 3);}
+		
+		if (mysqli_affected_rows($conMsi)==1)
+			return true;
+			else return false;
+	}
+	
 }
 ?>

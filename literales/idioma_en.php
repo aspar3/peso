@@ -236,4 +236,16 @@ define("litBienvenido12", 'You can also create challenges based on specific acti
 define("litRetosPersonalizados", 'Custom challenges');
 define("litRetosPersonalizados02", 'Choose this option for any other type of challenge that can be measured numerically or through a personalized response (for example, “Did you meet your goal today?”). You decide what value earns points and how progress is measured.');
 define("litTotal", 'Total');
+define("litMetodoNoSoportado", 'Unsupported method');
+define("litDeseoAvisosGeneralSi", 'Be able to choose the groups from which I want to receive notifications when someone enters new data.');
+define("litDeseoAvisosGeneralNo", 'Do not receive any notification from any of my groups when someone enters new data.');
+define("litDeseoAvisosGrupo", 'I want to receive a notification when someone from this group enters new data.');
+define("litRecibirNotificaciones", 'Receive notifications');
+define("litMailAvisoDatoSubject", 'New data from %1$s for challenge %2$s');
+define("litMailAvisoDatoBody01", '%1$s has entered new data in challenge %2$s.');
+define("litMailAvisoDatoBody02", 'Click here if you want to see the statistics:');
+define("litMailAvisoDatoBody03", 'Click here to stop receiving notifications from THIS group:');
+define("litMailAvisoDatoBody04", 'Click here to stop receiving notifications from ALL groups:');
+define("litNotifNoAll", 'You will no longer receive any notifications of new data in any group.');
+define("litNotifNo", 'You will no longer receive notifications of new data in the selected group.');
 ?>

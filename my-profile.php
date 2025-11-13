@@ -59,6 +59,12 @@ if ($accion == "save"){
 	$user->setUseIdidioma($_POST["ididioma"]);
 	$user->setUseIdunidad($_POST["idunidad"]);
 	$user->setUseMostrarPeso($_POST["mostrarPeso"]);
+	if ($_POST["avisosMailNo"] == "S") {
+		$user->setUseAvisosMail("N");
+	} else {
+		$user->setUseAvisosMail("S");
+		$user->setUseAvisosCode(User::getNewCode());
+	}
 	$user->setUsePassword($_POST["password"]);
 	
 	if ($user->checkMailAlreadyExists($conMsi, $pageCode, $user->getUseMail())){
@@ -73,6 +79,7 @@ if ($accion == "save"){
 			$_SESSION["sesName"] = $user->getUseName();
 			$_SESSION["sesLastname"] = $user->getUseLastname();
 			$_SESSION["sesMail"] = $user->getUseMail();
+			$_SESSION["sesAvisosMail"] = $user->getUseAvisosMail();
 			
 			$unidad = new Unidad();
 			$unidad->setUniIdunidad($user->getUseIdunidad());
@@ -127,6 +134,14 @@ if ($accion == "save"){
 					alert("<?=sprintf(litPaswwordKo)?>");
 					formulario.password2.focus();
 				} else formulario.submit();
+			}
+			
+			function checkChecks(form, campo) {
+				if (campo.name == "avisosMailSi") {
+					form.avisosMailNo.checked = false;
+				} else {
+					form.avisosMailSi.checked = false;
+				}
 			}
 		</script>
 	</head>
@@ -219,6 +234,21 @@ if ($accion == "save"){
 												<option <?=($user->getUseMostrarPeso() == "N"?" selected ":"")?> value="N"><?=sprintf(litNoPorcen)?></option>
 											</select>
 										</div>
+									</div>
+									<div>
+										<label class="desc"><?php echo sprintf(litRecibirNotificaciones)?>:</label>
+									</div>
+									<div class="checkbox">
+										<div>
+											<input type="checkbox" name="avisosMailSi" id="avisosMailSi" value="S" onclick="checkChecks(this.form, this)" <?=($user->getUseAvisosMail() == "S"?" checked ":"")?>>
+										</div>
+										<label class="descCheck" for="avisosMailSi"><?php echo sprintf(litDeseoAvisosGeneralSi)?></label>
+									</div>
+									<div class="checkbox">
+										<div>
+											<input type="checkbox" name="avisosMailNo" id="avisosMailNo" value="S" onclick="checkChecks(this.form, this)" <?=($user->getUseAvisosMail() == "N"?" checked ":"")?>>
+										</div>
+										<label class="descCheck" for="avisosMailNo"><?php echo sprintf(litDeseoAvisosGeneralNo)?></label>
 									</div>
 									<div>
 									    <label class="desc" id="title3" for="password"><?=sprintf(litPasswordNew)?></label>

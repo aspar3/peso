@@ -20,6 +20,8 @@ class User {
 	private $useIdidioma;
 	private $useIdunidad;
 	private $useMostrarPeso;
+	private $useAvisosMail;
+	private $useAvisosCode;
 	private $useAuthProvider;
 	private $useAuthUid;
 	private $usePassword;
@@ -59,15 +61,31 @@ class User {
 	public function getUseIdunidad() {
 		return $this->useIdunidad;
 	}
-
+	
 	public function getUseMostrarPeso() {
 		return $this->useMostrarPeso;
 	}
-
+	
 	public function setUseMostrarPeso($useMostrarPeso) {
 		$this->useMostrarPeso = $useMostrarPeso;
 	}
-
+	
+	public function getUseAvisosMail() {
+		return $this->useAvisosMail;
+	}
+	
+	public function setUseAvisosMail($useAvisosMail) {
+		$this->useAvisosMail = $useAvisosMail;
+	}
+	
+	public function getUseAvisosCode() {
+		return $this->useAvisosCode;
+	}
+	
+	public function setUseAvisosCode($useAvisosCode) {
+		$this->useAvisosCode = $useAvisosCode;
+	}
+	
 	public function getUseAuthProvider() {
 		return $this->useAuthProvider;
 	}
@@ -172,6 +190,8 @@ class User {
 		$this->useIdidioma		= $data["USE_IDIDIOMA"];
 		$this->useIdunidad		= $data["USE_IDUNIDAD"];
 		$this->useMostrarPeso	= $data["USE_MOSTRAR_PESO"];
+		$this->useAvisosMail	= $data["USE_AVISOS_MAIL"];
+		$this->useAvisosCode	= $data["USE_AVISOS_CODE"];
 		$this->usePicture		= $data["USE_PICTURE"];
 		$this->useVerifyCode	= $data["USE_VERIFY_CODE"];
 		$this->useIdstatus		= $data["USE_IDSTATUS"];
@@ -396,7 +416,7 @@ class User {
 	}
 	
 		
-	function getNewCode(){
+	static function getNewCode(){
 		$str = "ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz23456789";
 		$codValida = "";for($iVal=0;$iVal<15;$iVal++) {$codValida .= substr($str,rand(0,57),1);}
 		return $codValida;
@@ -425,6 +445,8 @@ class User {
 					USE_IDIDIOMA = ".mysqli_real_escape_string($conMsi, $this->useIdidioma).",
 					USE_IDUNIDAD = ".mysqli_real_escape_string($conMsi, $this->useIdunidad).",
 					USE_MOSTRAR_PESO = '".mysqli_real_escape_string($conMsi, $this->useMostrarPeso)."',
+					USE_AVISOS_MAIL = '".mysqli_real_escape_string($conMsi, $this->useAvisosMail)."',
+					USE_AVISOS_CODE = '".mysqli_real_escape_string($conMsi, $this->useAvisosCode)."',
 					".($this->usePassword!=""?"USE_PASSWORD = '".SHA1(mysqli_real_escape_string($conMsi, $this->usePassword))."',":"")."
 					USE_MAIL = '".mysqli_real_escape_string($conMsi, $this->useMail)."',
 					USE_IDSTATUS = 1
@@ -636,5 +658,21 @@ class User {
 		}
 		return $list;
 	}
+	
+	function desactivarNotifAll($conMsi, $pageCode){
+		global $error;
+		
+		$sql = "UPDATE ".$this->userTbl." SET 
+						USE_AVISOS_MAIL = 'N',
+						USE_AVISOS_CODE = null
+				WHERE USE_IDUSER = ".mysqli_real_escape_string($conMsi, $this->useIduser)."
+				  AND USE_AVISOS_CODE = '".mysqli_real_escape_string($conMsi, $this->useAvisosCode)."'";
+		if(!$conMsi->query($sql)){ $error = true; rolLog("$pageCode> USE-SQL-26", $sql." -> ".$conMsi->error, 3);}
+		
+		if (mysqli_affected_rows($conMsi)==1)
+			return true;
+			else return false;
+	}
+	
 }
 ?>
