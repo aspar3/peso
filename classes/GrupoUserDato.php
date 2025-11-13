@@ -288,7 +288,8 @@ class GrupoUserDato {
 		*/
 		
 		$sql = "SELECT DAYOFWEEK(GUD_FECHA) AS dia_semana,
-					   ROUND(AVG(GUD_DATO), 2) AS media
+					   ROUND(AVG(GUD_DATO), 2) AS media,
+					   ROUND(SUM(GUD_DATO), 2) AS suma
 				FROM ".$this->tbl."
 					JOIN ".$this->tblGrupo." ON GRU_IDGRUPO = GUD_IDGRUPO
 				WHERE GUD_FECHA >= GRU_FECINI
@@ -300,7 +301,7 @@ class GrupoUserDato {
 
 		if(!$result = $conMsi->query($sql)){ $error = true; rolLog("$pageCode> GUD-SQL-09", $sql." -> ".$conMsi->error, 3);}
 		while ($row = $result->fetch_assoc()) {
-			$resultado[$row['dia_semana']] = $row['media'];
+			$resultado[$row['dia_semana']] = ["media" => $row['media'], "suma" => $row['suma']];
 		}
 		return $resultado;
 	}

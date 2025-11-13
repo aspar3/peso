@@ -160,7 +160,7 @@
 									<tbody>
 										<?php
 											foreach ($users as $objUser){
-												if (count($objUser[3]) > 0) {
+												//if (count($objUser[3]) > 0) {
 													$valorAcumulado = 0;
 													foreach ($days as $day) {
 														if ($objUser[3][$day] != "") {
@@ -173,8 +173,8 @@
 														<td class="number"><?php echo $valorAcumulado?></td>
 													</tr>
 										<?php
-											 		}
-												}
+												//}
+											}
 										?>
 									</tbody>
 								</table>
@@ -187,20 +187,31 @@
 									<tbody>
 										<?php
 											foreach ($users as $objUser){
-												if (count($objUser[3]) > 0) {
+												//if (count($objUser[3]) > 0) {
 													$valorTotal = 0;
 													foreach ($objUser[3] as $valor) {
-														$valorTotal += $valor;
+														if ($grupo->getGruIdrespuesta() != 1) {
+															$valorTotal += $valor;
+														} else {
+															$valorTotal += $valor;
+														}
 													}
-													$media = $valorTotal / count($objUser[3]);
+													$media = 0;
+													if (is_array($objUser[3]) && count($objUser[3]) > 0) {
+														if ($grupo->getGruIdrespuesta() != 1) {
+															$media = $valorTotal / count($days);
+														} else {
+															$media = $valorTotal / count($objUser[3]);
+														}
+													}
 										?>
 													<tr>
 														<td><?php echo $objUser[1]?></td>
 														<td class="number"><?php echo Funciones::formatNum2dec($media)?></td>
 													</tr>
 										<?php
-											 		}
-												}
+											 	//}
+											}
 										?>
 									</tbody>
 								</table>
@@ -308,7 +319,13 @@
 						        	$g1Data = "";
 						        	$g1Coment = "";
 						        	foreach ($days as $day) {
-						        		$g1Data.= str_replace(",", ".", $objUser[3][$day]).",";
+						        		$dato = $objUser[3][$day];
+						        		if ($grupo->getGruIdrespuesta() != 1) {
+						        			if ($dato == "") {
+						        				$dato = 0;
+						        			}
+						        		}
+						        		$g1Data.= str_replace(",", ".", $dato).",";
 						        		$g1Coment.= "'".str_replace("'", " ", $objUser[4][$day])."',";
 						        	}
 						        	if ($g1Data !== "") { $g1Data = substr($g1Data, 0, -1);}
@@ -353,7 +370,13 @@
 								        	foreach ($objUser[3] as $valor) {
 								        		$valorTotal += $valor;
 								        	}
-								        	$media = $valorTotal / count($objUser[3]);
+								        	if (is_array($objUser[3]) && count($objUser[3]) > 0) {
+								        		if ($grupo->getGruIdrespuesta() != 1) {
+								        			$media = $valorTotal / count($days);
+								        		} else {
+								        			$media = $valorTotal / count($objUser[3]);
+								        		}
+								        	}								        	
 								?>
 									          media<?=$objUser[0]?>: {
 									            type: 'line',
@@ -404,19 +427,18 @@
 							        foreach ($users as $objUser){
 							        	if (count($objUser[3]) > 0) {
 								        	$grupoUserDato->setGudIduser($objUser[0]);
-								        	$datosPorDia = [];
-								        	if ($grupo->getGruIdrespuesta() == 1) {
-								        		$datosPorDia = $grupoUserDato->getDatosPorUserDiaDeLaSemanaRespuesta1($conMsi, $pageCode);
-								        	} else {
-								        		$datosPorDia = $grupoUserDato->getDatosPorUserDiaDeLaSemanaRespuesta2y3($conMsi, $pageCode);
+								        	$datosPorDia = $grupoUserDato->getDatosPorUserDiaDeLaSemana($conMsi, $pageCode);
+								        	$datoCoger = "media";
+								        	if ($grupo->getGruIdrespuesta() != 1) {
+								        		$datoCoger = "suma";
 								        	}
-								        	$g1Data = ($datosPorDia[2]??0).",".
-										        	($datosPorDia[3]??0).",".
-										        	($datosPorDia[4]??0).",".
-										        	($datosPorDia[5]??0).",".
-										        	($datosPorDia[6]??0).",".
-										        	($datosPorDia[7]??0).",".
-										        	($datosPorDia[1]??0);
+								        	$g1Data = ($datosPorDia[2][$datoCoger]??0).",".
+										        	($datosPorDia[3][$datoCoger]??0).",".
+										        	($datosPorDia[4][$datoCoger]??0).",".
+										        	($datosPorDia[5][$datoCoger]??0).",".
+										        	($datosPorDia[6][$datoCoger]??0).",".
+										        	($datosPorDia[7][$datoCoger]??0).",".
+										        	($datosPorDia[1][$datoCoger]??0);
 						        ?>
 							        		{
 								            label: '<?=$objUser[1]?>',
