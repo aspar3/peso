@@ -152,8 +152,10 @@ define("litEstadisticas", 'Estadísticas');
 define("litEstadGrupo", 'Estadísticas del grupo %1$s');
 define("litEstadGrupoAcum", 'Gráfico acumulado del grupo %1$s');
 define("litEstadGrupoReal", 'Datos individuales del grupo %1$s');
-define("litMedia", 'Media %1$s');
+define("litMedia", 'Media');
+define("litMediaParam", 'Media %1$s');
 define("litDiario", 'Diario');
+define("litDiaria", 'Diaria');
 define("litSemanal", 'Semanal');
 define("litMensual", 'Mensual');
 define("litAdministrador", 'Administrador');
@@ -232,4 +234,5 @@ define("litBienvenido11", 'Retos de hábitos y tareas');
 define("litBienvenido12", 'También podrá crear retos basados en acciones concretas que desee realizar de forma periódica —diaria, semanal o mensual—. Una vez definido el reto, podrá acceder a la plataforma para marcar las tareas que haya cumplido.');
 define("litRetosPersonalizados", 'Retos personalizados');
 define("litRetosPersonalizados02", 'Elija esta opción para cualquier otro tipo de reto que se pueda medir numéricamente o mediante una respuesta personalizada (por ejemplo, “¿Ha cumplido con su objetivo hoy?”). Usted decide qué valor otorga puntos y cómo se mide el progreso.');
+define("litTotal", 'Total');
 ?>

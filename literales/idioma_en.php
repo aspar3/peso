@@ -153,7 +153,9 @@ define("litEstadisticas", 'Statistics');
 define("litEstadGrupo", 'Group %1$s statistics');
 define("litEstadGrupoAcum", 'Cumulative graph of group %1$s');
 define("litEstadGrupoReal", 'Individual data of group %1$s');
-define("litMedia", 'Average %1$s');
+define("litMedia", 'Average');
+define("litMediaParam", '%1$s\'s average');
+define("litDiaria", 'Daily');
 define("litDiario", 'Daily');
 define("litSemanal", 'Weekly');
 define("litMensual", 'Monthly');
@@ -233,4 +235,5 @@ define("litBienvenido11", 'Habit and task challenges');
 define("litBienvenido12", 'You can also create challenges based on specific actions you wish to perform periodically—daily, weekly, or monthly. Once the challenge is defined, you can access the platform to mark the tasks you have completed.');
 define("litRetosPersonalizados", 'Custom challenges');
 define("litRetosPersonalizados02", 'Choose this option for any other type of challenge that can be measured numerically or through a personalized response (for example, “Did you meet your goal today?”). You decide what value earns points and how progress is measured.');
+define("litTotal", 'Total');
 ?>

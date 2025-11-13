@@ -256,7 +256,7 @@
 						            borderColor: 'rgba(<?=$color1?>, <?=$color2?>, <?=$color3?>, 1)',
 						            borderWidth: 1,
 						            label: {
-						              content: '<?=sprintf(litMedia, "")?>',
+						              content: '<?=sprintf(litMedia)?>',
 						              enabled: false,
 						              position: 'start'
 						            }

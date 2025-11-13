@@ -156,6 +156,7 @@
 							    	<span class="tituloGraph"><?=sprintf(litEstadGrupoAcum, $grupo->getGruNombre())?></span>
 									<canvas id="myChart1" width="870" height="435" style="display: block; width: 870px; height: 435px;"></canvas>
 								</div>
+								<span class="txtBold"><?=sprintf(litTotal)?></span>
 								<table class="gen">
 									<tbody>
 										<?php
@@ -183,6 +184,15 @@
 									<span class="tituloGraph"><?=sprintf(litEstadGrupoReal, $grupo->getGruNombre())?></span>
 									<canvas id="myChart2" width="870" height="435" style="display: block; width: 870px; height: 435px;"></canvas>
 								</div>
+								<?php
+									$textoMedia = sprintf(litDiaria);
+									if ($grupo->getGruIdtiempo() == "2") {
+										$textoMedia = sprintf(litSemanal);
+									} else if ($grupo->getGruIdtiempo() == "3") {
+										$textoMedia = sprintf(litMensual);
+									}
+								?>
+								<span class="txtBold"><?=sprintf(litMediaParam, $textoMedia)?></span>
 								<table class="gen">
 									<tbody>
 										<?php
@@ -385,7 +395,7 @@
 									            borderColor: 'rgba(<?=$colores[$indiceUser][0]?>, <?=$colores[$indiceUser][1]?>, <?=$colores[$indiceUser][2]?>, 1)',
 									            borderWidth: 1,
 									            label: {
-									              content: '<?=sprintf(litMedia, $objUser[1])?>',
+									              content: '<?=sprintf(litMediaParam, $objUser[1])?>',
 									              enabled: false,
 									              position: 'start'
 									            }
