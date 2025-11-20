@@ -146,6 +146,34 @@
 							    	<span class="tituloGraph"><?=sprintf(litEvolucionPorcentual)?></span>
 									<canvas id="myChart1" width="870" height="435" style="display: block; width: 870px; height: 435px;"></canvas>
 								</div>
+								<span class="txtBold"><?=sprintf(litEvolucionActual)?></span>
+								<table class="gen">
+									<tbody>
+										<?php
+											foreach ($users as $objUser){
+												if (count($objUser[3]) > 0) {
+													$valorFinal = 0;
+													$pesoInicial = str_replace(",", ".", $objUser[2]);
+													$pesoUltimo = str_replace(",", ".", $objUser[2]);
+													foreach ($objUser[3] as $objPeso){
+														if ($objPeso != "") {
+															$pesoUltimo = str_replace(",", ".", $objPeso);
+														}
+													}
+													if ($pesoInicial != "" && $pesoUltimo != "") {
+														$valorFinal = (-1) * (100 - ($pesoUltimo * 100 / $pesoInicial));
+													}
+										?>
+													<tr>
+														<td><?php echo $objUser[1]?></td>
+														<td class="number"><?php echo Funciones::formatNum2dec($valorFinal)?>%</td>
+													</tr>
+										<?php
+												}
+											}
+										?>
+									</tbody>
+								</table>
 								<?php if ($grupo->getGruMostrarPeso() == "S") {?>
 											<div class="graph100">
 												<br>
@@ -157,6 +185,34 @@
 										    	<span class="tituloGraph"><?=sprintf(litEvolucionCambiosPeso)?></span>
 												<canvas id="myChart3" width="870" height="435" style="display: block; width: 870px; height: 435px;"></canvas>
 											</div>
+											<span class="txtBold"><?=sprintf(litEvolucionActual)?></span>
+											<table class="gen">
+												<tbody>
+													<?php
+														foreach ($users as $objUser){
+															if (count($objUser[3]) > 0) {
+																$valorFinal = 0;
+																$pesoInicial = str_replace(",", ".", $objUser[2]);
+																$pesoUltimo = str_replace(",", ".", $objUser[2]);
+																foreach ($objUser[3] as $objPeso){
+																	if ($objPeso != "") {
+																		$pesoUltimo = str_replace(",", ".", $objPeso);
+																	}
+																}
+																if ($pesoInicial != "" && $pesoUltimo != "") {
+																	$valorFinal = $pesoUltimo - $pesoInicial;
+																}
+													?>
+																<tr>
+																	<td><?php echo $objUser[1]?></td>
+																	<td class="number"><?php echo Funciones::formatNum2dec($valorFinal)?> <?=$_SESSION["sesUniAbreviatura"]?></td>
+																</tr>
+													<?php
+															}
+														}
+													?>
+												</tbody>
+											</table>
 								<?php }?>
 								<div>
 							  		<br><input class="button" id="volver" name="volver" type="button" onclick="window.location.href='/mis-grupos'" value="<?=sprintf(litVolver)?>">

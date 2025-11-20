@@ -248,4 +248,5 @@ define("litMailAvisoDatoBody03", 'Click here to stop receiving notifications fro
 define("litMailAvisoDatoBody04", 'Click here to stop receiving notifications from ALL groups:');
 define("litNotifNoAll", 'You will no longer receive any notifications of new data in any group.');
 define("litNotifNo", 'You will no longer receive notifications of new data in the selected group.');
+define("litEvolucionActual", 'Current evolution');
 ?>

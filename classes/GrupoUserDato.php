@@ -305,5 +305,55 @@ class GrupoUserDato {
 		}
 		return $resultado;
 	}
+	
+	function getGrupoUsersDatosSemanal($conMsi, $pageCode){
+		global $error;
+		$list = array();
+		
+		$sql = "SELECT GUD_IDUSER iduser,
+					   AVG(GUD_DATO) AS peso_medio,
+					   YEARWEEK(GUD_FECHA, 1) AS semana,
+					   STR_TO_DATE(CONCAT(YEARWEEK(GUD_FECHA, 1), ' Monday'), '%X%V %W') AS lunes_semana,
+					   DATE_SUB(STR_TO_DATE(CONCAT(YEARWEEK(GUD_FECHA, 1), ' Monday'), '%X%V %W'), INTERVAL 1 WEEK) AS lunes_semana_anterior
+				FROM ".$this->tbl."
+					JOIN ".$this->tblGrupo." ON GRU_IDGRUPO = GUD_IDGRUPO
+					JOIN ".$this->tblGrupoUser." ON GUS_IDGRUPO = GUD_IDGRUPO AND GUS_IDUSER = GUD_IDUSER
+				WHERE GUD_IDGRUPO = ".mysqli_real_escape_string($conMsi, $this->gudIdgrupo)."
+				  AND GUD_FECHA >= GRU_FECINI
+				  AND (GUD_FECHA <= GRU_FECFIN OR GRU_FECFIN IS NULL)
+				  AND (GUS_VERIFY_CODE IS NULL OR GUS_VERIFY_CODE = '')
+				GROUP BY GUD_IDUSER, YEARWEEK(GUD_FECHA, 1)
+				ORDER BY GUD_IDUSER";
+		
+		if(!$result = $conMsi->query($sql)){ $error = true; rolLog("$pageCode> GUD-SQL-10", $sql." -> ".$conMsi->error, 3);}
+		while ($row = $result->fetch_assoc()){
+			array_push($list, $row);
+		}
+		return $list;
+	}
+
+	function getGrupoUsersDatosMensual($conMsi, $pageCode){
+		global $error;
+		$list = array();
+		
+		$sql = "SELECT GUD_IDUSER iduser,
+					   AVG(GUD_DATO) AS peso_medio,
+					   DATE_FORMAT(GUD_FECHA, '%m-%Y') AS mes
+				FROM ".$this->tbl."
+					JOIN ".$this->tblGrupo." ON GRU_IDGRUPO = GUD_IDGRUPO
+					JOIN ".$this->tblGrupoUser." ON GUS_IDGRUPO = GUD_IDGRUPO AND GUS_IDUSER = GUD_IDUSER
+				WHERE GUD_IDGRUPO = ".mysqli_real_escape_string($conMsi, $this->gudIdgrupo)."
+				  AND GUD_FECHA >= GRU_FECINI
+				  AND (GUD_FECHA <= GRU_FECFIN OR GRU_FECFIN IS NULL)
+				  AND (GUS_VERIFY_CODE IS NULL OR GUS_VERIFY_CODE = '')
+				GROUP BY GUD_IDUSER, DATE_FORMAT(GUD_FECHA, '%m-%Y')
+				ORDER BY GUD_IDUSER";
+		
+		if(!$result = $conMsi->query($sql)){ $error = true; rolLog("$pageCode> GUD-SQL-10", $sql." -> ".$conMsi->error, 3);}
+		while ($row = $result->fetch_assoc()){
+			array_push($list, $row);
+		}
+		return $list;
+	}
 }
 ?>

@@ -284,7 +284,7 @@ if ($accion == "save"){
 			<script src="/assets/js/main.js"></script>
 		
 		<?php include("in-footer.php");?>
-		<?php if ($idGrupo != "") {?>
+		<?php if ($idGrupo != "" && $idGud == "") {?>
 			<script type="text/javascript">
 				const now = new Date();
 				const yyyy = now.getFullYear();

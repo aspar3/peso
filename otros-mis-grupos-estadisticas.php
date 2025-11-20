@@ -14,6 +14,7 @@
 	include_once 'classes/Grupo.php';
 	include_once 'classes/GrupoUser.php';
 	include_once 'classes/GrupoUserDato.php';
+	include_once 'classes/Tiempo.php';
 	
 	if (!isset($_SESSION["sesIduser"]) || $_SESSION["sesIduser"]=="" || $_SESSION["sesStatus"]!=1){
 		//rolLog("$pageCode-01", "No session started or not a signedup user -> (".$_SESSION["sesIduser"].")", 1);
@@ -42,7 +43,12 @@
 	}
 	if ($grupo->getEsAdmin() == 1) {
 		$esAdmin = true;
-	}	
+	}
+	
+	$idtiempo = $_POST["idtiempo"];
+	if ($idtiempo == "") {
+		$idtiempo = "1";
+	}
 ?>
 <!DOCTYPE HTML>
 <html>
@@ -83,6 +89,22 @@
 										</header>
 										<div>
 											<div>
+												<form method="post">
+													<div>
+														<label class="desc" for="idtiempo">Agrupación:</label>
+														<div>
+															<select id="idtiempo" name="idtiempo" onchange="this.form.submit()">
+																<?php
+																$tiempo = new Tiempo();
+																foreach ($tiempo->getTiempos($conMsi, $pageCode) as $objTiempo) {
+																	echo "<option ".($objTiempo->getTieIdtiempo() == $idtiempo?"selected":"")." value = '".$objTiempo->getTieIdtiempo()."'>".constant($objTiempo->getTieNombre())."</option>";
+																}
+																?>
+															</select>
+														</div>
+													</div>
+												</form>
+												<br>
 										  		<?php
 											  		$grupoUser = new GrupoUser();
 											  		$grupoUser->setGusIdgrupo($idGrupo);
@@ -96,6 +118,7 @@
 											  		// 3) array tipo map con los datos, estilo $users[$fila][3]["una fecha"] te da el dato de esa fecha
 											  		// 4) array tipo map con los comentarios, estilo $users[$fila][4]["una fecha"] te da el comentario de esa fecha
 											  		$users = [];
+											  		$numeroDeDatosTotal = 0;
 											  		$fila = 0;
 											  		foreach ($grupoUser->getGrupoUsersTodos($conMsi, $pageCode) as $objGrupoUser){
 											  			$users[$fila][0] = $objGrupoUser->getGusIduser();
@@ -108,77 +131,125 @@
 										  			$labels = "";
 										  			$start = $grupo->getGruFecini();
 										  			$end   = $grupo->getGruFecfin();
-													$hoy = date('Y-m-d');
-													if ($end == "" || $end > $hoy) { $end = $hoy;}											  		
-													$days = Funciones::getDaysBetweenDates($start, $end);
-													foreach ($days as $day) {
-														$labels.= "'".Funciones::fechaFormateadaIdioma($day, $_SESSION["sesIdidioma"])."',";
-											  		}
-											  		if ($labels !== "") { $labels = substr($labels, 0, -1);}
+										  			$hoy = date('Y-m-d');
+										  			if ($end == "" || $end > $hoy) { $end = $hoy;}
+										  			
+										  			if ($idtiempo == "" || $idtiempo == "1") {
+														$days = Funciones::getDaysBetweenDates($start, $end);
+														$numeroDeDatosTotal = count($days);
+														foreach ($days as $day) {
+															$labels.= "'".Funciones::fechaFormateadaIdioma($day, $_SESSION["sesIdidioma"])."',";
+												  		}
+												  		
+												  		$grupoUserDia = new GrupoUserDato();
+												  		$grupoUserDia->setGudIdgrupo($grupo->getGruIdgrupo());
+												  		foreach ($grupoUserDia->getGrupoUsersDatos($conMsi, $pageCode) as $objUserDia) {
+												  			for ($fila = 0; $fila < count($users); $fila++) {
+												  				// echo "<br>".$objUserDia->getGudIduser()."  ".$users[$fila][0];
+												  				if ($objUserDia->getGudIduser() == $users[$fila][0]){
+												  					if ($users[$fila][2] == "" && $objUserDia->getPesoMedio() != "") {
+												  						$users[$fila][2] = $objUserDia->getPesoMedio();
+												  					}
+												  					// echo "<br>".$objUserDia->getGudFecha()."  ".$objUserDia->getPesoMedio();
+												  					//array_push($users[$fila][3][$objUserDia->getGudFecha()], $objUserDia->getPesoMedio());
+												  					$users[$fila][3][$objUserDia->getGudFecha()] = $objUserDia->getPesoMedio();
+												  					$users[$fila][4][$objUserDia->getGudFecha()] = $objUserDia->getGudComent();
+												  				}
+												  			}
+												  		}
+										  			} else if ($idtiempo == "2") {
+										  				$days = Funciones::getMondaysBetweenDates($start, $end);
+										  				$numeroDeDatosTotal = count($days);
+										  				foreach ($days as $day) {
+										  					$labels.= "'".Funciones::fechaFormateadaIdioma($day, $_SESSION["sesIdidioma"])."',";
+										  				}
+										  				
+										  				$grupoUserSemana = new GrupoUserDato();
+										  				$grupoUserSemana->setGudIdgrupo($grupo->getGruIdgrupo());
+										  				foreach ($grupoUserSemana->getGrupoUsersDatosSemanal($conMsi, $pageCode) as $objUserSemana) {
+										  					$numeroDeDatosTotal++;
+										  					for ($fila = 0; $fila < count($users); $fila++) {
+										  						// echo "<br>".$objUserSemana->getGudIduser()."  ".$users[$fila][0];
+										  						if ($objUserSemana["iduser"] == $users[$fila][0]){
+										  							if ($users[$fila][2] == "" && $objUserSemana["peso_medio"] != "") {
+										  								$users[$fila][2] = $objUserSemana["peso_medio"];
+										  							}
+										  							// echo "<br>".$objUserSemana->getGudFecha()."  ".$objUserSemana->getPesoMedio();
+										  							//array_push($users[$fila][3][$objUserSemana->getGudFecha()], $objUserSemana->getPesoMedio());
+										  							$users[$fila][3][$objUserSemana["lunes_semana_anterior"]] = $objUserSemana["peso_medio"];
+										  						}
+										  					}
+										  					
+										  				}
+										  			} else if ($idtiempo == "3") {
+										  				$days = Funciones::getMonthsBetweenDates($start, $end);
+										  				$numeroDeDatosTotal = count($days);
+										  				foreach ($days as $day) {
+										  					$labels.= "'".$day."',";
+										  				}
+										  				
+										  				$grupoUserMes = new GrupoUserDato();
+										  				$grupoUserMes->setGudIdgrupo($grupo->getGruIdgrupo());
+										  				foreach ($grupoUserMes->getGrupoUsersDatosMensual($conMsi, $pageCode) as $objUserMes) {
+										  					$numeroDeDatosTotal++;
+										  					for ($fila = 0; $fila < count($users); $fila++) {
+										  						// echo "<br>".$objUserMes->getGudIduser()."  ".$users[$fila][0];
+										  						if ($objUserMes["iduser"] == $users[$fila][0]){
+										  							if ($users[$fila][2] == "" && $objUserMes["peso_medio"] != "") {
+										  								$users[$fila][2] = $objUserMes["peso_medio"];
+										  							}
+										  							// echo "<br>".$objUserMes->getGudFecha()."  ".$objUserMes->getPesoMedio();
+										  							//array_push($users[$fila][3][$objUserMes->getGudFecha()], $objUserMes->getPesoMedio());
+										  							$users[$fila][3][$objUserMes["mes"]] = $objUserMes["peso_medio"];
+										  						}
+										  					}
+										  					
+										  				}
+										  			}
+										  			
+										  			if ($labels !== "") { $labels = substr($labels, 0, -1);}
 											  		
-											  		$grupoUserSemana = new GrupoUserDato();
-											  		$grupoUserSemana->setGudIdgrupo($grupo->getGruIdgrupo());
-											  		foreach ($grupoUserSemana->getGrupoUsersDatos($conMsi, $pageCode) as $objUserSemana) {
-											  			for ($fila = 0; $fila < count($users); $fila++) {
-// 											  				echo "<br>".$objUserSemana->getGudIduser()."  ".$users[$fila][0];
-											  				if ($objUserSemana->getGudIduser() == $users[$fila][0]){
-											  					if ($users[$fila][2] == "" && $objUserSemana->getPesoMedio() != "") {
-											  						$users[$fila][2] = $objUserSemana->getPesoMedio();
-											  					}
-// 											  					echo "<br>".$objUserSemana->getGudFecha()."  ".$objUserSemana->getPesoMedio();
-											  					//array_push($users[$fila][3][$objUserSemana->getGudFecha()], $objUserSemana->getPesoMedio());
-											  					$users[$fila][3][$objUserSemana->getGudFecha()] = $objUserSemana->getPesoMedio();
-											  					$users[$fila][4][$objUserSemana->getGudFecha()] = $objUserSemana->getGudComent();
-											  				}
-											  			}
-											  		}
-											  		
-// 											  		echo "<br><BR>";
-// 											  		Funciones::printArrayValues($users);
+ 											  		//echo "<br><BR>";
+ 											  		//Funciones::printArrayValues($users);
 										  		?>
 										    </div>
 										</div>
-										<form name="formulario" method="get">
-											<input type="hidden" name="accion" value="save"/>
-											<input type="hidden" name="idGrupo" value="<?=$idGrupo?>"/>
-											<input type="hidden" name="order" value="<?=$order?>"/>
-											<input type="hidden" name="asc" value="<?=$asc?>"/>
-										</form>
-										<form name="formularioBorrar" method="post">
-											<input type="hidden" name="accion" value="delete"/>
-											<input type="hidden" name="idUser" value="save"/>
-										</form>
 									</section>
 								</div>
 							</div>
 							<div class="graphs">
-							    <div class="graph100">
-							    	<span class="tituloGraph"><?=sprintf(litEstadGrupoAcum, $grupo->getGruNombre())?></span>
-									<canvas id="myChart1" width="870" height="435" style="display: block; width: 870px; height: 435px;"></canvas>
-								</div>
-								<span class="txtBold"><?=sprintf(litTotal)?></span>
-								<table class="gen">
-									<tbody>
-										<?php
-											foreach ($users as $objUser){
-												//if (count($objUser[3]) > 0) {
-													$valorAcumulado = 0;
-													foreach ($days as $day) {
-														if ($objUser[3][$day] != "") {
-															$valorAcumulado += $objUser[3][$day];
-														}
+								<?php if ($idtiempo == "" || $idtiempo == "1") {?>
+									    <div class="graph100">
+									    	<span class="tituloGraph"><?=sprintf(litEstadGrupoAcum, $grupo->getGruNombre())?></span>
+											<canvas id="myChart1" width="870" height="435" style="display: block; width: 870px; height: 435px;"></canvas>
+										</div>
+										<span class="txtBold"><?=sprintf(litTotal)?></span>
+										<table class="gen">
+											<tbody>
+												<?php
+													foreach ($users as $objUser){
+														//if (count($objUser[3]) > 0) {
+															$valorAcumulado = 0;
+															foreach ($days as $day) {
+																if ($objUser[3][$day] != "") {
+																	$valorAcumulado += $objUser[3][$day];
+																}
+															}
+															if ($valorAcumulado != 0) {
+												?>
+																<tr>
+																	<td><?php echo $objUser[1]?></td>
+																	<td class="number"><?php echo $valorAcumulado?></td>
+																</tr>
+												<?php
+															}
+														//}
 													}
-										?>
-													<tr>
-														<td><?php echo $objUser[1]?></td>
-														<td class="number"><?php echo $valorAcumulado?></td>
-													</tr>
-										<?php
-												//}
-											}
-										?>
-									</tbody>
-								</table>
+												?>
+											</tbody>
+										</table>
+								<?php }?>
+								
 								<div class="graph100">
 									<br>
 									<span class="tituloGraph"><?=sprintf(litEstadGrupoReal, $grupo->getGruNombre())?></span>
@@ -192,7 +263,7 @@
 										$textoMedia = sprintf(litMensual);
 									}
 								?>
-								<span class="txtBold"><?=sprintf(litMediaParam, $textoMedia)?></span>
+								<span class="txtBold"><?=sprintf(litMedia)?></span>
 								<table class="gen">
 									<tbody>
 										<?php
@@ -209,23 +280,25 @@
 													$media = 0;
 													if (is_array($objUser[3]) && count($objUser[3]) > 0) {
 														if ($grupo->getGruIdrespuesta() != 1) {
-															$media = $valorTotal / count($days);
+															$media = $valorTotal / $numeroDeDatosTotal;
 														} else {
 															$media = $valorTotal / count($objUser[3]);
 														}
 													}
+													if ($media != 0) {
 										?>
-													<tr>
-														<td><?php echo $objUser[1]?></td>
-														<td class="number"><?php echo Funciones::formatNum2dec($media)?></td>
-													</tr>
+														<tr>
+															<td><?php echo $objUser[1]?></td>
+															<td class="number"><?php echo Funciones::formatNum2dec($media)?></td>
+														</tr>
 										<?php
+													}
 											 	//}
 											}
 										?>
 									</tbody>
 								</table>
-								<?php if ($grupo->getGruIdtiempo() == "1") {?>
+								<?php if ($grupo->getGruIdtiempo() == "1" && ($idtiempo == "" || $idtiempo == "1")) {?>
 										<div class="graph100">
 											<br>
 											<span class="tituloGraph"><?=sprintf(litEstadPorDiaSemana, $grupo->getGruNombre())?></span>
@@ -265,57 +338,59 @@
 				}
 			?>
 			<script>
-			    var ctx1 = document.getElementById('myChart1').getContext('2d');
-				var myChart = new Chart(ctx1, {
-				    type: 'line',
-				    data: {
-				        labels: [<?=$labels?>],
-				        datasets: [
-				        <?php
-	        				$indiceUser = 0;
-					        foreach ($users as $objUser){
-					        	if (count($objUser[3]) > 0) {
-						        	$g1Data = "";
-						        	$valorAcumulado = 0;
-						        	foreach ($days as $day) {
-						        		if ($objUser[3][$day] != "") {
-						        			$valorAcumulado += $objUser[3][$day];
-						        			$g1Data.= str_replace(",", ".", $valorAcumulado).",";
-						        		} else {
-						        			$g1Data.= ", ";
-						        		}
-						        	}
-						        	if ($g1Data !== "") { $g1Data = substr($g1Data, 0, -1);}
-				        ?>
-					        		{
-						            label: '<?=$objUser[1]?>',
-						            data: [<?=$g1Data?>],
-						            <?=$graph2Config?>,
-						            borderColor: 'rgba(<?=$colores[$indiceUser][0]?>, <?=$colores[$indiceUser][1]?>, <?=$colores[$indiceUser][2]?>, 1)',
-						            backgroundColor: 'rgba(<?=$colores[$indiceUser][0]?>, <?=$colores[$indiceUser][1]?>, <?=$colores[$indiceUser][2]?>, 1)'
-						            }
-				        <?php 
-					        		if ($objUser !== end($users)) {
-							        	echo ", ";
+				<?php if ($idtiempo == "" || $idtiempo == "1") {?>
+					    var ctx1 = document.getElementById('myChart1').getContext('2d');
+						var myChart = new Chart(ctx1, {
+						    type: 'line',
+						    data: {
+						        labels: [<?=$labels?>],
+						        datasets: [
+						        <?php
+			        				$indiceUser = 0;
+							        foreach ($users as $objUser){
+							        	if (count($objUser[3]) > 0) {
+								        	$g1Data = "";
+								        	$valorAcumulado = 0;
+								        	foreach ($days as $day) {
+								        		if ($objUser[3][$day] != "") {
+								        			$valorAcumulado += $objUser[3][$day];
+								        			$g1Data.= str_replace(",", ".", $valorAcumulado).",";
+								        		} else {
+								        			$g1Data.= ", ";
+								        		}
+								        	}
+								        	if ($g1Data !== "") { $g1Data = substr($g1Data, 0, -1);}
+						        ?>
+							        		{
+								            label: '<?=$objUser[1]?>',
+								            data: [<?=$g1Data?>],
+								            <?=$graph2Config?>,
+								            borderColor: 'rgba(<?=$colores[$indiceUser][0]?>, <?=$colores[$indiceUser][1]?>, <?=$colores[$indiceUser][2]?>, 1)',
+								            backgroundColor: 'rgba(<?=$colores[$indiceUser][0]?>, <?=$colores[$indiceUser][1]?>, <?=$colores[$indiceUser][2]?>, 1)'
+								            }
+						        <?php 
+							        		if ($objUser !== end($users)) {
+									        	echo ", ";
+									        }
+									        $indiceUser++;
+							        	}
 							        }
-							        $indiceUser++;
-					        	}
-					        }
-					    ?>
-				        ]
-				    },
-				    options: {
-					    scales: {
-					      x: {
-					        stacked: true
-					      },
-					      y: {
-					        stacked: false
-					      }
-					    }
-				    }
-				});
-				
+							    ?>
+						        ]
+						    },
+						    options: {
+							    scales: {
+							      x: {
+							        stacked: true
+							      },
+							      y: {
+							        stacked: false
+							      }
+							    }
+						    }
+						});
+				<?php }?>
+
 			    var ctx2 = document.getElementById('myChart2').getContext('2d');
 				var myChart = new Chart(ctx2, {
 				    type: 'line',
@@ -382,7 +457,7 @@
 								        	}
 								        	if (is_array($objUser[3]) && count($objUser[3]) > 0) {
 								        		if ($grupo->getGruIdrespuesta() != 1) {
-								        			$media = $valorTotal / count($days);
+								        			$media = $valorTotal / $numeroDeDatosTotal;
 								        		} else {
 								        			$media = $valorTotal / count($objUser[3]);
 								        		}
@@ -423,7 +498,7 @@
 						}
 				    }
 				});
-				<?php if ($grupo->getGruIdtiempo() == "1") {?>
+				<?php if ($grupo->getGruIdtiempo() == "1" && ($idtiempo == "" || $idtiempo == "1")) {?>
 					    var ctx3 = document.getElementById('myChart3').getContext('2d');
 						var myChart = new Chart(ctx3, {
 						    type: 'bar',

@@ -313,5 +313,45 @@ class Funciones {
 			}
 		}
 	}
+	
+	public static function getMondaysBetweenDates($startDateParam, $endDateParam) {
+		$dates = [];
+		
+		$startDate = new DateTime($startDateParam);
+		$today     = new DateTime($endDateParam);
+		
+		if ($startDate->format('N') != 1) { // N=1 es lunes
+			$startDate->modify('next monday');
+		}
+		
+		while ($startDate <= $today) {
+			$dates[] = $startDate->format('Y-m-d');
+			$startDate->modify('+1 week'); // saltar al siguiente lunes
+		}
+		
+		return $dates;
+	}
+
+	public static function getMonthsBetweenDates($startDateParam, $endDateParam) {
+		$dates = [];
+		
+		$startDate = new DateTime($startDateParam);
+		$end       = new DateTime($endDateParam);
+		
+		// Normalizamos la fecha final al primer día del mes siguiente
+		$end->modify('first day of this month');
+		$end->modify('+1 month');
+		
+		$interval = new DateInterval('P1M'); // intervalo de 1 mes
+		$period   = new DatePeriod($startDate->modify('first day of this month'), $interval, $end);
+		
+		foreach ($period as $dt) {
+			// Puedes obtener solo el nombre del mes o año-mes completo
+			$dates[] = $dt->format('m-Y'); // ejemplo: 2025-01, 2025-02, ...
+			// $months[] = $dt->format('F Y'); // ejemplo: January 2025, February 2025, ...
+		}
+		
+		return $dates;
+	}
 }
 ?>

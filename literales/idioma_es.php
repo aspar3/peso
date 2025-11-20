@@ -247,4 +247,5 @@ define("litMailAvisoDatoBody03", 'Pulsa aquí para dejar de recibir notificacion
 define("litMailAvisoDatoBody04", 'Pulsa aquí para dejar de recibir notificaciones de TODOS los grupos:');
 define("litNotifNoAll", 'Ya no recibirá ninguna notificacion de nuevos datos en ningún grupo.');
 define("litNotifNo", 'Ya no recibirá ninguna notificacion de nuevos datos en el grupo seleccionado.');
+define("litEvolucionActual", 'Evolución actual');
 ?>
